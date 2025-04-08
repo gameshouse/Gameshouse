@@ -17,8 +17,8 @@
         .controls-top, .controls-bottom { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
         button, select { padding: 6px 12px; font-size: 0.9em; border: none; border-radius: 25px; background: linear-gradient(135deg, #ffd700, #b8860b); color: #0a1d37; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
         button:hover, select:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); }
-        .game-board { display: grid; gap: 8px; justify-content: center; width: 100%; }
-        .cell { width: 80px; height: 80px; background: #1e3a5f; border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 2em; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.2); transform: perspective(600px) rotateX(0deg) rotateY(0deg); }
+        .game-board { display: grid; gap: 12px; justify-content: center; width: 100%; }
+        .cell { width: 100px; height: 100px; background: #1e3a5f; border-radius: 15px; display: flex; justify-content: center; align-items: center; font-size: 2.5em; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.2); transform: perspective(600px) rotateX(0deg) rotateY(0deg); }
         body.light .cell { background: #f0f8ff; }
         .cell:hover { transform: perspective(600px) rotateX(8deg) rotateY(8deg); box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5); }
         .cell.active { animation: bounce 0.3s ease-in-out; }
@@ -38,8 +38,8 @@
             .container { padding: 15px; }
             h1 { font-size: 1.8em; }
             #scoreboard, #timer, #tip { font-size: 0.9em; }
-            .game-board { gap: 6px; }
-            .cell { width: 60px; height: 60px; font-size: 1.5em; }
+            .game-board { gap: 8px; }
+            .cell { width: 80px; height: 80px; font-size: 2em; }
             button, select { padding: 5px 10px; font-size: 0.8em; }
             .ad-space { width: 320px; height: 50px; }
             .ad-space-small { width: 250px; height: 200px; right: 5px; }
@@ -102,7 +102,7 @@
 
         function initBoard() {
             board.innerHTML = '';
-            board.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+            board.style.gridTemplateColumns = `repeat(${size}, 100px)`;
             gameBoard = Array(size * size).fill('');
             for (let i = 0; i < size * size; i++) {
                 const cell = document.createElement('div');
@@ -285,7 +285,7 @@
             currentPlayer = lastWinner;
             gameBoard = Array(size * size).fill('');
             board.innerHTML = '';
-            board.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+            board.style.gridTemplateColumns = `repeat(${size}, 100px)`;
             for (let i = 0; i < size * size; i++) {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
