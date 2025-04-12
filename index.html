@@ -3,46 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe Universe - Final Edition</title>
+    <title>Tic Tac Toe Universe - Premium Edition</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
+    <!-- Font Awesome for Icons (like speaker) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        /* CSS Styling - Enhanced */
+        /* CSS Styling */
         :root {
-            /* Default Light Theme Colors */
-            --gradient-start: #6e8efb;
-            --gradient-mid: #a777e3;
+            --gradient-start: #6a11cb;
+            --gradient-mid: #2575fc;
             --gradient-end: #3f5efb;
             --background-main: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
-            --container-bg: rgba(255, 255, 255, 0.2);
-            --container-border: rgba(255, 255, 255, 0.3);
-            --settings-bg: rgba(0, 0, 0, 0.08);
-            --cell-bg: rgba(255, 255, 255, 0.9);
+            --container-bg: rgba(255, 255, 255, 0.15);
+            --cell-bg: rgba(255, 255, 255, 0.85);
             --cell-hover-bg: rgba(255, 255, 255, 1);
             --text-light: #f0f0f0;
             --text-dark: #333;
-            --text-on-container: var(--text-light); /* Text inside the semi-transparent container */
-            --text-footer: rgba(255, 255, 255, 0.85);
             --accent-color: #ffcc00; /* Gold/Yellow */
             --player1-emoji-color: #4caf50; /* Greenish */
             --player2-emoji-color: #f44336; /* Reddish */
             --win-color: #00e676; /* Bright Green */
             --button-bg: #4a4e69;
             --button-hover-bg: #6b708f;
-            --reset-button-bg: var(--player2-emoji-color);
-            --reset-button-hover-bg: #d32f2f;
-            --ad-placeholder-bg: rgba(0, 0, 0, 0.25);
-            --ad-placeholder-border: rgba(255, 255, 255, 0.6);
-            --ad-placeholder-text: rgba(255, 255, 255, 0.75);
-            --modal-backdrop: rgba(0, 0, 0, 0.7);
-            --modal-content-bg: #f8f9fa;
-            --modal-content-text: var(--text-dark);
-            --modal-title-color: var(--gradient-start);
-            --modal-link-color: var(--gradient-mid);
             --border-radius: 15px;
             --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.1);
             --shadow-strong: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -52,43 +37,17 @@
             --cell-size-medium: 70px;
             --cell-size-large: 60px;
             --gap-size: 8px;
-            --transition-speed: 0.3s;
         }
 
-        /* Dark Theme Colors */
-        .dark-theme {
-            --gradient-start: #232526;
-            --gradient-mid: #414345;
-            --gradient-end: #232526;
-            --container-bg: rgba(0, 0, 0, 0.3);
-            --container-border: rgba(255, 255, 255, 0.15);
-            --settings-bg: rgba(255, 255, 255, 0.08);
-            --cell-bg: rgba(50, 50, 50, 0.85);
-            --cell-hover-bg: rgba(70, 70, 70, 1);
-            --text-light: #e0e0e0;
-            --text-dark: #f0f0f0; /* Dark theme uses light text on dark inputs */
-            --text-on-container: var(--text-light);
-            --text-footer: rgba(255, 255, 255, 0.7);
-            --accent-color: #f1c40f; /* Slightly different gold for dark */
-            --player1-emoji-color: #2ecc71; /* Adjusted green */
-            --player2-emoji-color: #e74c3c; /* Adjusted red */
-            --win-color: #00cf70; /* Adjusted win green */
-            --button-bg: #525575;
-            --button-hover-bg: #73779a;
-            --reset-button-bg: #e74c3c;
-            --reset-button-hover-bg: #c0392b;
-            --ad-placeholder-bg: rgba(255, 255, 255, 0.1);
-            --ad-placeholder-border: rgba(255, 255, 255, 0.4);
-            --ad-placeholder-text: rgba(255, 255, 255, 0.6);
-            --modal-backdrop: rgba(0, 0, 0, 0.8);
-            --modal-content-bg: #343a40; /* Dark modal background */
-            --modal-content-text: var(--text-light);
-            --modal-title-color: var(--accent-color);
-            --modal-link-color: #8ab4f8; /* Light blue link for dark mode */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: var(--font-main);
@@ -98,12 +57,11 @@
             align-items: center;
             min-height: 100vh;
             background: var(--background-main);
-            background-size: 400% 400%;
-            animation: gradientBG 20s ease infinite;
-            color: var(--text-on-container); /* Default text color */
+            background-size: 400% 400%; /* For gradient animation */
+            animation: gradientBG 18s ease infinite; /* Subtle background animation */
+            color: var(--text-light);
             padding: 15px;
             overflow-x: hidden;
-            transition: background var(--transition-speed) ease-in-out;
         }
 
         @keyframes gradientBG {
@@ -112,119 +70,73 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- Header Controls (Theme Toggle, Share) --- */
-        .header-controls {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            display: flex;
-            gap: 15px;
-            z-index: 10; /* Ensure they are above game wrapper */
-        }
-        .control-button {
-             background: rgba(255, 255, 255, 0.15);
-             backdrop-filter: blur(5px);
-             border: 1px solid rgba(255, 255, 255, 0.2);
-             color: var(--text-light);
-             font-size: 1.5em;
-             cursor: pointer;
-             padding: 8px;
-             border-radius: 50%;
-             width: 40px;
-             height: 40px;
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             transition: all var(--transition-speed) ease;
-             box-shadow: var(--shadow-light);
-        }
-        .control-button:hover {
-             background: rgba(255, 255, 255, 0.25);
-             transform: scale(1.1);
-             color: var(--accent-color);
-        }
-        /* Style adjustments for dark theme controls */
-        .dark-theme .control-button {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-         .dark-theme .control-button:hover {
-             background: rgba(0, 0, 0, 0.3);
-         }
-
 
         /* --- Main Game Container --- */
         .game-wrapper {
             background: var(--container-bg);
             backdrop-filter: blur(12px);
-            padding: 30px; /* Increased padding */
+            padding: 25px;
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-strong);
             text-align: center;
             max-width: 95%;
-            width: 680px; /* Adjusted width */
-            margin-top: 70px; /* Space down from top controls */
+            width: 650px; /* Slightly wider */
             margin-bottom: 20px;
-            border: 1px solid var(--container-border);
-            transition: background var(--transition-speed) ease-in-out, border var(--transition-speed) ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         h1 {
             font-family: var(--font-title);
             color: var(--accent-color);
-            margin-bottom: 30px; /* More space */
-            font-size: 3em; /* Slightly larger */
+            margin-bottom: 25px;
+            font-size: 2.8em;
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
         }
 
         /* --- Settings Area --- */
         .settings-area {
-            margin-bottom: 30px; /* More space */
-            background: var(--settings-bg);
+            margin-bottom: 25px;
+            background: rgba(0, 0, 0, 0.15);
             padding: 20px;
             border-radius: 10px;
-             transition: background var(--transition-speed) ease-in-out;
         }
-        .settings-grid {
+        .settings-grid { /* Use grid for better alignment */
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Adjust minmax */
-            gap: 20px; /* Increased gap */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
             align-items: center;
         }
         .settings-group {
+             /* Removed some margin, handled by grid gap */
              display: flex;
-             flex-direction: column;
-             align-items: flex-start;
-             gap: 8px; /* Increased gap */
+             flex-direction: column; /* Stack label and control */
+             align-items: flex-start; /* Align labels left */
+             gap: 5px; /* Space between label and control */
         }
         .settings-group label {
             font-weight: 600;
-            color: var(--text-on-container);
-            font-size: 1em; /* Slightly larger label */
-            padding-left: 5px;
+            color: var(--text-light);
+            font-size: 0.95em;
+            padding-left: 5px; /* Small indent */
         }
-        .settings-controls {
+        .settings-controls { /* Group buttons/selects */
              display: flex;
              gap: 10px;
              width: 100%;
         }
         .settings-controls button, .settings-controls select {
-            flex-grow: 1;
-            padding: 10px 15px; /* Increased padding */
-            font-size: 0.95em; /* Slightly larger font */
+            flex-grow: 1; /* Allow buttons/select to grow */
+            padding: 9px 15px;
+            font-size: 0.9em;
             font-weight: 600;
             color: var(--text-dark);
-            background-color: var(--cell-bg); /* Use cell bg for consistency */
-            border: 1px solid rgba(0,0,0,0.1); /* Subtle border */
+            background-color: rgba(255, 255, 255, 0.85);
+            border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: all var(--transition-speed) ease;
+            transition: all 0.3s ease;
             box-shadow: var(--shadow-light);
             text-align: center;
-        }
-        .dark-theme .settings-controls button, .dark-theme .settings-controls select {
-             color: var(--text-light); /* Light text on dark inputs */
-             border: 1px solid rgba(255,255,255,0.1);
         }
         .settings-controls select {
              appearance: none;
@@ -233,68 +145,84 @@
              background-position: right 10px center;
              background-size: 1em;
              padding-right: 30px;
-             text-align-last: center;
-        }
-        .dark-theme .settings-controls select { /* Update arrow color for dark theme */
-              background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23eee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+             text-align-last: center; /* Center selected option text */
         }
         .settings-controls button:hover, .settings-controls select:hover {
-            background-color: var(--cell-hover-bg);
+            background-color: rgba(255, 255, 255, 1);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            border-color: rgba(0,0,0,0.2);
-        }
-        .dark-theme .settings-controls button:hover, .dark-theme .settings-controls select:hover {
-            border-color: rgba(255,255,255,0.2);
         }
         .settings-controls button.active {
             background-color: var(--accent-color);
-            color: var(--text-dark); /* Text color on active button */
-            box-shadow: 0 0 15px color-mix(in srgb, var(--accent-color) 60%, transparent);
-            border-color: color-mix(in srgb, var(--accent-color) 80%, black);
+            color: var(--text-dark);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
         }
-         .dark-theme .settings-controls button.active {
-            color: #333; /* Ensure dark text on accent button */
-         }
-        .settings-controls .emoji-select { font-size: 1.6em; padding: 5px 15px; }
+        .settings-controls .emoji-select {
+            font-size: 1.6em; /* Make emojis in select larger */
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
 
-        /* --- Scoreboard --- */
-         .scoreboard {
+
+        /* --- Scoreboard & Controls --- */
+        .scoreboard-controls-wrapper {
             display: flex;
-            justify-content: center;
-            gap: 20px; /* Increased gap */
-            margin-bottom: 30px; /* More space */
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 20px;
+            flex-wrap: wrap; /* Wrap on smaller screens */
+        }
+        .scoreboard {
+            display: flex;
+            justify-content: center; /* Center scores when wrapped */
+            gap: 15px; /* Space between score items */
+            flex-grow: 1; /* Take available space */
             flex-wrap: wrap;
         }
         .score {
-            background: var(--settings-bg); /* Consistent background */
-            padding: 12px 20px; /* Increased padding */
-            border-radius: 10px; /* More rounded */
-            transition: all var(--transition-speed) ease;
-            font-size: 1.15em;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-size: 1.1em;
             font-weight: 600;
-            text-align: center;
-            color: var(--text-on-container);
-            min-width: 160px; /* Ensure minimum width */
+            text-align: center; /* Center text */
         }
         .score.active-turn {
             background-color: var(--accent-color);
-            color: #333; /* Dark text on accent */
+            color: var(--text-dark);
             transform: scale(1.05);
-             box-shadow: 0 0 15px color-mix(in srgb, var(--accent-color) 60%, transparent);
         }
         .score span { font-weight: 700; }
-        .score .emoji { font-size: 1.3em; margin-right: 8px; display: inline-block;}
-        .score .streak { font-size: 0.85em; color: color-mix(in srgb, var(--text-on-container) 70%, transparent); display: block; margin-top: 4px;}
+        .score .emoji { font-size: 1.2em; margin-right: 5px; display: inline-block;}
+        .score .streak { font-size: 0.8em; color: rgba(255,255,255,0.7); display: block; margin-top: 3px;}
+        .game-controls {
+            display: flex;
+            align-items: center;
+        }
+        #soundToggle {
+             background: none;
+             border: none;
+             color: var(--text-light);
+             font-size: 1.8em;
+             cursor: pointer;
+             padding: 5px;
+             transition: color 0.3s, transform 0.3s;
+        }
+        #soundToggle:hover {
+             color: var(--accent-color);
+             transform: scale(1.1);
+        }
 
 
         /* --- Game Board --- */
         .game-board {
             display: grid;
             justify-content: center;
-            margin: 25px auto; /* Adjusted margin */
+            margin: 20px auto;
             position: relative;
-            transition: all 0.4s ease-in-out;
+            transition: all 0.4s ease-in-out; /* Smoother size change */
             max-width: 100%;
         }
         .board-3x3 { grid-template-columns: repeat(3, var(--cell-size-small)); grid-template-rows: repeat(3, var(--cell-size-small)); gap: var(--gap-size); }
@@ -312,7 +240,7 @@
             font-weight: bold;
             cursor: pointer;
             user-select: none;
-            box-shadow: inset 0 3px 6px rgba(0,0,0,0.1), 0 6px 12px rgba(0,0,0,0.15);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1), 0 5px 10px rgba(0,0,0,0.15); /* Enhanced shadow */
             transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
@@ -323,21 +251,29 @@
 
         .cell:hover {
             background-color: var(--cell-hover-bg);
-            transform: scale(1.07) translateZ(7px); /* Enhanced lift */
-            box-shadow: inset 0 3px 6px rgba(0,0,0,0.1), 0 12px 24px rgba(0,0,0,0.25);
+            transform: scale(1.06) translateZ(6px); /* Slightly more lift */
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.25);
         }
-        .cell:active { transform: scale(0.96) translateZ(4px); }
+        .cell:active {
+             transform: scale(0.97) translateZ(3px);
+         }
 
         .cell span {
             display: inline-block;
-            transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Spring animation */
             text-shadow: 1px 1px 4px rgba(0,0,0,0.25);
         }
         .cell.p1 span { color: var(--player1-emoji-color); transform: scale(1); }
         .cell.p2 span { color: var(--player2-emoji-color); transform: scale(1); }
-         .cell:not(:empty) span { animation: popIn 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+         .cell:not(:empty) span {
+             animation: popIn 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+         }
 
-        @keyframes popIn { /* Same as before */ }
+        @keyframes popIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            70% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
         .cell.win {
             background-color: var(--win-color);
@@ -348,30 +284,36 @@
             animation: winEmojiPulse 0.8s infinite alternate ease-in-out;
         }
 
-        @keyframes winPulse { /* Same as before */ }
-        @keyframes winEmojiPulse { /* Same as before */ }
+        @keyframes winPulse {
+            from { transform: scale(1) translateZ(5px); box-shadow: 0 0 12px var(--win-color), inset 0 0 5px rgba(255,255,255,0.3); }
+            to { transform: scale(1.07) translateZ(12px); box-shadow: 0 0 25px var(--win-color), inset 0 0 8px rgba(255,255,255,0.5); }
+        }
+        @keyframes winEmojiPulse {
+            from { transform: scale(1); text-shadow: 0 0 5px white; }
+            to { transform: scale(1.2); text-shadow: 0 0 15px white; }
+        }
 
         /* Winning Line Styles */
         #winLine {
             position: absolute;
-            background: linear-gradient(90deg, rgba(255, 204, 0, 0.7), rgba(255, 230, 100, 0.9), rgba(255, 204, 0, 0.7));
-            height: 8px;
+            background: linear-gradient(90deg, rgba(255, 204, 0, 0.7), rgba(255, 230, 100, 0.9), rgba(255, 204, 0, 0.7)); /* Gradient line */
+            height: 8px; /* Thicker line */
             border-radius: 4px;
             transform-origin: left center;
             box-shadow: 0 0 15px var(--accent-color);
             display: none;
             z-index: 5;
-            transition: width 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Spring animation */
+            transition: width 0.5s ease-in-out; /* Animate length */
         }
+
 
         /* --- Status Display --- */
         #status {
-            font-size: 1.5em; /* Slightly larger */
-            margin: 25px 0; /* More margin */
-            min-height: 35px; /* Reserve more space */
+            font-size: 1.4em;
+            margin: 20px 0;
+            min-height: 30px;
             font-weight: 600;
-            transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
-            color: var(--text-on-container);
+            transition: color 0.3s ease, transform 0.3s ease;
         }
         #status.win-message { color: var(--win-color); font-weight: 700; transform: scale(1.05); }
         #status.draw-message { color: var(--accent-color); transform: scale(1.05); }
@@ -380,41 +322,49 @@
 
         /* --- Action Buttons --- */
         .action-buttons {
-            margin-top: 30px; /* More space */
+            margin-top: 25px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px; /* Increased gap */
+            gap: 15px;
         }
         .action-buttons button {
-            padding: 14px 32px; /* More padding */
-            font-size: 1.1em;
+            padding: 12px 28px;
+            font-size: 1.05em; /* Slightly larger */
             font-weight: 600;
             color: var(--text-light);
             background-color: var(--button-bg);
             border: none;
-            border-radius: 10px; /* More rounded */
+            border-radius: 8px;
             cursor: pointer;
-            transition: all var(--transition-speed) ease;
+            transition: all 0.3s ease;
             box-shadow: var(--shadow-light);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            text-transform: uppercase; /* Button text style */
+            letter-spacing: 0.5px;
         }
         .action-buttons button:hover {
             background-color: var(--button-hover-bg);
-            transform: translateY(-4px); /* More lift */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
-        .action-buttons button#resetScoreButton { background-color: var(--reset-button-bg); }
-        .action-buttons button#resetScoreButton:hover { background-color: var(--reset-button-hover-bg); }
+        .action-buttons button#resetScoreButton { background-color: var(--player2-emoji-color); }
+        .action-buttons button#resetScoreButton:hover { background-color: #d32f2f; }
 
 
         /* --- Confetti Canvas --- */
-        #confettiCanvas { /* Same as before */ }
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
 
-        /* --- Modals --- */
+        /* --- Modals (Legal, Contact, Winner) --- */
         .modal {
-            display: none;
+            display: none; /* Hidden by default */
             position: fixed;
             z-index: 100;
             left: 0;
@@ -422,273 +372,251 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: var(--modal-backdrop);
-            backdrop-filter: blur(8px); /* Stronger blur */
+            background-color: rgba(0, 0, 0, 0.7); /* Darker backdrop */
+            backdrop-filter: blur(6px);
             align-items: center;
             justify-content: center;
         }
         .modal.active {
              display: flex;
-             animation: fadeIn 0.4s ease-out;
+             animation: fadeIn 0.4s ease-out; /* Fade in modal */
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-        .modal.fade-out { animation: fadeOut 0.4s ease-out forwards; }
+         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+         .modal.fade-out { animation: fadeOut 0.4s ease-out forwards; } /* Fade out modal */
+
 
         .modal-content {
-            background-color: var(--modal-content-bg);
-            color: var(--modal-content-text);
+            background-color: #f8f9fa; /* Light background for contrast */
+            color: var(--text-dark);
             margin: auto;
-            padding: 40px; /* More padding */
+            padding: 35px; /* More padding */
             border: none;
             border-radius: var(--border-radius);
             width: 90%;
-            max-width: 700px; /* Wider modal */
+            max-width: 650px; /* Slightly wider modal */
             box-shadow: var(--shadow-strong);
             position: relative;
             animation: slideInModal 0.4s ease-out;
-             transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
         }
-         @keyframes slideInModal { /* Same as before */ }
+         @keyframes slideInModal {
+             from { transform: translateY(-60px) scale(0.95); opacity: 0; }
+             to { transform: translateY(0) scale(1); opacity: 1; }
+         }
 
         .modal-close {
-            color: #aaa;
+            color: #888;
             position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 32px;
+            top: 12px;
+            right: 20px;
+            font-size: 32px; /* Larger close button */
             font-weight: bold;
             cursor: pointer;
-            transition: all var(--transition-speed) ease;
-            z-index: 101; /* Ensure close button is above content */
+            transition: color 0.3s, transform 0.3s;
         }
-         .dark-theme .modal-close { color: #ccc;}
         .modal-close:hover,
         .modal-close:focus {
-            color: #555;
-            transform: rotate(90deg) scale(1.1);
+            color: #333;
+            transform: rotate(90deg); /* Rotation effect */
             text-decoration: none;
         }
-         .dark-theme .modal-close:hover, .dark-theme .modal-close:focus { color: #fff;}
-
         .modal-content h2 {
             margin-top: 0;
-            margin-bottom: 30px; /* More space */
-            color: var(--modal-title-color);
+            margin-bottom: 25px;
+            color: var(--gradient-start);
             font-family: var(--font-title);
-            text-align: center;
-            font-size: 2em; /* Larger title */
+            text-align: center; /* Center modal titles */
+            font-size: 1.8em;
         }
         .modal-content p, .modal-content ul, .modal-content form {
-            margin-bottom: 20px;
-            line-height: 1.75; /* Improved readability */
+            margin-bottom: 18px;
+            line-height: 1.7; /* Better readability */
             text-align: left;
-            font-size: 1em;
+            font-size: 0.95em;
         }
-         .modal-content ul { padding-left: 30px; }
-         .modal-content a { color: var(--modal-link-color); text-decoration: none; font-weight: 600;}
+         .modal-content ul { padding-left: 25px; }
+         .modal-content a { color: var(--gradient-mid); text-decoration: none; font-weight: 600;}
          .modal-content a:hover { text-decoration: underline;}
 
          /* Contact Form Styles */
-         #contactForm label { display: block; margin-bottom: 6px; font-weight: 600;}
+         #contactForm label { display: block; margin-bottom: 5px; font-weight: 600;}
          #contactForm input[type="text"],
          #contactForm input[type="email"],
          #contactForm textarea {
             width: 100%;
-            padding: 12px; /* More padding */
-            margin-bottom: 18px;
+            padding: 10px;
+            margin-bottom: 15px;
             border: 1px solid #ccc;
-            border-radius: 8px; /* More rounded */
+            border-radius: 6px;
             font-family: var(--font-main);
-            font-size: 1em;
-            background-color: var(--cell-bg); /* Use consistent bg */
-            color: var(--modal-content-text); /* Match text color */
-             transition: border-color var(--transition-speed), background-color var(--transition-speed);
+            font-size: 0.95em;
          }
-         .dark-theme #contactForm input[type="text"],
-         .dark-theme #contactForm input[type="email"],
-         .dark-theme #contactForm textarea {
-             border: 1px solid #555;
-         }
-          #contactForm textarea { resize: vertical; min-height: 90px; }
+          #contactForm textarea { resize: vertical; min-height: 80px; }
           #contactForm button {
-             padding: 12px 24px;
-             background-color: var(--modal-link-color);
-             color: var(--modal-content-bg); /* Contrast text */
+             padding: 10px 20px;
+             background-color: var(--gradient-mid);
+             color: white;
              border: none;
-             border-radius: 8px;
+             border-radius: 6px;
              cursor: pointer;
              font-weight: bold;
-             transition: background-color var(--transition-speed);
-             font-size: 1em;
+             transition: background-color 0.3s;
           }
-          #contactForm button:hover { background-color: color-mix(in srgb, var(--modal-link-color) 80%, black); }
-           .dark-theme #contactForm button {
-             background-color: var(--modal-link-color);
-             color: #333; /* Dark text on light blue button */
-           }
-            .dark-theme #contactForm button:hover {
-                background-color: color-mix(in srgb, var(--modal-link-color) 80%, white);
-            }
+          #contactForm button:hover { background-color: var(--gradient-end); }
           #contactInfoMessage {
-             margin-top: 20px;
-             padding: 15px;
-             background-color: color-mix(in srgb, var(--modal-link-color) 15%, transparent);
-             border-left: 5px solid var(--modal-link-color);
+             margin-top: 15px;
+             padding: 10px;
+             background-color: #e9ecef;
+             border-left: 4px solid var(--gradient-mid);
              font-weight: 500;
-             display: none;
-             border-radius: 5px;
+             display: none; /* Initially hidden */
           }
 
 
          /* Winner Popup Specific Styles */
-        #winnerPopup .modal-content { /* Same as before */ }
-         #winnerPopup h2 { /* Same as before */ }
-         #winnerPopup p { /* Same as before */ }
-         #winnerPopup button { /* Same as before */ }
+        #winnerPopup .modal-content {
+             background: linear-gradient(135deg, rgba(106, 17, 203, 0.9), rgba(37, 117, 252, 0.9)); /* Use theme gradient */
+             backdrop-filter: blur(5px);
+             color: var(--text-light);
+             text-align: center;
+             border: 1px solid var(--accent-color);
+        }
+         #winnerPopup h2 {
+             font-size: 2.8em; /* Larger title */
+             color: var(--accent-color);
+             text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+             margin-bottom: 20px;
+         }
+          #winnerPopup p {
+             font-size: 1.6em;
+             font-weight: 600;
+             margin-bottom: 30px;
+              text-align: center;
+          }
+          #winnerPopup button {
+             padding: 12px 25px;
+             font-size: 1.1em;
+             background-color: var(--accent-color);
+             color: var(--text-dark);
+             border: none;
+             border-radius: 8px;
+             cursor: pointer;
+              font-weight: bold;
+             transition: all 0.3s;
+             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+          }
+          #winnerPopup button:hover {
+             background-color: #ffd633;
+             transform: scale(1.08);
+             box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+          }
 
 
         /* --- Footer --- */
         footer {
             width: 100%;
             text-align: center;
-            padding: 25px 0 15px 0;
+            padding: 20px 0 10px 0; /* More top padding */
             margin-top: auto;
             font-size: 0.9em;
-            color: var(--text-footer);
-             transition: color var(--transition-speed);
+            color: rgba(255, 255, 255, 0.85);
         }
         footer a {
             color: var(--accent-color);
             text-decoration: none;
-            margin: 0 10px;
-            transition: color var(--transition-speed) ease;
+            margin: 0 10px; /* More spacing */
+            transition: color 0.3s ease;
         }
         footer a:hover {
             color: var(--text-light);
             text-decoration: underline;
         }
-         .dark-theme footer a:hover {
-            color: var(--accent-color);
-         }
         footer .footer-separator {
-            margin: 10px auto; /* Increased margin */
-            width: 60px;
+            margin: 8px auto;
+            width: 50px;
             height: 1px;
             background-color: rgba(255, 255, 255, 0.3);
-            transition: background-color var(--transition-speed);
         }
-         .dark-theme footer .footer-separator { background-color: rgba(255, 255, 255, 0.2);}
 
 
         /* --- Ad Placeholders --- */
         .ad-placeholder {
-            background-color: var(--ad-placeholder-bg);
-            border: 1px dashed var(--ad-placeholder-border);
-            min-height: 70px;
+            background-color: rgba(0, 0, 0, 0.25);
+            border: 1px dashed rgba(255, 255, 255, 0.6);
+            min-height: 70px; /* Standard ad height example */
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 30px auto; /* Increased margin */
+            margin: 25px auto; /* Consistent margin */
             padding: 10px;
             max-width: 90%;
-            width: 468px;
-            color: var(--ad-placeholder-text);
+            width: 468px; /* Example banner size */
+            color: rgba(255, 255, 255, 0.75);
             font-size: 1em;
-            border-radius: 10px; /* More rounded */
+            border-radius: 8px;
             text-align: center;
-             transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
         }
-         .ad-placeholder.top { margin-bottom: 35px; }
-         .ad-placeholder.bottom { margin-top: 35px; }
+         .ad-placeholder.top { margin-bottom: 30px; } /* Below settings */
+         .ad-placeholder.bottom { margin-top: 30px; } /* Below board/status */
 
 
         /* --- Utility Classes --- */
         .hidden { display: none !important; }
-         /* Feedback message for copy to clipboard */
-         #copyFeedback {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--accent-color);
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 600;
-            z-index: 1100;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            pointer-events: none; /* Don't block clicks */
-        }
-         #copyFeedback.show { opacity: 1; }
-
 
         /* --- Responsive Design --- */
         @media (max-width: 768px) {
-             h1 { font-size: 2.4em; }
-             .game-wrapper { padding: 20px; width: 95%; margin-top: 80px; } /* Adjust margin for header controls */
-             .settings-grid { grid-template-columns: 1fr; gap: 15px;}
-             .scoreboard { gap: 15px; }
-             .score { font-size: 1.05em; padding: 10px 15px; min-width: 140px;}
-             #status { font-size: 1.35em; }
-             .action-buttons button { padding: 12px 25px; font-size: 1em; }
+            h1 { font-size: 2.3em; }
+            .game-wrapper { padding: 20px; width: 95%; }
+            .settings-grid { grid-template-columns: 1fr; } /* Stack settings vertically */
+            .scoreboard-controls-wrapper { justify-content: center; } /* Center score/controls */
+            .scoreboard { justify-content: center; gap: 10px; }
+            .score { font-size: 1em; padding: 8px 12px;}
+            #status { font-size: 1.3em; }
+            .action-buttons button { padding: 11px 22px; font-size: 1em; }
 
-             :root {
+             :root { /* Adjust cell sizes */
                  --cell-size-small: 70px;
                  --cell-size-medium: 60px;
                  --cell-size-large: 50px;
                  --gap-size: 6px;
-             }
+            }
              .cell { font-size: 2em; }
              .board-4x4 .cell { font-size: 1.8em; }
              .board-5x5 .cell { font-size: 1.6em; }
 
-             .modal-content { width: 92%; padding: 30px; }
-             .modal-content h2 { font-size: 1.7em;}
+             .modal-content { width: 92%; padding: 25px; }
+             .modal-content h2 { font-size: 1.6em;}
              footer { font-size: 0.85em; }
              .ad-placeholder { width: 90%; min-height: 60px; }
-             .header-controls { gap: 10px; }
-             .control-button { font-size: 1.3em; width: 35px; height: 35px; padding: 6px;}
         }
 
         @media (max-width: 480px) {
-            h1 { font-size: 2em; margin-bottom: 25px;}
-            .game-wrapper { padding: 15px; margin-top: 75px;}
+            h1 { font-size: 1.9em; }
+            .game-wrapper { padding: 15px; }
             :root {
                  --cell-size-small: 60px;
-                 --cell-size-medium: 55px; /* Adjusted */
-                 --cell-size-large: 48px; /* Adjusted */
+                 --cell-size-medium: 50px;
+                 --cell-size-large: 45px; /* Smaller for 5x5 on tiny screens */
                  --gap-size: 5px;
             }
              .cell { font-size: 1.8em; }
              .board-4x4 .cell { font-size: 1.6em; }
              .board-5x5 .cell { font-size: 1.4em; }
 
-            #status { font-size: 1.2em; margin: 20px 0; }
+            #status { font-size: 1.15em; }
             .action-buttons { gap: 10px; }
-            .action-buttons button { width: calc(50% - 5px); padding: 12px 15px; font-size: 0.95em;}
-            .scoreboard { font-size: 1em; gap: 10px;}
-            .score { padding: 8px 12px; min-width: 130px;}
-            .ad-placeholder { min-height: 50px; }
-             #winnerPopup h2 {font-size: 2.2em;}
+            .action-buttons button { width: calc(50% - 5px); padding: 10px 15px; font-size: 0.95em;}
+            .scoreboard { font-size: 0.95em; }
+             .score { padding: 7px 10px; }
+             .scoreboard-controls-wrapper { flex-direction: column; gap: 15px;}
+             .ad-placeholder { min-height: 50px; }
+             #winnerPopup h2 {font-size: 2em;}
              #winnerPopup p {font-size: 1.3em;}
-             .settings-grid { gap: 12px;}
-             .settings-controls button, .settings-controls select { padding: 9px 12px;}
-             .modal-content { padding: 25px; }
-             .modal-content h2 { font-size: 1.6em; }
         }
 
     </style>
 </head>
-<body class=""> <!-- Theme class will be added here by JS -->
-
-    <div class="header-controls">
-        <button id="themeToggle" class="control-button" title="Toggle Theme"><i class="fas fa-sun"></i></button>
-        <button id="shareButton" class="control-button" title="Share Game"><i class="fas fa-share-alt"></i></button>
-        <button id="soundToggle" class="control-button" title="Toggle Sound"><i class="fas fa-volume-up"></i></button>
-    </div>
+<body>
 
     <canvas id="confettiCanvas"></canvas>
 
@@ -696,42 +624,78 @@
         <h1>Tic Tac Toe Universe</h1>
 
         <!-- Ad Placeholder 1 (Top - Below Settings) -->
+        <!-- Strategy: Place ad before intense gameplay focus, potentially higher visibility -->
         <div class="ad-placeholder top" id="adSlot1">Advertisement Area 1 (e.g., 468x60 Banner) <!-- Your AdSense Code Here --></div>
 
         <div class="settings-area">
             <div class="settings-grid">
                 <div class="settings-group">
                     <label for="boardSizeSelect">Board Size:</label>
-                    <div class="settings-controls"> <select id="boardSizeSelect"> <option value="3">3x3</option> <option value="4">4x4</option> <option value="5">5x5</option> </select> </div>
+                    <div class="settings-controls">
+                        <select id="boardSizeSelect">
+                            <option value="3">3x3</option>
+                            <option value="4">4x4</option>
+                            <option value="5">5x5</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="settings-group">
                      <label>Game Mode:</label>
-                     <div class="settings-controls"> <button id="pvpButton" class="mode-button active">🧑 vs 🧑</button> <button id="pveButton" class="mode-button">🧑 vs 🤖</button> </div>
+                     <div class="settings-controls">
+                         <button id="pvpButton" class="mode-button active">🧑 vs 🧑</button>
+                         <button id="pveButton" class="mode-button">🧑 vs 🤖</button>
+                     </div>
                 </div>
                 <div class="settings-group hidden" id="difficultyGroup">
                      <label for="difficultySelect">AI Level:</label>
-                     <div class="settings-controls"> <select id="difficultySelect"> <option value="easy">Easy</option> <option value="medium" selected>Medium</option> <option value="hard">Hard</option> </select> </div>
+                     <div class="settings-controls">
+                         <select id="difficultySelect">
+                             <option value="easy">Easy</option>
+                             <option value="medium" selected>Medium</option>
+                             <option value="hard">Hard</option>
+                         </select>
+                     </div>
                 </div>
                  <div class="settings-group">
                      <label>Player Emojis:</label>
                      <div class="settings-controls">
-                        <select id="player1EmojiSelect" class="emoji-select"> <option value="👽">👽</option> <option value="⭐">⭐</option> <option value="🚀">🚀</option> <option value="💎">💎</option> <option value="🍕">🍕</option> <option value="🦊">🦊</option> <option value="🐼">🐼</option> </select>
-                        <select id="player2EmojiSelect" class="emoji-select"> <option value="🤖">🤖</option> <option value="👻">👻</option> <option value="💖">💖</option> <option value="👑">👑</option> <option value="🍔">🍔</option> <option value="🐙">🐙</option> <option value="🦄">🦄</option> </select>
+                         <select id="player1EmojiSelect" class="emoji-select">
+                             <option value="👽">👽</option>
+                             <option value="⭐">⭐</option>
+                             <option value="🚀">🚀</option>
+                             <option value="💎">💎</option>
+                             <option value="🍕">🍕</option>
+                              <option value="🦊">🦊</option>
+                         </select>
+                         <select id="player2EmojiSelect" class="emoji-select">
+                             <option value="🤖">🤖</option>
+                             <option value="👻">👻</option>
+                             <option value="💖">💖</option>
+                             <option value="👑">👑</option>
+                             <option value="🍔">🍔</option>
+                              <option value="🐙">🐙</option>
+                         </select>
                      </div>
                  </div>
              </div>
         </div>
 
-        <div class="scoreboard">
-             <div class="score" id="player1ScoreIndicator">
-                 <span class="emoji">P1</span> Score: <span id="scoreP1">0</span>
-                 <span class="streak">(Streak: <span id="streakP1">0</span>)</span>
-             </div>
-             <div class="score" id="player2ScoreIndicator">
-                 <span class="emoji">P2</span> Score: <span id="scoreP2">0</span>
-                  <span class="streak">(Streak: <span id="streakP2">0</span>)</span>
-             </div>
-         </div>
+        <div class="scoreboard-controls-wrapper">
+            <div class="scoreboard">
+                <div class="score" id="player1ScoreIndicator">
+                    <span class="emoji">P1</span> Score: <span id="scoreP1">0</span>
+                    <span class="streak">(Streak: <span id="streakP1">0</span>)</span>
+                </div>
+                <div class="score" id="player2ScoreIndicator">
+                    <span class="emoji">P2</span> Score: <span id="scoreP2">0</span>
+                     <span class="streak">(Streak: <span id="streakP2">0</span>)</span>
+                </div>
+            </div>
+            <div class="game-controls">
+                 <button id="soundToggle" title="Toggle Sound"><i class="fas fa-volume-up"></i></button>
+            </div>
+        </div>
+
 
         <div id="gameBoard" class="game-board">
             <!-- Cells generated by JS -->
@@ -741,6 +705,7 @@
         <div id="status">Choose settings and start playing!</div>
 
          <!-- Ad Placeholder 2 (Bottom - Below Board/Status) -->
+         <!-- Strategy: Place ad after gameplay focus, less intrusive during play -->
         <div class="ad-placeholder bottom" id="adSlot2">Advertisement Area 2 (e.g., 300x250) <!-- Your AdSense Code Here --></div>
 
         <div class="action-buttons">
@@ -756,7 +721,7 @@
         <a href="#" id="disclaimerLink">Disclaimer</a> |
         <a href="#" id="contactLink">Contact Us</a>
         <div class="footer-separator"></div>
-        © <span id="footerYear">2025</span> Tic Tac Toe Universe. All rights reserved.
+        © 2025 Tic Tac Toe Universe. All rights reserved.
     </footer>
 
     <!-- Modals -->
@@ -765,7 +730,7 @@
             <span class="modal-close" data-modal-id="aboutModal">×</span>
             <h2>About Us</h2>
             <p>Welcome to Tic Tac Toe Universe! We are passionate about creating fun, engaging, and visually appealing web games for everyone to enjoy.</p>
-            <p>Our goal is to provide a premium Tic Tac Toe experience with enhanced features like multiple board sizes, challenging AI opponents with different difficulty levels, custom player emojis, sound effects, win streaks, day/night mode, and a clean, responsive design.</p>
+            <p>Our goal is to provide a premium Tic Tac Toe experience with enhanced features like multiple board sizes, challenging AI opponents with different difficulty levels, custom player emojis, sound effects, win streaks, and a clean, responsive design.</p>
             <p>This game was developed with modern web technologies (HTML, CSS, JavaScript) and includes libraries like Font Awesome for icons and Canvas Confetti for celebrations. We strive to continuously improve the game based on user feedback.</p>
             <p>We hope you have a fantastic time playing! For any inquiries, suggestions, or feedback, please use the Contact Us section.</p>
         </div>
@@ -775,7 +740,7 @@
         <div class="modal-content">
             <span class="modal-close" data-modal-id="termsModal">×</span>
             <h2>Terms and Conditions</h2>
-            <p><strong>Last updated: <span class="currentDate">[Date Placeholder]</span></strong></p>
+            <p><strong>Last updated: [Insert Current Date, e.g., October 26, 2023]</strong></p>
             <p>Please read these terms and conditions carefully before using Our Service.</p>
              <p><strong>Acknowledgement</strong><br>These are the Terms and Conditions governing the use of this Service (Tic Tac Toe Universe game website). By accessing or using the Service, You agree to be bound by these Terms and Conditions. If You disagree with any part, You may not access the Service. Your access to and use of the Service is also conditioned on Your acceptance of and compliance with the Privacy Policy of the Company.</p>
             <p><strong>Using the Service</strong><br>Our Service provides a Tic Tac Toe game for personal entertainment purposes. You agree not to use the Service for any illegal or unauthorized purpose. You agree not to interfere with or disrupt the Service, servers, or networks connected to the Service.</p>
@@ -783,7 +748,7 @@
              <p><strong>Advertisements</strong><br>This Service displays advertisements, primarily through Google AdSense, which are necessary to support the free availability of the game. We are not responsible for the content, promises, or practices of any third-party advertisers. Your interactions with advertisers are solely between You and the advertiser.</p>
              <p><strong>Limitation of Liability</strong><br>To the maximum extent permitted by applicable law, in no event shall Tic Tac Toe Universe or its suppliers be liable for any special, incidental, indirect, or consequential damages whatsoever (including, but not limited to, damages for loss of profits, loss of data or other information, for business interruption, for personal injury, loss of privacy) arising out of or in any way related to the use of or inability to use the Service.</p>
              <p><strong>"AS IS" and "AS AVAILABLE" Disclaimer</strong><br>The Service is provided to You "AS IS" and "AS AVAILABLE" and with all faults and defects without warranty of any kind. [...] We provide no warranty that the Service will meet Your requirements, achieve any intended results, be compatible or work with any other software, systems or services, operate without interruption, meet any performance or reliability standards or be error free or that any errors or defects can or will be corrected.</p>
-            <p><strong>Governing Law</strong><br>The laws of [Your Country/State, e.g., India or California - **Please Update**], excluding its conflicts of law rules, shall govern these Terms and Your use of the Service.</p>
+            <p><strong>Governing Law</strong><br>The laws of [Your Country/State, e.g., India or California], excluding its conflicts of law rules, shall govern these Terms and Your use of the Service.</p>
              <p><strong>Changes to These Terms and Conditions</strong><br>We reserve the right, at Our sole discretion, to modify or replace these Terms at any time. If a revision is material We will make reasonable efforts to provide at least 30 days' notice prior to any new terms taking effect. [...] By continuing to access or use Our Service after those revisions become effective, You agree to be bound by the revised terms.</p>
             <p><strong>Contact Us</strong><br>If you have any questions about these Terms and Conditions, You can contact us: By email: mindsetmentor320@gmail.com</p>
             <p><em>(Note: This is a template. Consult a legal professional for terms suitable for your specific situation and jurisdiction.)</em></p>
@@ -794,18 +759,18 @@
         <div class="modal-content">
             <span class="modal-close" data-modal-id="privacyModal">×</span>
             <h2>Privacy Policy</h2>
-            <p><strong>Last updated: <span class="currentDate">[Date Placeholder]</span></strong></p>
+            <p><strong>Last updated: [Insert Current Date]</strong></p>
             <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Tic Tac Toe Universe game Service.</p>
-            <p><strong>Information Collection and Use</strong><br>We do not directly collect Personally Identifiable Information (PII) from users playing the game. Game state information (like scores, settings, theme preference) is stored locally in your browser using technologies like `localStorage` during your session and is not transmitted to our servers.</p>
+            <p><strong>Information Collection and Use</strong><br>We do not directly collect Personally Identifiable Information (PII) from users playing the game. Game state information (like scores, settings) is stored locally in your browser during your session and is not transmitted to our servers.</p>
             <p><strong>Third-Party Services & Data</strong></p>
             <ul>
                  <li><strong>Google AdSense:</strong> We use Google AdSense to serve advertisements. Google uses cookies to serve ads based on a user's prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads based on your visit to this site and/or other sites on the Internet. You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ad Settings</a>. Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="http://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">www.aboutads.info/choices</a>. Google's Privacy Policy can be found <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">here</a>.</li>
-                <li><strong>Web Fonts & Libraries:</strong> We use third-party libraries like Google Fonts, Font Awesome, and Canvas Confetti loaded via Content Delivery Networks (CDNs). These services might collect aggregated usage data or IP addresses as part of their service delivery, governed by their respective privacy policies.</li>
+                <li><strong>Web Fonts & Libraries:</strong> We may use third-party libraries like Google Fonts, Font Awesome, and Canvas Confetti loaded via Content Delivery Networks (CDNs). These services might collect aggregated usage data or IP addresses as part of their service delivery, governed by their respective privacy policies.</li>
             </ul>
-             <p><strong>Cookies & Local Storage</strong><br>We use `localStorage` to save your game settings preferences (like theme choice) for a better user experience. We do not set essential cookies for the game functionality itself. Our advertising partner (Google AdSense) uses cookies as described above. You can manage cookie preferences and clear local storage through your browser settings.</p>
-            <p><strong>Data Security</strong><br>As we do not collect sensitive personal data directly, the main security aspect relates to the third-party services we use. We rely on the security measures implemented by Google AdSense and the CDN providers. Data stored in `localStorage` is stored on your device.</p>
+             <p><strong>Cookies</strong><br>We do not set essential cookies for the game functionality itself. However, our advertising partner (Google AdSense) uses cookies as described above. You can manage cookie preferences through your browser settings.</p>
+            <p><strong>Data Security</strong><br>As we do not collect sensitive personal data directly, the main security aspect relates to the third-party services we use. We rely on the security measures implemented by Google AdSense and the CDN providers.</p>
              <p><strong>Children's Privacy</strong><br>Our Service is not directed at children under the age of 13 (or relevant age in your jurisdiction). We do not knowingly collect personal information from children. If You are a parent or guardian and You are aware that Your child has provided Us with Personal Data through third-party services like ads, please contact Us.</p>
-             <p><strong>Changes to this Privacy Policy</strong><br>We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date. You are advised to review this Privacy Policy periodically for any changes.</p>
+             <p><strong>Changes to this Privacy Policy</strong><br>We may update Our Privacy Policy from time to time. We will notify You of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes.</p>
             <p><strong>Contact Us</strong><br>If you have any questions about this Privacy Policy, You can contact us:<br>By email: mindsetmentor320@gmail.com</p>
             <p><em>(Note: Ensure this policy accurately reflects your data practices and complies with relevant regulations like GDPR/CCPA. Legal advice is recommended.)</em></p>
         </div>
@@ -815,7 +780,7 @@
         <div class="modal-content">
             <span class="modal-close" data-modal-id="disclaimerModal">×</span>
             <h2>Disclaimer</h2>
-            <p><strong>Last updated: <span class="currentDate">[Date Placeholder]</span></strong></p>
+            <p><strong>Last updated: [Insert Current Date]</strong></p>
             <p>The information and game provided by Tic Tac Toe Universe (the "Service") are for general entertainment purposes only. All information and game mechanics on the Service are provided in good faith, however, we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability, or completeness of any information or game functionality on the Service.</p>
             <p><strong>Game Disclaimer</strong><br>The Tic Tac Toe game is provided purely for entertainment. While we aim for a balanced and functional experience, we make no guarantees regarding the AI's performance, the outcome of any game, or the absence of bugs or errors. Gameplay results depend on player skill, strategy, and chance elements (like AI choices in easier modes).</p>
              <p><strong>External Links & Advertising Disclaimer</strong><br>The Service displays advertisements (e.g., via Google AdSense) and may contain links to external websites that are not provided or maintained by or in any way affiliated with us. We do not guarantee the accuracy, relevance, timeliness, or completeness of any information on these external websites or the claims made in advertisements. We are not responsible for the content or practices of third-party sites or advertisers.</p>
@@ -832,32 +797,34 @@
              <form id="contactForm">
                  <label for="contactName">Name:</label>
                  <input type="text" id="contactName" name="name" placeholder="Your Name (Optional)">
+
                  <label for="contactEmail">Email:</label>
                  <input type="email" id="contactEmail" name="email" placeholder="Your Email (Optional, for response)">
+
                  <label for="contactMessage">Message:</label>
                  <textarea id="contactMessage" name="message" rows="4" required placeholder="Your message..."></textarea>
-                 <button type="submit" id="submitContact">Show Contact Email</button>
+
+                 <button type="submit" id="submitContact">Send Feedback / Show Email</button>
              </form>
              <div id="contactInfoMessage">
-                 Thank you! To send your message, please use your email client to contact: <a href="mailto:mindsetmentor320@gmail.com"><strong>mindsetmentor320@gmail.com</strong></a>
+                 Thank you for your feedback! To ensure your message reaches us, please send it directly via email to: <a href="mailto:mindsetmentor320@gmail.com"><strong>mindsetmentor320@gmail.com</strong></a>
             </div>
+             <p style="font-size: 0.85em; text-align: center; margin-top: 15px;">(Note: This form does not send email directly due to browser limitations.)</p>
         </div>
     </div>
 
     <div id="winnerPopup" class="modal">
         <div class="modal-content">
+            <!-- Removed close button to encourage clicking "Play Again" -->
             <h2 id="winnerPopupTitle">🎉 Victory! 🎉</h2>
             <p id="winnerPopupMessage">Player X Wins!</p>
             <button id="winnerPopupClose">Play Again</button>
         </div>
     </div>
 
-    <!-- Feedback message for copy URL -->
-    <div id="copyFeedback">Link Copied!</div>
-
 
     <script>
-        // JavaScript Logic - Final Enhanced Version
+        // JavaScript Logic - Enhanced
         const gameBoard = document.getElementById('gameBoard');
         const statusDisplay = document.getElementById('status');
         const restartButton = document.getElementById('restartButton');
@@ -878,13 +845,23 @@
         const winLineElement = document.getElementById('winLine');
         const confettiCanvas = document.getElementById('confettiCanvas');
         const soundToggleButton = document.getElementById('soundToggle');
-        const themeToggleButton = document.getElementById('themeToggle');
-        const shareButton = document.getElementById('shareButton');
-        const copyFeedbackElement = document.getElementById('copyFeedback');
 
         // Modal related elements
-        const modalLinks = { /* as before */ };
-        const modals = { /* as before */ };
+        const modalLinks = {
+            about: document.getElementById('aboutLink'),
+            terms: document.getElementById('termsLink'),
+            privacy: document.getElementById('privacyLink'),
+            disclaimer: document.getElementById('disclaimerLink'),
+            contact: document.getElementById('contactLink'),
+        };
+        const modals = {
+            about: document.getElementById('aboutModal'),
+            terms: document.getElementById('termsModal'),
+            privacy: document.getElementById('privacyModal'),
+            disclaimer: document.getElementById('disclaimerModal'),
+            contact: document.getElementById('contactModal'),
+            winner: document.getElementById('winnerPopup'),
+        };
         const closeButtons = document.querySelectorAll('.modal-close');
         const winnerPopupCloseButton = document.getElementById('winnerPopupClose');
         const winnerPopupTitle = document.getElementById('winnerPopupTitle');
@@ -892,13 +869,14 @@
         const contactForm = document.getElementById('contactForm');
         const contactInfoMessage = document.getElementById('contactInfoMessage');
 
+
         // --- Game State Variables ---
         let cells = [];
         let currentPlayer;
         let gameActive = false;
         let gameState = [];
         let scores = { p1: 0, p2: 0 };
-        let streaks = { p1: 0, p2: 0 };
+        let streaks = { p1: 0, p2: 0 }; // Added streak tracking
         let boardSize = 3;
         let winLength = 3;
         let gameMode = 'pvp';
@@ -908,224 +886,570 @@
         let player1Emoji = '👽';
         let player2Emoji = '🤖';
         let currentPlayerStarts = 'p1';
-        let isMuted = localStorage.getItem('tttUniverseMuted') === 'true'; // Load mute state
-        let currentTheme = localStorage.getItem('tttUniverseTheme') || 'light'; // Load theme state
+        let isMuted = false; // Added mute state
 
         // --- Sound Effects ---
         let moveSound, winSound;
-        function loadSounds() {
-            try {
-                // ** IMPORTANT: Place 'move.mp3' and 'win.mp3' in the same folder as this HTML file, **
-                // ** or update the paths below to the correct location of your sound files.      **
-                moveSound = new Audio('move.mp3');
-                winSound = new Audio('win.mp3');
-                console.log("Sound files loaded successfully (or placeholder created).");
-            } catch (e) {
-                console.warn("Could not initialize audio. Ensure sound files exist and paths are correct.", e);
-                // Create dummy objects so game doesn't crash if Audio fails
-                moveSound = { play: () => {}, currentTime: 0 };
-                winSound = { play: () => {}, currentTime: 0 };
-                 // Visually disable sound toggle if loading fails completely
-                 soundToggleButton.style.opacity = '0.5';
-                 soundToggleButton.style.pointerEvents = 'none';
-                 soundToggleButton.title = "Sound disabled (files not found)";
-                 isMuted = true; // Force mute if sounds can't load
-            } finally {
-                 // Update button state based on loaded preference or forced mute
-                 updateSoundButtonIcon();
-            }
+        try {
+            // IMPORTANT: Replace 'path/to/move.mp3' and 'path/to/win.mp3' with the ACTUAL paths to your sound files!
+            // If the files are in the same folder as the HTML, just use the filenames.
+            moveSound = new Audio('move.mp3');
+            winSound = new Audio('win.mp3');
+        } catch (e) {
+            console.warn("Could not initialize audio. Ensure sound files exist and paths are correct.", e);
+            moveSound = { play: () => {} }; // Dummy object
+            winSound = { play: () => {} };
         }
 
-        // --- Confetti ---
-        const myConfetti = confetti.create(confettiCanvas, { resize: true, useWorker: true });
-        function fireConfetti() { /* as before */ }
 
-        // --- Initialization ---
+        // --- Confetti ---
+        const myConfetti = confetti.create(confettiCanvas, {
+            resize: true,
+            useWorker: true
+        });
+
+        function fireConfetti() {
+             // More controlled burst
+             const defaults = {
+                 spread: 360,
+                 ticks: 70, // Slightly longer lasting particles
+                 gravity: 0.8, // একটু নিচে নামবে
+                 decay: 0.95,
+                 startVelocity: 35,
+                 shapes: ['star', 'circle'], // Added shapes
+                 colors: ['#ffcc00', '#ff3366', '#00e676', '#2575fc', '#ffffff'] // Theme colors
+             };
+
+             // Fire multiple bursts for a better effect
+             myConfetti({ ...defaults, particleCount: 60, scalar: 1.2, origin: { x: 0.5, y: 0.6 } });
+             myConfetti({ ...defaults, particleCount: 40, scalar: 0.8, origin: { x: 0.3, y: 0.7 } });
+             myConfetti({ ...defaults, particleCount: 40, scalar: 0.8, origin: { x: 0.7, y: 0.7 } });
+
+            // Optional: Slightly longer, less intense shower
+            setTimeout(() => {
+                myConfetti({
+                    particleCount: 100,
+                    angle: 90,
+                    spread: 180,
+                    origin: { y: 0 }, // From top center
+                    gravity: 0.5,
+                    decay: 0.94,
+                     colors: ['#ffcc00', '#ffffff', '#00e676']
+                });
+            }, 200);
+        }
+
+
+        // --- Initialization and Settings ---
+
         function initializeGame() {
             boardSize = parseInt(boardSizeSelect.value);
-            winLength = boardSize;
+            winLength = boardSize; // N-in-a-row win condition
             player1Emoji = player1EmojiSelect.value;
             player2Emoji = player2EmojiSelect.value;
-            player1ScoreIndicator.querySelector('.emoji').textContent = player1Emoji;
-            player2ScoreIndicator.querySelector('.emoji').textContent = gameMode === 'pvp' ? player2Emoji : '🤖';
+             player1ScoreIndicator.querySelector('.emoji').textContent = player1Emoji;
+             player2ScoreIndicator.querySelector('.emoji').textContent = gameMode === 'pvp' ? player2Emoji : '🤖';
+
 
             gameState = Array(boardSize * boardSize).fill("");
             cells = [];
             gameBoard.innerHTML = '';
-            winLineElement.style.display = 'none';
-            winLineElement.style.width = '0px';
+             winLineElement.style.display = 'none';
+             winLineElement.style.width = '0px'; // Reset width for animation
 
-            gameBoard.className = 'game-board';
-            gameBoard.classList.add(`board-${boardSize}x${boardSize}`);
+
+             gameBoard.className = 'game-board';
+             gameBoard.classList.add(`board-${boardSize}x${boardSize}`);
             gameBoard.style.gridTemplateColumns = `repeat(${boardSize}, var(--cell-size-${boardSize === 3 ? 'small' : boardSize === 4 ? 'medium' : 'large'}))`;
             gameBoard.style.gridTemplateRows = `repeat(${boardSize}, var(--cell-size-${boardSize === 3 ? 'small' : boardSize === 4 ? 'medium' : 'large'}))`;
-            gameBoard.style.gap = `var(--gap-size)`;
+             gameBoard.style.gap = `var(--gap-size)`;
 
-            for (let i = 0; i < boardSize * boardSize; i++) { /* Create cells as before */ }
+
+            for (let i = 0; i < boardSize * boardSize; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.index = i;
+                cell.addEventListener('click', handleCellClick);
+                gameBoard.appendChild(cell);
+                cells.push(cell);
+            }
 
             currentPlayer = currentPlayerStarts;
             gameActive = true;
             statusDisplay.textContent = `Player ${currentPlayer === 'p1' ? player1Emoji : (gameMode === 'pvp' ? player2Emoji : '🤖')}'s turn`;
             statusDisplay.className = '';
-            updateTurnIndicator();
-            enableBoardInteraction();
+             updateTurnIndicator();
+             enableBoardInteraction();
 
-            if (gameMode === 'pve' && currentPlayer === aiPlayer) { /* AI start logic as before */ }
+             if (gameMode === 'pve' && currentPlayer === aiPlayer) {
+                  statusDisplay.textContent = `AI ${player2Emoji} is thinking...`;
+                  statusDisplay.classList.add('ai-thinking');
+                  disableBoardInteraction();
+                  setTimeout(makeAIMove, 1000 + Math.random() * 500); // Slightly longer, varied delay
+             }
         }
 
         function updateSettings() {
             currentPlayerStarts = 'p1';
             scores = { p1: 0, p2: 0 };
-            streaks = { p1: 0, p2: 0 };
-            updateScoreDisplay();
+             streaks = { p1: 0, p2: 0 }; // Reset streaks on settings change
+            updateScoreDisplay(); // Update display before init
             initializeGame();
         }
 
-        function updateTurnIndicator() { /* as before */ }
-        function updateScoreDisplay() { /* as before */ }
+        function updateTurnIndicator() {
+             player1ScoreIndicator.classList.toggle('active-turn', currentPlayer === 'p1');
+             player2ScoreIndicator.classList.toggle('active-turn', currentPlayer === 'p2');
+        }
+
+        function updateScoreDisplay() {
+             scoreP1Element.textContent = scores.p1;
+             scoreP2Element.textContent = scores.p2;
+             streakP1Element.textContent = streaks.p1;
+             streakP2Element.textContent = streaks.p2;
+        }
 
         // --- Event Listeners Setup ---
         boardSizeSelect.addEventListener('change', updateSettings);
         player1EmojiSelect.addEventListener('change', updateSettings);
         player2EmojiSelect.addEventListener('change', updateSettings);
-        difficultySelect.addEventListener('change', () => { aiDifficulty = difficultySelect.value; updateSettings(); });
-        pvpButton.addEventListener('click', () => { /* as before */ });
-        pveButton.addEventListener('click', () => { /* as before */ });
-        restartButton.addEventListener('click', initializeGame);
-        resetScoreButton.addEventListener('click', () => { /* Includes streak reset */ });
-
-        // Sound Toggle Listener
-        soundToggleButton.addEventListener('click', () => {
-            isMuted = !isMuted;
-            localStorage.setItem('tttUniverseMuted', isMuted); // Save preference
-            updateSoundButtonIcon();
+        difficultySelect.addEventListener('change', () => {
+             aiDifficulty = difficultySelect.value;
+             updateSettings();
         });
 
-         function updateSoundButtonIcon() {
-            soundToggleButton.innerHTML = isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-            soundToggleButton.title = isMuted ? 'Unmute Sound' : 'Mute Sound';
-         }
-
-
-        // Theme Toggle Listener
-        themeToggleButton.addEventListener('click', () => {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-            applyTheme();
-            localStorage.setItem('tttUniverseTheme', currentTheme); // Save preference
-        });
-
-        function applyTheme() {
-            document.body.className = currentTheme === 'dark' ? 'dark-theme' : '';
-            themeToggleButton.innerHTML = currentTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            themeToggleButton.title = currentTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
-        }
-
-        // Share Button Listener
-        shareButton.addEventListener('click', async () => {
-            const shareData = {
-                title: 'Tic Tac Toe Universe',
-                text: 'Check out this awesome Tic Tac Toe game!',
-                url: window.location.href // Share the current page URL
-            };
-            try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                    console.log('Game shared successfully');
-                } else {
-                    // Fallback for desktop/unsupported browsers: Copy URL
-                    await navigator.clipboard.writeText(shareData.url);
-                    showCopyFeedback('Link Copied!');
-                }
-            } catch (err) {
-                console.error('Error sharing:', err);
-                 // Fallback if share fails or clipboard fails
-                 showCopyFeedback('Could not share/copy.');
+        pvpButton.addEventListener('click', () => {
+            if (gameMode !== 'pvp') {
+                gameMode = 'pvp';
+                pvpButton.classList.add('active');
+                pveButton.classList.remove('active');
+                difficultyGroup.classList.add('hidden');
+                updateSettings();
             }
         });
 
-         function showCopyFeedback(message) {
-             copyFeedbackElement.textContent = message;
-             copyFeedbackElement.classList.add('show');
-             setTimeout(() => {
-                 copyFeedbackElement.classList.remove('show');
-             }, 2000); // Hide after 2 seconds
+        pveButton.addEventListener('click', () => {
+             if (gameMode !== 'pve') {
+                 gameMode = 'pve';
+                 pveButton.classList.add('active');
+                 pvpButton.classList.remove('active');
+                 difficultyGroup.classList.remove('hidden');
+                 aiDifficulty = difficultySelect.value;
+                 updateSettings();
+             }
+        });
+
+        restartButton.addEventListener('click', initializeGame);
+        resetScoreButton.addEventListener('click', () => {
+             currentPlayerStarts = 'p1';
+             scores = { p1: 0, p2: 0 };
+             streaks = { p1: 0, p2: 0 }; // Also reset streaks
+             updateScoreDisplay();
+             initializeGame();
+        });
+
+         // Sound Toggle Listener
+         soundToggleButton.addEventListener('click', () => {
+             isMuted = !isMuted;
+             soundToggleButton.innerHTML = isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+             soundToggleButton.title = isMuted ? 'Unmute Sound' : 'Mute Sound';
+         });
+
+
+        // Modal Listeners
+        Object.keys(modalLinks).forEach(key => {
+            modalLinks[key].addEventListener('click', (e) => {
+                e.preventDefault();
+                showModal(key);
+            });
+        });
+
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                 // Get the ID from the button's data attribute
+                const modalId = button.dataset.modalId;
+                if (modalId) {
+                     hideModal(modalId); // Pass the actual ID (e.g., "aboutModal")
+                } else {
+                     console.error("Modal close button missing data-modal-id");
+                }
+            });
+        });
+
+         winnerPopupCloseButton.addEventListener('click', () => {
+             hideModal('winnerPopup'); // Use the specific ID
+             initializeGame();
+         });
+
+        window.addEventListener('click', (event) => {
+             // Use Object.values to iterate through modal elements directly
+             Object.values(modals).forEach(modalElement => {
+                 if (event.target == modalElement) {
+                     // Hide using the element's ID
+                     hideModal(modalElement.id);
+                 }
+             });
+        });
+
+         // Contact Form Listener
+         contactForm.addEventListener('submit', (e) => {
+             e.preventDefault(); // Prevent actual form submission
+             contactInfoMessage.style.display = 'block'; // Show the email info message
+         });
+
+
+        // --- Modal Functions (Corrected Hide Logic) ---
+        function showModal(modalKey) {
+            const modalElement = modals[modalKey.replace('Modal', '').replace('Popup', '')]; // Get element using base key
+            if (modalElement) {
+                modalElement.classList.remove('fade-out'); // Remove fade-out if present
+                modalElement.classList.add('active');
+                 // Reset contact form message visibility when opening contact modal
+                if (modalKey === 'contact') {
+                    contactInfoMessage.style.display = 'none';
+                }
+            } else {
+                 console.error("Modal not found for key:", modalKey);
+            }
+        }
+         function hideModal(modalId) { // Takes the actual element ID
+             const modalElement = document.getElementById(modalId);
+             if (modalElement && modalElement.classList.contains('active')) {
+                  modalElement.classList.add('fade-out'); // Start fade-out animation
+                 // Remove the 'active' class after the animation completes
+                 setTimeout(() => {
+                    modalElement.classList.remove('active');
+                    modalElement.classList.remove('fade-out'); // Clean up animation class
+                 }, 400); // Match animation duration
+             } else {
+                 // console.warn("Attempted to hide non-active or non-existent modal:", modalId);
+             }
          }
 
 
-        // Modal Listeners (Corrected)
-        Object.keys(modalLinks).forEach(key => { /* as before */ });
-        closeButtons.forEach(button => { /* as before */ });
-        winnerPopupCloseButton.addEventListener('click', () => { /* as before */ });
-        window.addEventListener('click', (event) => { /* as before */ });
-        contactForm.addEventListener('submit', (e) => { /* as before */ });
+        // --- Game Logic ---
 
-        // --- Modal Functions (Corrected Hide Logic) ---
-        function showModal(modalKey) { /* as before */ }
-        function hideModal(modalId) { /* Corrected fade-out logic as before */ }
+        function handleCellClick(event) {
+             if (!gameActive) return;
+             const clickedCell = event.target.closest('.cell');
+             if (!clickedCell) return;
+             const clickedCellIndex = parseInt(clickedCell.dataset.index);
 
-        // --- Update Dates in Modals ---
-        function updateDynamicDates() {
-            const dateElements = document.querySelectorAll('.currentDate');
-            const today = new Date();
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedDate = today.toLocaleDateString('en-US', options); // Or adjust locale
-            dateElements.forEach(el => {
-                el.textContent = formattedDate;
-            });
-            // Update footer year too
-            document.getElementById('footerYear').textContent = today.getFullYear();
+             if (gameState[clickedCellIndex] !== "" || (gameMode === 'pve' && currentPlayer === aiPlayer)) {
+                 return;
+             }
+             makeMove(clickedCellIndex);
+
+             if (gameActive && gameMode === 'pve' && currentPlayer === aiPlayer) {
+                 statusDisplay.textContent = `AI ${player2Emoji} is thinking...`;
+                 statusDisplay.classList.add('ai-thinking');
+                 disableBoardInteraction();
+                 setTimeout(makeAIMove, 800 + Math.random() * 600); // Adjust delay
+             }
         }
 
-        // --- Game Logic ---
-        function handleCellClick(event) { /* as before */ }
-        function makeMove(index) { /* Added playSound call */ }
-        function changePlayer() { /* as before */ }
-        function disableBoardInteraction() { /* Added opacity change */ }
-        function enableBoardInteraction() { /* Added opacity change */ }
-        function playSound(sound) { /* Checks isMuted */ }
+         function makeMove(index) {
+             if (!gameActive || gameState[index] !== "") return;
+             gameState[index] = currentPlayer;
+             const cellElement = cells[index];
+             const emoji = currentPlayer === 'p1' ? player1Emoji : player2Emoji;
+             cellElement.innerHTML = `<span>${emoji}</span>`;
+             cellElement.classList.add(currentPlayer);
+             playSound(moveSound); // Play move sound
+
+             if (!checkResult()) {
+                 changePlayer();
+             }
+         }
+
+        function changePlayer() {
+            currentPlayer = currentPlayer === 'p1' ? 'p2' : 'p1';
+            statusDisplay.textContent = `Player ${currentPlayer === 'p1' ? player1Emoji : (gameMode === 'pvp' ? player2Emoji : '🤖')}'s turn`;
+             statusDisplay.className = ''; // Reset status class
+            updateTurnIndicator();
+        }
+
+         function disableBoardInteraction() {
+            gameBoard.style.pointerEvents = 'none';
+            gameBoard.style.opacity = '0.7'; // Visually indicate disabled state
+         }
+
+         function enableBoardInteraction() {
+             gameBoard.style.pointerEvents = 'auto';
+             gameBoard.style.opacity = '1';
+         }
+
+        function playSound(sound) {
+            if (!isMuted && sound && typeof sound.play === 'function') { // Check mute status
+                sound.currentTime = 0;
+                sound.play().catch(error => console.warn("Audio play failed:", error));
+            }
+        }
+
 
         // --- Win/Draw Check ---
-        function checkResult() { /* as before */ }
-        function handleWin(winInfo) { /* Includes streak update */ }
-        function handleDraw() { /* Includes streak reset */ }
-        function highlightWinningCells(line) { /* as before */ }
-        function drawWinningLine(line) { /* Added smooth animation trigger */ }
-        function generateWinningLines(size, length) { /* as before */ }
 
-        // --- AI Logic (Minimax and Heuristics) ---
-        // The AI logic from the previous version is generally sound and kept here.
-        function makeAIMove() { /* as before, with fallbacks */ }
-        function getAvailableMoves(boardState) { /* as before */ }
-        function getMediumAIMove(boardState, availableMoves) { /* as before */ }
-        function getHardHeuristicMove(boardState, availableMoves) { /* as before */ }
-        function minimax(newBoard, player) { /* as before */ }
-        function checkWinnerInternal(boardState, player) { /* as before */ }
-        function getCorners(size) { /* as before */ }
-        function getSides(size) { /* as before */ }
-        function getOppositeCornersMap(size) { /* as before */ }
+        function checkResult() {
+            let roundWon = false;
+            let winInfo = null;
+            const lines = generateWinningLines(boardSize, winLength);
 
-        // --- Initial Setup on Load ---
-        document.addEventListener('DOMContentLoaded', () => {
-             loadSounds(); // Load sounds first
-             applyTheme(); // Apply saved or default theme
-             updateDynamicDates(); // Set current dates in modals/footer
-             initializeGame(); // Setup the initial game board
-              // Make sure modal event listeners are properly attached after DOM is ready
-             Object.keys(modalLinks).forEach(key => {
-                 if (modalLinks[key]) {
-                    modalLinks[key].addEventListener('click', (e) => { e.preventDefault(); showModal(key); });
+            for (const line of lines) {
+                const cellValues = line.map(index => gameState[index]);
+                const firstVal = cellValues[0];
+                if (firstVal !== "" && cellValues.every(val => val === firstVal)) {
+                     roundWon = true;
+                     winInfo = { winner: firstVal, line: line }; // Winner is 'p1' or 'p2'
+                     break;
+                }
+            }
+
+            if (roundWon) {
+                handleWin(winInfo);
+                return true;
+            }
+            if (!gameState.includes("")) {
+                handleDraw();
+                return true;
+            }
+            enableBoardInteraction();
+            return false;
+        }
+
+        function handleWin(winInfo) {
+            gameActive = false;
+            disableBoardInteraction();
+            highlightWinningCells(winInfo.line);
+            drawWinningLine(winInfo.line);
+
+             // Update scores and streaks
+            scores[winInfo.winner]++;
+            streaks[winInfo.winner]++;
+             const loser = winInfo.winner === 'p1' ? 'p2' : 'p1';
+             streaks[loser] = 0; // Reset loser's streak
+
+            currentPlayerStarts = winInfo.winner;
+            updateScoreDisplay();
+            playSound(winSound); // Play win sound
+
+             const winnerName = winInfo.winner === 'p1' ? player1Emoji : (gameMode === 'pvp' ? player2Emoji : '🤖');
+            statusDisplay.textContent = `Player ${winnerName} Wins!`;
+            statusDisplay.className = 'win-message';
+
+             setTimeout(() => {
+                 winnerPopupTitle.textContent = "🎉 Victory! 🎉";
+                 winnerPopupMessage.textContent = `Player ${winnerName} takes the round!`;
+                 showModal('winnerPopup'); // Use the specific ID
+                 fireConfetti();
+             }, 800);
+        }
+
+        function handleDraw() {
+             gameActive = false;
+             disableBoardInteraction();
+             statusDisplay.textContent = "It's a Draw! 🤝";
+             statusDisplay.className = 'draw-message';
+             currentPlayerStarts = currentPlayerStarts === 'p1' ? 'p2' : 'p1';
+             streaks = { p1: 0, p2: 0 }; // Reset streaks on draw too? (Optional, current implementation resets)
+             updateScoreDisplay(); // Update display to show reset streaks
+
+             setTimeout(() => {
+                 winnerPopupTitle.textContent = "🤝 It's a Tie! 🤝";
+                 winnerPopupMessage.textContent = "No winner this round. Play again!";
+                  showModal('winnerPopup');
+             }, 800);
+        }
+
+        function highlightWinningCells(line) {
+             line.forEach(index => cells[index].classList.add('win'));
+        }
+
+        function drawWinningLine(line) {
+            if (!line || line.length < 2) return;
+            const firstCell = cells[line[0]];
+            const lastCell = cells[line[line.length - 1]];
+            if (!firstCell || !lastCell) { // Safety check
+                 console.error("Cannot find cells for win line:", line);
+                 return;
+            }
+            const boardRect = gameBoard.getBoundingClientRect();
+            const firstRect = firstCell.getBoundingClientRect();
+            const lastRect = lastCell.getBoundingClientRect();
+
+            const startX = firstRect.left + firstRect.width / 2 - boardRect.left;
+            const startY = firstRect.top + firstRect.height / 2 - boardRect.top;
+            const endX = lastRect.left + lastRect.width / 2 - boardRect.left;
+            const endY = lastRect.top + lastRect.height / 2 - boardRect.top;
+
+            const angle = Math.atan2(endY - startY, endX - startX) * (180 / Math.PI);
+            const length = Math.hypot(endX - startX, endY - startY); // More accurate length
+
+            winLineElement.style.top = `${startY}px`;
+            winLineElement.style.left = `${startX}px`;
+            winLineElement.style.transform = `rotate(${angle}deg)`;
+            winLineElement.style.display = 'block';
+            // Force reflow to apply initial width 0 for animation
+            winLineElement.offsetWidth;
+             winLineElement.style.width = `${length}px`; // Animate to full length
+        }
+
+        function generateWinningLines(size, length) {
+            const lines = [];
+            // Rows, Cols, Diagonals logic remains the same
+             for (let r = 0; r < size; r++) {
+                for (let c = 0; c <= size - length; c++) {
+                    const line = [];
+                    for (let k = 0; k < length; k++) line.push(r * size + c + k);
+                    lines.push(line);
+                }
+            }
+            for (let c = 0; c < size; c++) {
+                for (let r = 0; r <= size - length; r++) {
+                    const line = [];
+                    for (let k = 0; k < length; k++) line.push((r + k) * size + c);
+                    lines.push(line);
+                }
+            }
+            for (let r = 0; r <= size - length; r++) {
+                for (let c = 0; c <= size - length; c++) {
+                    const line = [];
+                    for (let k = 0; k < length; k++) line.push((r + k) * size + c + k);
+                    lines.push(line);
+                }
+            }
+            for (let r = 0; r <= size - length; r++) {
+                for (let c = length - 1; c < size; c++) {
+                    const line = [];
+                    for (let k = 0; k < length; k++) line.push((r + k) * size + c - k);
+                    lines.push(line);
+                }
+            }
+            return lines;
+        }
+
+        // --- AI Logic (No changes needed from previous good version) ---
+
+        function makeAIMove() {
+             if (!gameActive) return;
+             let bestMove = -1;
+             const availableMoves = getAvailableMoves(gameState);
+             if (availableMoves.length === 0) {
+                console.error("AI Error: No available moves.");
+                enableBoardInteraction();
+                return;
+             }
+
+             if (aiDifficulty === 'easy') {
+                 bestMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+             } else if (aiDifficulty === 'medium') {
+                 bestMove = getMediumAIMove(gameState, availableMoves);
+             } else { // Hard
+                 if (boardSize === 3) {
+                     bestMove = minimax(gameState, aiPlayer).index;
+                 } else { // Use heuristics for larger boards
+                     bestMove = getHardHeuristicMove(gameState, availableMoves);
                  }
-             });
-             closeButtons.forEach(button => {
-                 button.addEventListener('click', () => {
-                     const modalId = button.dataset.modalId; // Ensure this attribute exists on your buttons
-                     if (modalId) hideModal(modalId);
-                 });
-             });
-             winnerPopupCloseButton.addEventListener('click', () => { hideModal('winnerPopup'); initializeGame(); });
-             window.addEventListener('click', (event) => { Object.values(modals).forEach(modalElement => { if (event.target == modalElement) hideModal(modalElement.id); }); });
-             contactForm.addEventListener('submit', (e) => { e.preventDefault(); contactInfoMessage.style.display = 'block'; });
-        });
+                 // If minimax/heuristic fails to return a valid index (shouldn't happen ideally)
+                 if (bestMove === undefined || bestMove === -1 || gameState[bestMove] !== "") {
+                    console.warn("AI hard logic failed or returned invalid move, falling back.");
+                    bestMove = getMediumAIMove(gameState, availableMoves); // Fallback to medium
+                 }
+             }
+
+
+            // Final check before making the move
+             if (bestMove !== -1 && gameState[bestMove] === "") {
+                 makeMove(bestMove);
+             } else if(availableMoves.length > 0) {
+                 console.warn(`AI chose invalid move (${bestMove}) or failed. Fallback to random.`);
+                 makeMove(availableMoves[Math.floor(Math.random() * availableMoves.length)]);
+             } else {
+                 console.error("AI failed completely.");
+                 enableBoardInteraction();
+             }
+        }
+
+        function getAvailableMoves(boardState) {
+            return boardState.map((cell, index) => cell === "" ? index : null).filter(val => val !== null);
+        }
+
+         function getMediumAIMove(boardState, availableMoves) {
+             // 1. Win
+             for (const move of availableMoves) {
+                 const tempState = [...boardState]; tempState[move] = aiPlayer;
+                 if (checkWinnerInternal(tempState, aiPlayer)) return move;
+             }
+             // 2. Block
+             for (const move of availableMoves) {
+                 const tempState = [...boardState]; tempState[move] = humanPlayer;
+                 if (checkWinnerInternal(tempState, humanPlayer)) return move;
+             }
+             // 3. Random
+             return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+         }
+
+        function getHardHeuristicMove(boardState, availableMoves) {
+             // Priority: Win > Block > Center > Opposite Corner > Corner > Side > Random
+             // 1. Win
+             for (const move of availableMoves) { const tempState = [...boardState]; tempState[move] = aiPlayer; if (checkWinnerInternal(tempState, aiPlayer)) return move; }
+             // 2. Block
+             for (const move of availableMoves) { const tempState = [...boardState]; tempState[move] = humanPlayer; if (checkWinnerInternal(tempState, humanPlayer)) return move; }
+             // 3. Center (if available and board is odd size)
+             if (boardSize % 2 !== 0) { const centerIndex = Math.floor(boardState.length / 2); if (boardState[centerIndex] === "") return centerIndex; }
+             // 4. Opposite Corner (simplified - check if corner taken & opposite free)
+              const corners = getCorners(boardSize);
+              const oppositeCorners = getOppositeCornersMap(boardSize);
+              for (const corner of corners) { if (boardState[corner] === humanPlayer && boardState[oppositeCorners[corner]] === "") return oppositeCorners[corner]; }
+             // 5. Any Corner
+             const availableCorners = corners.filter(index => boardState[index] === "");
+             if (availableCorners.length > 0) return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+             // 6. Any Side
+             const sides = getSides(boardSize);
+             const availableSides = sides.filter(index => boardState[index] === "");
+             if (availableSides.length > 0) return availableSides[Math.floor(Math.random() * availableSides.length)];
+             // 7. Random
+             return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        }
+
+
+        function minimax(newBoard, player) {
+            const availSpots = getAvailableMoves(newBoard);
+            if (checkWinnerInternal(newBoard, humanPlayer)) return { score: -10 };
+            if (checkWinnerInternal(newBoard, aiPlayer)) return { score: 10 };
+            if (availSpots.length === 0) return { score: 0 };
+
+            const moves = [];
+            for (let i = 0; i < availSpots.length; i++) {
+                const move = { index: availSpots[i] };
+                newBoard[availSpots[i]] = player;
+                const result = minimax(newBoard, player === aiPlayer ? humanPlayer : aiPlayer);
+                move.score = result.score;
+                newBoard[availSpots[i]] = ""; // Undo move
+                moves.push(move);
+            }
+
+            let bestMove;
+            if (player === aiPlayer) { // Maximize
+                let bestScore = -Infinity;
+                moves.forEach((move, i) => { if (move.score > bestScore) { bestScore = move.score; bestMove = i; } });
+            } else { // Minimize
+                let bestScore = Infinity;
+                moves.forEach((move, i) => { if (move.score < bestScore) { bestScore = move.score; bestMove = i; } });
+            }
+            return moves[bestMove];
+        }
+
+         function checkWinnerInternal(boardState, player) {
+             const lines = generateWinningLines(boardSize, winLength);
+             return lines.some(line => line.every(index => boardState[index] === player));
+         }
+
+         function getCorners(size) { /* As before */ if (size < 1) return []; const s = size - 1; return [0, s, size * s, size * size - 1].filter(c=> c >= 0 && c < size*size); }
+         function getSides(size) { /* As before */ if (size < 3) return []; const sides = []; const corners = getCorners(size); for(let i=0; i < size*size; i++) { const r = Math.floor(i / size); const c = i % size; if ((r === 0 || r === size - 1 || c === 0 || c === size - 1) && !corners.includes(i)) sides.push(i); } return sides; }
+          function getOppositeCornersMap(size) { /* Helper for opposite corners */ const s = size -1; return { 0: size * size - 1, [s]: size * s, [size * s]: s, [size * size - 1]: 0 }; }
+
+        // --- Start Game on Load ---
+        initializeGame(); // Initial setup
 
     </script>
 
