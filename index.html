@@ -26,7 +26,10 @@
             --header-bg-start: #ffffff;
             --header-bg-end: #f8f9fa;
             --header-shadow: 0 6px 20px rgba(0, 0, 0, 0.09);
-            /* Footer variables removed */
+            --footer-bg-start: #f8f9fa; /* Footer background */
+            --footer-bg-end: #ffffff;
+            --footer-shadow: 0 -5px 15px rgba(0, 0, 0, 0.07); /* Footer shadow */
+            --footer-text: #495057; /* Footer text color */
             --primary-color: #007bff;
             --secondary-color: #6f42c1;
             --accent-color: #fd7e14;
@@ -40,7 +43,7 @@
             --button-bg: var(--primary-color);
             --button-text: #ffffff;
             --button-hover-bg: #0056b3;
-            --icon-color: var(--primary-color); /* Kept for potential future use */
+            --icon-color: var(--primary-color);
             --link-color: var(--primary-color);
             --link-hover-color: #0056b3;
             --modal-bg: #ffffff;
@@ -57,7 +60,10 @@
             --header-bg-start: #1f1f1f;
             --header-bg-end: #242526;
             --header-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
-            /* Footer variables removed */
+            --footer-bg-start: #242526; /* Dark Footer background */
+            --footer-bg-end: #1f1f1f;
+            --footer-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3); /* Dark Footer shadow */
+            --footer-text: #adb5bd; /* Dark Footer text color */
             --primary-color: #3a9cff;
             --secondary-color: #bb86fc;
             --accent-color: #ffac4d;
@@ -149,7 +155,7 @@
         .header-buttons button:hover { color: var(--primary-color); transform: scale(1.15) rotate(5deg); }
 
         /* Main Content Area */
-        main { flex-grow: 1; padding: 40px 0; padding-bottom: 60px; /* Add padding to bottom since footer is gone */ }
+        main { flex-grow: 1; padding: 40px 0; } /* Remove padding-bottom added previously */
 
         /* Advertisement Banner Placeholder */
         .ad-banner {
@@ -159,7 +165,7 @@
             margin-left: auto; margin-right: auto;
             max-width: 728px; min-height: 90px;
             display: flex; align-items: center; justify-content: center;
-            color: #6c757d; /* Fallback color if footer text variable removed */
+            color: var(--footer-text); /* Use footer text color */
             font-size: 0.9rem; border-radius: 8px;
             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
@@ -226,7 +232,7 @@
         /* Contact Form Section */
         #contact {
             background-color: var(--box-bg); padding: 40px; border-radius: 10px;
-             /* Removed margin-bottom as it's the last element in main now */
+            margin-bottom: 50px; /* Restore margin-bottom before footer */
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
@@ -259,9 +265,76 @@
              box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
         }
 
-        /* Footer Styles Removed */
+        /* Footer Styles Re-added */
+        footer {
+             background-color: var(--footer-bg-start);
+            color: var(--footer-text); padding: 30px 0;
+            margin-top: auto; /* Pushes footer to bottom */
+            box-shadow: var(--footer-shadow);
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        .footer-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .footer-left, .footer-center, .footer-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            flex-basis: auto;
+        }
+        .footer-center a {
+            font-size: 2.2rem;
+            color: var(--icon-color);
+            transition: color 0.3s ease, transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding: 5px;
+        }
+        .footer-center a:hover {
+            transform: scale(1.2) rotate(-5deg);
+            color: var(--link-hover-color);
+        }
+        .footer-left a, .footer-right a {
+            color: var(--footer-text);
+            font-size: 0.95rem;
+            transition: color 0.3s ease, transform 0.2s ease;
+            padding: 5px 0;
+            position: relative;
+            cursor: pointer; /* Important for modal triggers */
+        }
+         .footer-left a::after, .footer-right a::after {
+             content: '';
+             position: absolute;
+             width: 0;
+             height: 2px;
+             display: block;
+             margin-top: 3px;
+             right: 0;
+             background: var(--link-hover-color);
+             transition: width .3s ease;
+             -webkit-transition: width .3s ease;
+         }
+          .footer-left a:hover::after, .footer-right a:hover::after{
+            width: 100%;
+            left: 0;
+            background-color: var(--link-hover-color);
+          }
+        .footer-left a:hover, .footer-right a:hover {
+             color: var(--link-hover-color);
+        }
+        .copyright { /* Re-add copyright style if needed, or remove if not */
+             text-align: center; margin-top: 30px;
+             font-size: 0.9rem; width: 100%;
+             color: var(--footer-text); transition: color 0.3s ease;
+             padding-top: 20px;
+             border-top: 1px solid var(--input-border);
+        }
 
-        /* Modal Styles (Kept as they might be triggered from elsewhere later) */
+        /* Modal Styles */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--modal-overlay-bg);
@@ -291,7 +364,7 @@
         .modal-close {
             position: absolute; top: 18px; right: 18px;
             background: transparent; border: none; font-size: 2rem;
-            color: #6c757d; /* Fallback color */
+            color: var(--footer-text); /* Use footer text color */
             cursor: pointer;
             transition: color 0.3s ease, transform 0.3s ease;
             padding: 5px; line-height: 1; z-index: 10;
@@ -310,11 +383,11 @@
         .modal-body ul { list-style: disc; margin-left: 30px; }
         .modal-body strong { font-weight: 600; color: var(--text-color); }
         .modal-body .last-updated {
-            font-size: 0.9rem; color: #6c757d; /* Fallback color */
+            font-size: 0.9rem; color: var(--footer-text); /* Use footer text color */
              margin-top: 2.5rem;
             border-top: 1px solid var(--input-border); padding-top: 1.2rem;
         }
-        .modal-source-content { display: none; } /* Kept hidden content divs */
+        .modal-source-content { display: none; }
 
         /* Responsive Design Adjustments */
         @media (max-width: 992px) {
@@ -322,7 +395,7 @@
             .game-box { min-height: 210px; padding: 30px 20px; }
             .game-name { font-size: 1.4rem; }
             .play-now-button { padding: 12px 35px; font-size: 1.1rem; }
-             /* Footer responsive removed */
+            .footer-left, .footer-right { gap: 12px; }
         }
 
         @media (max-width: 768px) {
@@ -337,7 +410,20 @@
             .game-boxes-container { grid-template-columns: 1fr; gap: 25px; }
             .game-box { min-height: 190px; }
 
-            /* Footer responsive removed */
+             /* Footer Responsive Re-added */
+            .footer-container {
+                 justify-content: center;
+                 flex-direction: column;
+                 text-align: center;
+                 gap: 10px;
+            }
+             .footer-left, .footer-right {
+                 gap: 10px;
+                 flex-direction: column;
+                 margin-bottom: 10px;
+             }
+             .footer-center { order: -1; margin-bottom: 15px; } /* Home icon at top */
+             .copyright { margin-top: 20px; padding-top: 15px; }
 
              .modal-content { padding: 25px 20px; width: 95%; }
              .modal-body h2 { font-size: 1.6rem; }
@@ -355,7 +441,10 @@
             #about, #contact { padding: 30px 20px; }
             .form-group button { width: 100%; }
 
-            /* Footer responsive removed */
+            /* Footer Responsive Re-added */
+            .footer-left a, .footer-right a { font-size: 0.9rem; }
+            .copyright { font-size: 0.85rem; }
+            .footer-left, .footer-right, .footer-center { gap: 8px; }
         }
 
         /* Simple fade-in animation for page load */
@@ -394,8 +483,6 @@
 
         <!-- Game Selection Boxes -->
         <section id="game-boxes">
-             <!-- Optional H2 title -->
-             <!-- <h2>Featured Games</h2> -->
             <div class="game-boxes-container">
                 <!-- Box 1: Replace href and Game Name -->
                 <a href="your-game-link-1.html" class="game-box" target="_blank">
@@ -459,19 +546,41 @@
 
     </main>
 
-    <!-- Footer Section Removed -->
+     <!-- Footer Section Re-added -->
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-left">
+                <!-- Links triggering modals -->
+                <a class="footer-link modal-trigger" data-modal-target="disclaimer-content">Disclaimer</a>
+                <a class="footer-link modal-trigger" data-modal-target="privacy-policy-content">Privacy Policy</a>
+            </div>
+            <div class="footer-center">
+                <!-- Home Button - Scrolls to top -->
+                <a href="#" aria-label="Back to Home"><i class="fa-solid fa-house-chimney"></i></a>
+            </div>
+            <div class="footer-right">
+                 <!-- Links triggering modals -->
+                <a class="footer-link modal-trigger" data-modal-target="terms-conditions-content">Terms & Conditions</a>
+                <a class="footer-link modal-trigger" data-modal-target="about-us-content">About Us</a>
+                <!-- Optional: Add Contact Us link back if needed -->
+                <!-- <a href="#contact" class="footer-link scroll-link">Contact Us</a> -->
+            </div>
+        </div>
+         <!-- Optional: Re-add copyright if desired -->
+         <p class="copyright">© <span id="current-year"></span> Games House. All Rights Reserved.</p>
+    </footer>
 
-    <!-- Modal Structure (Kept for potential future use, but no triggers now) -->
+    <!-- Modal Structure -->
     <div id="modal-overlay" class="modal-overlay">
         <div id="modal-content" class="modal-content">
             <button id="modal-close" class="modal-close" aria-label="Close Modal">×</button>
             <div id="modal-body" class="modal-body">
-                <!-- Content would be loaded here if triggered -->
+                <!-- Content will be loaded here by JavaScript -->
             </div>
         </div>
     </div>
 
-    <!-- Hidden Divs Containing Modal Content (Kept for potential future use) -->
+    <!-- Hidden Divs Containing Modal Content -->
     <div id="terms-conditions-content" class="modal-source-content">
         <h2>Terms and Conditions</h2>
         <p><strong>PLEASE READ THESE TERMS AND CONDITIONS CAREFULLY BEFORE USING THE GAMES HOUSE WEBSITE.</strong></p>
@@ -623,19 +732,22 @@
                 });
             }
 
-            // --- Dynamic Date Update (Only needed if .dynamic-date elements exist) ---
+            // --- Dynamic Date Update ---
             const today = new Date();
             const formattedDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            // Remove year update as copyright is gone
+            const currentYearSpan = document.getElementById('current-year'); // Re-add year span check
+             if(currentYearSpan) {
+                 currentYearSpan.textContent = today.getFullYear();
+             }
             document.querySelectorAll('.dynamic-date').forEach(el => {
                 if(el) el.textContent = formattedDate;
-            }); // Keep for modals if they are ever re-enabled
+            });
 
-            // --- Modal Functionality (Kept, but no triggers are present now) ---
+            // --- Modal Functionality Re-enabled ---
             const modalOverlay = document.getElementById('modal-overlay');
             const modalBody = document.getElementById('modal-body');
             const modalClose = document.getElementById('modal-close');
-            // const modalTriggers = document.querySelectorAll('.modal-trigger'); // No triggers exist now
+            const modalTriggers = document.querySelectorAll('.modal-trigger'); // Select triggers again
 
             const openModal = (targetId) => {
                 const sourceContent = document.getElementById(targetId);
@@ -655,18 +767,18 @@
                 }
             };
 
-            // No triggers, so this loop won't run
-            // modalTriggers.forEach(trigger => {
-            //     trigger.addEventListener('click', (event) => {
-            //         event.preventDefault();
-            //         const targetId = trigger.getAttribute('data-modal-target');
-            //         if(targetId) {
-            //             openModal(targetId);
-            //         } else {
-            //             console.warn('Modal trigger clicked, but no data-modal-target found:', trigger);
-            //         }
-            //     });
-            // });
+            // Add event listeners back to modal triggers
+            modalTriggers.forEach(trigger => {
+                trigger.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const targetId = trigger.getAttribute('data-modal-target');
+                    if(targetId) {
+                        openModal(targetId);
+                    } else {
+                        console.warn('Modal trigger clicked, but no data-modal-target found:', trigger);
+                    }
+                });
+            });
 
             if(modalClose) {
                  modalClose.addEventListener('click', closeModal);
@@ -685,9 +797,16 @@
                 }
             });
 
-             // --- Smooth Scroll for Links (Only #contact link might exist now) ---
-             // Home link code removed
-            const scrollLinks = document.querySelectorAll('.scroll-link'); // Check if any scroll links remain
+             // --- Smooth Scroll for Footer Links (Home and potentially Contact Us) ---
+             const homeLink = document.querySelector('.footer-center a'); // Home link re-added
+             if(homeLink) {
+                homeLink.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+             }
+
+            const scrollLinks = document.querySelectorAll('.scroll-link'); // Re-add scroll link functionality if needed
             scrollLinks.forEach(link => {
                 link.addEventListener('click', (event) => {
                     event.preventDefault();
