@@ -7,7 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <style>
         /* --- CSS Styles --- */
-        /* (CSS remains identical to the previous correct version) */
         :root {
             --bg-color-light: #f0f8ff; --card-bg-light: #ffffff; --text-color-light: #333d4f;
             --accent-color-light-1: #007bff; --accent-color-light-2: #28a745; --border-color-light: #ced4da;
@@ -61,6 +60,12 @@
         .stats span { font-weight: bold; color: var(--accent-color-1); }
         #moves-info.warning { color: var(--moves-warning-color); font-weight: bold; animation: pulseWarning 1.5s infinite ease-in-out; }
         @keyframes pulseWarning { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
+        
+        /* Added: Button pulse animation for ad buttons */
+        @keyframes pulseButton { 
+            0%, 100% { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,123,255,0.4); } 
+            50% { transform: scale(1.1); box-shadow: 0 4px 20px rgba(0,123,255,0.6); } 
+        }
 
         /* Combo Message */
         #combo-message { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 1.3em; font-weight: bold; color: var(--combo-color); opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; text-shadow: 1px 1px 2px rgba(255,255,255,0.7); pointer-events: none; z-index: 5; }
@@ -153,7 +158,7 @@
         <div class="game-board-area">
             <div id="combo-message"></div>
             <div class="game-board" id="game-board">
-                <!-- Cards GUARANTEED to be populated here -->
+                <!-- Cards will be populated here -->
             </div>
         </div>
 
@@ -182,55 +187,20 @@
 
     <!-- Modals -->
     <div id="win-message" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('win-message')">×</span> <h2 id="win-title">Congratulations! 🎉</h2> <p id="win-stats">Level Complete!</p> <div class="final-stats"> Final Score: <span id="final-score">0</span><br> Highest Level: <span id="final-highest-level">Easy</span> </div> <button id="play-again-btn">Play Again (Level 1)</button> </div> </div>
-    <div id="rules-modal" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('rules-modal')">×</span> <h2>How to Play</h2> <ul> <li>Goal: Find all matching pairs.</li> <li>Click cards to flip. Matches stay open ✨. Mismatches flip back 🤔.</li> <li>Level 1: 20 Moves, Level 2: 25 Moves, Level 3+: 30 Moves.</li> <li>Earn points for speed & fewer moves. Get Combo bonuses!</li> <li>Out of moves? Watch an ad for +10 (once per level try).</li> <li>Use 'Hint' if stuck (limited uses, last hint may require ad).</li> <li>Complete levels to unlock harder ones.</li> <li>Ad shown after every 3 completed levels.</li><li>Progress saved automatically. Enjoy!</li> </ul> <button onclick="hideModal('rules-modal')">Got it!</button> </div> </div>
+    <div id="rules-modal" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('rules-modal')">×</span> <h2>How to Play</h2> <ul> <li>Goal: Find all matching pairs.</li> <li>Click cards to flip. Matches stay open ✨. Mismatches flip back 🤔.</li> <li>Level 1: 20 Moves, Level 2: 25 Moves, Level 3+: 30 Moves.</li> <li>Earn points for speed & fewer moves. Get Combo bonuses!</li> <li>Out of moves? Watch an ad for +10 (once per level try).</li> <li>Use 'Hint' if stuck (3 hints per level, but 3rd hint requires ad).</li> <li>Complete levels to unlock harder ones.</li> <li>Ad shown after every 3 completed levels.</li><li>Progress saved automatically. Enjoy!</li> </ul> <button onclick="hideModal('rules-modal')">Got it!</button> </div> </div>
     <div id="celebration-modal" class="modal"> <div class="modal-content"> <h2 id="celebration-title">Level Complete!</h2> <p id="celebration-stats">Score: +<span id="level-score">0</span></p> </div> </div>
-    <div id="hint-ad-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="hideModal('hint-ad-modal')">×</span>
-    <h2>Watch Ad for Hint?</h2>
-    <p>Watch a short ad to use your last hint for this level.</p>
-    
-    <div class="ad-placeholder">
-      <script type='text/javascript' src='//pl26378193.profitableratecpm.com/97/8f/7e/978f7e688126f92bf6433370ca361bf1.js'></script>
-    </div>
-    
-  </div>
-</div>
-
-<div id="out-of-moves-modal" class="modal">
-  <div class="modal-content">
-    <h2>Out of Moves!</h2>
-    <p>You've run out of moves for this level.</p>
-
-    <div class="ad-placeholder">
-      <script type='text/javascript' src='//pl26378193.profitableratecpm.com/97/8f/7e/978f7e688126f92bf6433370ca361bf1.js'></script>
-    </div>
-
-  </div>
-</div>
-
-<div id="interstitial-ad" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="skipInterstitialAdAndContinue()">×</span>
-    <h2>Advertisement</h2>
-
-    <div class="ad-placeholder">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : 'f13b9aebb338988dc9099e067dd01302',
-          'format' : 'iframe',
-          'height' : 90,
-          'width' : 728,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/f13b9aebb338988dc9099e067dd01302/invoke.js"></script>
-    </div>
-
-    <p>Loading next level...</p>
-    <button id="continue-interstitial-btn">Continue</button>
-  </div>
-</div>
+    <div id="hint-ad-modal" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('hint-ad-modal')">×</span> <h2>Watch Ad for Hint?</h2> <p>Watch a short ad to use your last hint for this level.</p> <div class="ad-placeholder">(Ad Simulation)</div> <button id="watch-hint-ad-btn">Watch Ad</button> <button onclick="hideModal('hint-ad-modal')">No Thanks</button> </div> </div>
+    <div id="out-of-moves-modal" class="modal"> <div class="modal-content"> <h2>Out of Moves!</h2> <p>You've run out of moves for this level.</p> <div class="ad-placeholder" id="moves-ad-placeholder">(Moves Ad Simulation)</div> <button id="watch-moves-ad-btn">Get +10 Moves (Ad)</button> <button id="try-again-btn">Try Again</button> </div> </div>
+    <!-- Interstitial Ad Modal -->
+     <div id="interstitial-ad" class="modal">
+          <div class="modal-content">
+               <span class="close-btn" onclick="skipInterstitialAdAndContinue()">×</span> <!-- Allow skipping -->
+              <h2>Advertisement</h2>
+              <div class="ad-placeholder">(Interstitial Ad Simulation)</div>
+              <p>Loading next level...</p>
+              <button id="continue-interstitial-btn">Continue</button> <!-- Specific Continue button -->
+          </div>
+     </div>
 
 
     <!-- Audio Elements -->
@@ -248,7 +218,6 @@
 
     <script>
         // --- DOM Elements ---
-        // (Added interstitialAdModal, continueInterstitialBtn)
         const gameBoard = document.getElementById('game-board');
         const movesInfoDiv = document.getElementById('moves-info');
         const movesSpan = document.getElementById('moves');
@@ -284,35 +253,55 @@
         const outOfMovesModal = document.getElementById('out-of-moves-modal');
         const watchMovesAdBtn = document.getElementById('watch-moves-ad-btn');
         const tryAgainBtn = document.getElementById('try-again-btn');
-        const interstitialAdModal = document.getElementById('interstitial-ad'); // Interstitial Ad Modal
-        const continueInterstitialBtn = document.getElementById('continue-interstitial-btn'); // Continue button for interstitial
+        const interstitialAdModal = document.getElementById('interstitial-ad');
+        const continueInterstitialBtn = document.getElementById('continue-interstitial-btn');
 
         // Audio Elements Map
-        const sounds = { /* ... same map ... */ };
+        const sounds = {
+            tap: document.getElementById('tap-sound'),
+            flip: document.getElementById('flip-sound'),
+            match: document.getElementById('match-sound'),
+            mismatch: document.getElementById('mismatch-sound'),
+            win: document.getElementById('win-sound'),
+            levelUp: document.getElementById('level-up-sound'),
+            celebration: document.getElementById('celebration-sound'),
+            combo: document.getElementById('combo-sound'),
+            hint: document.getElementById('hint-sound'),
+            fail: document.getElementById('fail-sound')
+        };
 
-        // Emojis & Levels Config (moveLimit removed, calculated by function)
+        // Emojis & Levels Config (Updated to have 3 hints for all levels)
         const allEmojis = ['🍎', '🍌', '🍇', '🍉', '🍓', '🍒', '🍑', '🍍', '🥝', '🥭', '🥥', '🥑', '🍆', '🥕', '🌽', '🌶️', '🍄', '🥦', '🍕', '🍔', '🍟', '🍩', '🍪', '🎂', '🍦', '🍿'];
         const levels = {
             easy: { name: 'Easy', pairs: 6, cols: 4, emojis: allEmojis.slice(0, 6), baseScore: 1000, timePenalty: 5, movePenalty: 10, hints: 3 },
             medium: { name: 'Medium', pairs: 8, cols: 4, emojis: allEmojis.slice(0, 8), baseScore: 1500, timePenalty: 7, movePenalty: 15, hints: 3 },
-            hard: { name: 'Hard', pairs: 12, cols: 6, emojis: allEmojis.slice(0, 12), baseScore: 2500, timePenalty: 10, movePenalty: 20, hints: 2 },
-            expert: { name: 'Expert', pairs: 15, cols: 6, emojis: allEmojis.slice(0, 15), baseScore: 4000, timePenalty: 12, movePenalty: 25, hints: 1 }
+            hard: { name: 'Hard', pairs: 12, cols: 6, emojis: allEmojis.slice(0, 12), baseScore: 2500, timePenalty: 10, movePenalty: 20, hints: 3 }, // Changed to 3
+            expert: { name: 'Expert', pairs: 15, cols: 6, emojis: allEmojis.slice(0, 15), baseScore: 4000, timePenalty: 12, movePenalty: 25, hints: 3 }  // Changed to 3
         };
         const levelOrder = ['easy', 'medium', 'hard', 'expert'];
 
         // --- Game State Variables ---
-        // (Added levelsCompletedSinceLastAd, interstitialTimer)
         let flippedCards = []; let matchedPairs = 0; let moves = 0; let timerInterval = null; let seconds = 0;
         let gameLocked = false; let gameStarted = false; let currentLevelKey = levelOrder[0];
         let highestLevelReachedIndex = -1; let totalScore = 0;
         let hintsRemaining = 0; let comboCount = 0; let lastMatchTime = 0; const COMBO_WINDOW = 3000;
         const COMBO_BASE_POINTS = 50; let hintTimeout = null;
         let adWatchedForHintThisLevel = false; let currentMoveLimit = 0; let extraMovesGivenThisLevel = false;
-        let levelsCompletedSinceLastAd = 0; // Counter for interstitial ads
-        let interstitialTimer = null; // Timer for interstitial ad auto-continue
+        let levelsCompletedSinceLastAd = 0;
+        let interstitialTimer = null;
 
         // --- Robust Sound Function ---
-        async function playSound(soundName, volume = 1.0) { const sound = sounds[soundName]; if (!sound) { console.warn(`Sound element "${soundName}" not found.`); return; } sound.volume = volume; sound.currentTime = 0; try { await sound.play(); } catch (error) { console.warn(`Could not play sound "${soundName}":`, error); } }
+        async function playSound(soundName, volume = 1.0) { 
+            const sound = sounds[soundName]; 
+            if (!sound) { console.warn(`Sound element "${soundName}" not found.`); return; } 
+            sound.volume = volume; 
+            sound.currentTime = 0; 
+            try { 
+                await sound.play(); 
+            } catch (error) { 
+                console.warn(`Could not play sound "${soundName}":`, error); 
+            } 
+        }
 
         // --- Utility & Theme Functions ---
         function applyTheme(theme) { document.body.classList.toggle('dark-mode', theme === 'dark'); themeToggleBtn.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode'; localStorage.setItem('mixMatchTheme', theme); }
@@ -325,7 +314,6 @@
         function loadProgress() {
             const savedLevelIndexStr = localStorage.getItem('mixMatchHighestLevel'); const savedScoreStr = localStorage.getItem('mixMatchTotalScore');
             highestLevelReachedIndex = savedLevelIndexStr ? parseInt(savedLevelIndexStr, 10) : -1; totalScore = savedScoreStr ? parseInt(savedScoreStr, 10) : 0;
-            // Load interstitial counter or default to 0 if not saved (starts fresh count)
             levelsCompletedSinceLastAd = parseInt(localStorage.getItem('mixMatchLevelsSinceAd') || '0', 10);
             let startLevelIndex = (highestLevelReachedIndex >= levelOrder.length - 1) ? 0 : highestLevelReachedIndex + 1;
             currentLevelKey = levelOrder[startLevelIndex] || levelOrder[0];
@@ -334,11 +322,11 @@
         function saveProgress() {
             localStorage.setItem('mixMatchHighestLevel', highestLevelReachedIndex.toString());
             localStorage.setItem('mixMatchTotalScore', totalScore.toString());
-            localStorage.setItem('mixMatchLevelsSinceAd', levelsCompletedSinceLastAd.toString()); // Save ad counter
+            localStorage.setItem('mixMatchLevelsSinceAd', levelsCompletedSinceLastAd.toString());
         }
         function resetProgress() {
              highestLevelReachedIndex = -1; totalScore = 0; currentLevelKey = levelOrder[0];
-             levelsCompletedSinceLastAd = 0; // Reset ad counter on new game
+             levelsCompletedSinceLastAd = 0;
              saveProgress();
              updateScoreDisplay(); updateHighestLevelDisplay(); updateLevelsClearedDisplay();
          }
@@ -361,69 +349,285 @@
         }
 
         // --- Game Setup: createBoard() ---
-        // *** Ensures cards are created and appended ***
         function createBoard() {
             console.log(`--- Creating board for level: ${currentLevelKey} ---`);
-            gameBoard.innerHTML = ''; // ** Clear Board FIRST **
+            gameBoard.innerHTML = '';
             matchedPairs = 0; moves = 0; seconds = 0; gameStarted = false; gameLocked = false;
             flippedCards = []; comboCount = 0; lastMatchTime = 0; adWatchedForHintThisLevel = false; extraMovesGivenThisLevel = false;
             clearTimeout(hintTimeout); stopTimer();
-            hideModal('win-message'); hideModal('celebration-modal'); hideModal('hint-ad-modal'); hideModal('out-of-moves-modal'); hideModal('interstitial-ad'); // Hide interstitial too
+            hideModal('win-message'); hideModal('celebration-modal'); hideModal('hint-ad-modal'); hideModal('out-of-moves-modal'); hideModal('interstitial-ad');
             comboMessage.classList.remove('show'); movesInfoDiv.classList.remove('warning');
 
             const levelConfig = levels[currentLevelKey];
             if (!levelConfig) { console.error("Invalid level key, defaulting to easy."); currentLevelKey = levelOrder[0]; levelConfig = levels[currentLevelKey]; }
 
             hintsRemaining = levelConfig.hints; updateHintsDisplay();
-            currentMoveLimit = calculateMoveLimit(currentLevelKey); // Use function to get limit
+            currentMoveLimit = calculateMoveLimit(currentLevelKey);
             updateMovesDisplay(); updateLevelsClearedDisplay();
             levelDisplay.textContent = `Level: ${levelConfig.name}`; let cardValues = shuffle([...levelConfig.emojis, ...levelConfig.emojis]);
 
             const columns = levelConfig.cols; const baseSize = 70; const scaleFactor = columns > 4 ? (columns > 5 ? 0.8 : 0.9) : 1; const finalCardSize = Math.max(40, baseSize * scaleFactor); document.documentElement.style.setProperty('--card-size', `${finalCardSize}px`); gameBoard.style.gridTemplateColumns = `repeat(${columns}, var(--card-size))`;
 
             // --- Card Creation Loop ---
-            cardValues.forEach(value => { const card = document.createElement('div'); card.classList.add('card'); card.dataset.value = value; card.innerHTML = `<div class="card-face card-front"></div><div class="card-face card-back">${value}</div>`; card.addEventListener('click', handleCardClick); gameBoard.appendChild(card); }); // *** APPEND CHILD ***
+            cardValues.forEach(value => { const card = document.createElement('div'); card.classList.add('card'); card.dataset.value = value; card.innerHTML = `<div class="card-face card-front"></div><div class="card-face card-back">${value}</div>`; card.addEventListener('click', handleCardClick); gameBoard.appendChild(card); });
             console.log(`--- Board creation complete. ${gameBoard.children.length} cards added. Move Limit: ${currentMoveLimit} ---`);
         }
 
         // --- Game Logic ---
-        function handleCardClick(event) { if (gameLocked || event.currentTarget.classList.contains('matched') || event.currentTarget.classList.contains('flipped')) { return; } if (flippedCards.length === 1 && (moves + 1) > currentMoveLimit) { playSound('fail'); handleOutOfMoves(); return; } playSound('tap', 0.6); const clickedCard = event.currentTarget; if (!gameStarted) { startTimer(); gameStarted = true; } flipCard(clickedCard); }
-        function flipCard(card) { gameLocked = true; playSound('flip'); card.classList.add('flipped'); flippedCards.push(card); setTimeout(() => { if(flippedCards.length < 2) gameLocked = false; }, 200); if (flippedCards.length === 2) { gameLocked = true; incrementMoves(); setTimeout(checkForMatch, 600); } }
-        function checkForMatch() { const [card1, card2] = flippedCards; const isEqual = card1.dataset.value === card2.dataset.value; if (isEqual) { handleMatch(card1, card2); } else { handleMismatch(card1, card2); } }
-        function handleMatch(card1, card2) { playSound('match'); card1.classList.add('matched'); card2.classList.add('matched'); matchedPairs++; const now = Date.now(); if (now - lastMatchTime <= COMBO_WINDOW) { comboCount++; } else { comboCount = 1; } lastMatchTime = now; if (comboCount > 1) { const comboBonus = (comboCount - 1) * COMBO_BASE_POINTS; totalScore += comboBonus; updateScoreDisplay(); } showComboMessage(comboCount); flippedCards = []; gameLocked = false; if (matchedPairs === levels[currentLevelKey].pairs) { stopTimer(); handleLevelComplete(); } }
-        function handleMismatch(card1, card2) { playSound('mismatch', 0.8); comboCount = 0; setTimeout(() => { card1.classList.remove('flipped'); card2.classList.remove('flipped'); flippedCards = []; gameLocked = false; }, 900); }
+        function handleCardClick(event) { 
+            if (gameLocked || event.currentTarget.classList.contains('matched') || event.currentTarget.classList.contains('flipped')) { 
+                return; 
+            } 
+            if (flippedCards.length === 1 && (moves + 1) > currentMoveLimit) { 
+                playSound('fail'); 
+                handleOutOfMoves(); 
+                return; 
+            } 
+            playSound('tap', 0.6); 
+            const clickedCard = event.currentTarget; 
+            if (!gameStarted) { 
+                startTimer(); 
+                gameStarted = true; 
+            } 
+            flipCard(clickedCard); 
+        }
+        
+        function flipCard(card) { 
+            gameLocked = true; 
+            playSound('flip'); 
+            card.classList.add('flipped'); 
+            flippedCards.push(card); 
+            setTimeout(() => { 
+                if(flippedCards.length < 2) gameLocked = false; 
+            }, 200); 
+            if (flippedCards.length === 2) { 
+                gameLocked = true; 
+                incrementMoves(); 
+                setTimeout(checkForMatch, 600); 
+            } 
+        }
+        
+        function checkForMatch() { 
+            const [card1, card2] = flippedCards; 
+            const isEqual = card1.dataset.value === card2.dataset.value; 
+            if (isEqual) { 
+                handleMatch(card1, card2); 
+            } else { 
+                handleMismatch(card1, card2); 
+            } 
+        }
+        
+        function handleMatch(card1, card2) { 
+            playSound('match'); 
+            card1.classList.add('matched'); 
+            card2.classList.add('matched'); 
+            matchedPairs++; 
+            const now = Date.now(); 
+            if (now - lastMatchTime <= COMBO_WINDOW) { 
+                comboCount++; 
+            } else { 
+                comboCount = 1; 
+            } 
+            lastMatchTime = now; 
+            if (comboCount > 1) { 
+                const comboBonus = (comboCount - 1) * COMBO_BASE_POINTS; 
+                totalScore += comboBonus; 
+                updateScoreDisplay(); 
+            } 
+            showComboMessage(comboCount); 
+            flippedCards = []; 
+            gameLocked = false; 
+            if (matchedPairs === levels[currentLevelKey].pairs) { 
+                stopTimer(); 
+                handleLevelComplete(); 
+            } 
+        }
+        
+        function handleMismatch(card1, card2) { 
+            playSound('mismatch', 0.8); 
+            comboCount = 0; 
+            setTimeout(() => { 
+                card1.classList.remove('flipped'); 
+                card2.classList.remove('flipped'); 
+                flippedCards = []; 
+                gameLocked = false; 
+            }, 900); 
+        }
 
-        // --- Hint System Logic ---
-        function attemptUseHint() { if (hintsRemaining <= 0 || gameLocked || flippedCards.length > 0) { return; } const isAdGatedHint = hintsRemaining === 1 && (levels[currentLevelKey]?.hints || 0) > 1; if (isAdGatedHint && !adWatchedForHintThisLevel) { playSound('tap', 0.7); showModal('hint-ad-modal'); } else { executeHint(); } }
-        function simulateWatchAdAndUseHint() { hideModal('hint-ad-modal'); console.log("Hint Ad watched (simulated)."); adWatchedForHintThisLevel = true; executeHint(); }
-        function executeHint() { if (hintsRemaining <= 0 || gameLocked || flippedCards.length > 0) { return; } playSound('hint', 0.7); hintsRemaining--; updateHintsDisplay(); gameLocked = true; const unmatchedCards = Array.from(gameBoard.querySelectorAll('.card:not(.matched):not(.flipped)')); let card1 = null, card2 = null; const foundValues = {}; for (const card of unmatchedCards) { const value = card.dataset.value; if (foundValues[value]) { card1 = foundValues[value]; card2 = card; break; } foundValues[value] = card; } if (card1 && card2) { card1.classList.add('flipped', 'hint-reveal'); card2.classList.add('flipped', 'hint-reveal'); clearTimeout(hintTimeout); hintTimeout = setTimeout(() => { card1.classList.remove('flipped', 'hint-reveal'); card2.classList.remove('flipped', 'hint-reveal'); gameLocked = false; }, 1000); } else { console.warn("No suitable pair found for hint."); hintsRemaining++; updateHintsDisplay(); gameLocked = false; } }
+        // --- Hint System Logic --- (Modified to always require ad for last hint)
+        function attemptUseHint() { 
+            if (hintsRemaining <= 0 || gameLocked || flippedCards.length > 0) { 
+                return; 
+            } 
+            
+            // Always require ad for last hint (3rd hint)
+            if (hintsRemaining === 1 && !adWatchedForHintThisLevel) { 
+                playSound('tap', 0.7); 
+                showModal('hint-ad-modal'); 
+            } else { 
+                executeHint(); 
+            } 
+        }
+        
+        function simulateWatchAdAndUseHint() { 
+            hideModal('hint-ad-modal'); 
+            console.log("Hint Ad watched (simulated)."); 
+            adWatchedForHintThisLevel = true; 
+            executeHint(); 
+        }
+        
+        function executeHint() { 
+            if (hintsRemaining <= 0 || gameLocked || flippedCards.length > 0) { 
+                return; 
+            } 
+            playSound('hint', 0.7); 
+            hintsRemaining--; 
+            updateHintsDisplay(); 
+            gameLocked = true; 
+            const unmatchedCards = Array.from(gameBoard.querySelectorAll('.card:not(.matched):not(.flipped)')); 
+            let card1 = null, card2 = null; 
+            const foundValues = {}; 
+            for (const card of unmatchedCards) { 
+                const value = card.dataset.value; 
+                if (foundValues[value]) { 
+                    card1 = foundValues[value]; 
+                    card2 = card; 
+                    break; 
+                } 
+                foundValues[value] = card; 
+            } 
+            if (card1 && card2) { 
+                card1.classList.add('flipped', 'hint-reveal'); 
+                card2.classList.add('flipped', 'hint-reveal'); 
+                clearTimeout(hintTimeout); 
+                hintTimeout = setTimeout(() => { 
+                    card1.classList.remove('flipped', 'hint-reveal'); 
+                    card2.classList.remove('flipped', 'hint-reveal'); 
+                    gameLocked = false; 
+                }, 1000); 
+            } else { 
+                console.warn("No suitable pair found for hint."); 
+                hintsRemaining++; 
+                updateHintsDisplay(); 
+                gameLocked = false; 
+            } 
+        }
 
-        // --- Move Limit Handling ---
-        function incrementMoves() { moves++; updateMovesDisplay(); }
-        function handleOutOfMoves() { gameLocked = true; stopTimer(); playSound('fail'); watchMovesAdBtn.disabled = extraMovesGivenThisLevel; showModal('out-of-moves-modal'); }
-        function simulateWatchAdAndGetMoves() { hideModal('out-of-moves-modal'); console.log("Moves Ad watched (simulated)..."); gameLocked = true; setTimeout(() => { console.log("Ad finished."); currentMoveLimit += 10; extraMovesGivenThisLevel = true; gameLocked = false; updateMovesDisplay(); }, 1500); }
-        function handleLevelFailFromMoves() { hideModal('out-of-moves-modal'); playSound('fail'); restartCurrentLevel(); }
+        // --- Move Limit Handling --- (Enhanced for better ad promotion)
+        function incrementMoves() { 
+            moves++; 
+            updateMovesDisplay(); 
+        }
+        
+        function handleOutOfMoves() { 
+            gameLocked = true; 
+            stopTimer(); 
+            playSound('fail'); 
+            
+            // Enhanced: Highlight the ad button if not used yet
+            if (!extraMovesGivenThisLevel) {
+                watchMovesAdBtn.style.animation = "pulseButton 1.5s infinite";
+                watchMovesAdBtn.style.transform = "scale(1.05)";
+            }
+            
+            watchMovesAdBtn.disabled = extraMovesGivenThisLevel;
+            showModal('out-of-moves-modal'); 
+        }
+        
+        function simulateWatchAdAndGetMoves() { 
+            hideModal('out-of-moves-modal'); 
+            console.log("Moves Ad watched (simulated)..."); 
+            gameLocked = true; 
+            
+            // Reset any button styling
+            watchMovesAdBtn.style.animation = "none";
+            watchMovesAdBtn.style.transform = "none";
+            
+            setTimeout(() => { 
+                console.log("Ad finished."); 
+                currentMoveLimit += 10; 
+                extraMovesGivenThisLevel = true; 
+                gameLocked = false; 
+                updateMovesDisplay(); 
+            }, 1500); 
+        }
+        
+        function handleLevelFailFromMoves() { 
+            hideModal('out-of-moves-modal'); 
+            playSound('fail'); 
+            restartCurrentLevel(); 
+        }
 
         // --- Score Calculation ---
-        function calculateLevelScore() { const levelConfig = levels[currentLevelKey]; const timeScorePenalty = seconds * levelConfig.timePenalty; const moveScorePenalty = moves * levelConfig.movePenalty; let levelScore = Math.max(0, levelConfig.baseScore - timeScorePenalty - moveScorePenalty); levelScore = Math.max(10, levelScore); return Math.round(levelScore); }
+        function calculateLevelScore() { 
+            const levelConfig = levels[currentLevelKey]; 
+            const timeScorePenalty = seconds * levelConfig.timePenalty; 
+            const moveScorePenalty = moves * levelConfig.movePenalty; 
+            let levelScore = Math.max(0, levelConfig.baseScore - timeScorePenalty - moveScorePenalty); 
+            levelScore = Math.max(10, levelScore); 
+            return Math.round(levelScore); 
+        }
 
         // --- Level Complete & Progression ---
-        // (Now increments levelsCompletedSinceLastAd)
         function handleLevelComplete() {
-            const levelScore = calculateLevelScore(); totalScore += levelScore; updateScoreDisplay();
+            const levelScore = calculateLevelScore(); 
+            totalScore += levelScore; 
+            updateScoreDisplay();
             const currentLevelIndex = levelOrder.indexOf(currentLevelKey);
-            if (currentLevelIndex > highestLevelReachedIndex) { highestLevelReachedIndex = currentLevelIndex; updateHighestLevelDisplay(); updateLevelsClearedDisplay(); }
-            levelsCompletedSinceLastAd++; // Increment counter
-            saveProgress(); // Save progress including ad counter
+            if (currentLevelIndex > highestLevelReachedIndex) { 
+                highestLevelReachedIndex = currentLevelIndex; 
+                updateHighestLevelDisplay(); 
+                updateLevelsClearedDisplay(); 
+            }
+            levelsCompletedSinceLastAd++;
+            saveProgress();
             showCelebration(levelScore);
         }
-        // (Enhanced Celebration remains the same)
-        function showCelebration(levelScore) { /* ... same confetti logic ... */
-            playSound('celebration'); levelScoreSpan.textContent = levelScore; celebrationTitle.textContent = `${levels[currentLevelKey].name} Complete!`; showModal('celebration-modal');
-            if (typeof confetti === 'function') { const duration = 2 * 1000; const animationEnd = Date.now() + duration; const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1001 }; function randomInRange(min, max) { return Math.random() * (max - min) + min; } const interval = setInterval(function() { const timeLeft = animationEnd - Date.now(); if (timeLeft <= 0) { return clearInterval(interval); } const particleCount = 50 * (timeLeft / duration); confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#FFD700', '#FFFFFF', '#00BFFF', '#FF69B4'], shapes: ['star'] })); confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, colors: ['#FFD700', '#FFFFFF', '#28a745', '#FFA500'], shapes: ['circle'] })); }, 250); } else { console.warn("Confetti function not found."); }
-            setTimeout(() => { hideModal('celebration-modal'); proceedAfterCelebration(); }, 2500);
+        
+        function showCelebration(levelScore) {
+            playSound('celebration'); 
+            levelScoreSpan.textContent = levelScore; 
+            celebrationTitle.textContent = `${levels[currentLevelKey].name} Complete!`; 
+            showModal('celebration-modal');
+            
+            if (typeof confetti === 'function') { 
+                const duration = 2 * 1000; 
+                const animationEnd = Date.now() + duration; 
+                const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1001 }; 
+                
+                function randomInRange(min, max) { 
+                    return Math.random() * (max - min) + min; 
+                } 
+                
+                const interval = setInterval(function() { 
+                    const timeLeft = animationEnd - Date.now(); 
+                    if (timeLeft <= 0) { 
+                        return clearInterval(interval); 
+                    } 
+                    const particleCount = 50 * (timeLeft / duration); 
+                    confetti(Object.assign({}, defaults, { 
+                        particleCount, 
+                        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, 
+                        colors: ['#FFD700', '#FFFFFF', '#00BFFF', '#FF69B4'], 
+                        shapes: ['star'] 
+                    })); 
+                    confetti(Object.assign({}, defaults, { 
+                        particleCount, 
+                        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, 
+                        colors: ['#FFD700', '#FFFFFF', '#28a745', '#FFA500'], 
+                        shapes: ['circle'] 
+                    })); 
+                }, 250); 
+            } else { 
+                console.warn("Confetti function not found."); 
+            }
+            
+            setTimeout(() => { 
+                hideModal('celebration-modal'); 
+                proceedAfterCelebration(); 
+            }, 2500);
         }
-        // (Checks for interstitial ad)
+        
         function proceedAfterCelebration() {
             const currentLevelIndex = levelOrder.indexOf(currentLevelKey);
             const isLastLevel = currentLevelIndex === levelOrder.length - 1;
@@ -431,46 +635,98 @@
             if (isLastLevel) {
                 showFinalWinScreen();
             } else if (levelsCompletedSinceLastAd >= 3) {
-                // Time to show interstitial ad
-                levelsCompletedSinceLastAd = 0; // Reset counter
-                saveProgress(); // Save reset counter
-                playSound('levelUp'); // Maybe a different sound for ad break?
+                levelsCompletedSinceLastAd = 0;
+                saveProgress();
+                playSound('levelUp');
                 showModal('interstitial-ad');
-                // Auto-continue simulation
+                
                 clearTimeout(interstitialTimer);
                 interstitialTimer = setTimeout(() => {
                     if (interstitialAdModal.classList.contains('show')) {
-                        skipInterstitialAdAndContinue(); // Use skip function to hide modal and setup next level
+                        skipInterstitialAdAndContinue();
                     }
-                }, 5000); // Show ad for 5 seconds
+                }, 5000);
             } else {
-                // Not time for ad, proceed directly
                 playSound('levelUp');
                 setupNextLevel();
             }
         }
+        
         function setupNextLevel() {
-             const currentLevelIndex = levelOrder.indexOf(currentLevelKey); const nextLevelIndex = currentLevelIndex + 1;
-             if (nextLevelIndex < levelOrder.length) { currentLevelKey = levelOrder[nextLevelIndex]; setTimeout(createBoard, 200); } else { showFinalWinScreen(); }
+             const currentLevelIndex = levelOrder.indexOf(currentLevelKey); 
+             const nextLevelIndex = currentLevelIndex + 1;
+             if (nextLevelIndex < levelOrder.length) { 
+                 currentLevelKey = levelOrder[nextLevelIndex]; 
+                 setTimeout(createBoard, 200); 
+             } else { 
+                 showFinalWinScreen(); 
+             }
         }
+        
         function skipInterstitialAdAndContinue() {
-             hideModal('interstitial-ad'); clearTimeout(interstitialTimer);
+             hideModal('interstitial-ad'); 
+             clearTimeout(interstitialTimer);
              setupNextLevel();
          }
-        function showFinalWinScreen() { /* ... same implementation ... */ }
+        
+        function showFinalWinScreen() {
+            playSound('win');
+            winTitle.textContent = "You've beaten all levels! 🏆";
+            winStatsP.textContent = `Congratulations! You've completed every level in the game.`;
+            finalScoreSpan.textContent = totalScore;
+            finalHighestLevelSpan.textContent = levels[levelOrder[highestLevelReachedIndex]].name;
+            finalStatsDiv.style.display = 'block';
+            showModal('win-message');
+        }
 
         // --- Timer & Moves ---
-        function startTimer() { stopTimer(); seconds = 0; updateTimerDisplay(); timerInterval = setInterval(() => { seconds++; updateTimerDisplay(); }, 1000); }
-        function stopTimer() { clearInterval(timerInterval); timerInterval = null; }
-        function incrementMoves() { moves++; updateMovesDisplay(); }
+        function startTimer() { 
+            stopTimer(); 
+            seconds = 0; 
+            updateTimerDisplay(); 
+            timerInterval = setInterval(() => { 
+                seconds++; 
+                updateTimerDisplay(); 
+            }, 1000); 
+        }
+        
+        function stopTimer() { 
+            clearInterval(timerInterval); 
+            timerInterval = null; 
+        }
 
         // --- Restart / New Game / Share ---
-        function restartCurrentLevel() { stopTimer(); createBoard(); }
-        function startNewGame() { stopTimer(); if (confirm("Start a new game? This will reset your score and progress.")) { resetProgress(); createBoard(); } }
-        async function shareScore() { /* ... share logic ... */ }
+        function restartCurrentLevel() { 
+            stopTimer(); 
+            createBoard(); 
+        }
+        
+        function startNewGame() { 
+            stopTimer(); 
+            if (confirm("Start a new game? This will reset your score and progress.")) { 
+                resetProgress(); 
+                createBoard(); 
+            } 
+        }
+        
+        async function shareScore() {
+            const text = `I scored ${totalScore} points in Ultimate Mix & Match! My highest level: ${levels[levelOrder[Math.max(0, highestLevelReachedIndex)]].name}`;
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'Ultimate Mix & Match Score',
+                        text: text
+                    });
+                } else {
+                    alert(`Share this score: ${text}`);
+                }
+            } catch(e) {
+                console.error('Sharing failed:', e);
+                alert(`Share this score: ${text}`);
+            }
+        }
 
         // --- Event Listeners ---
-        // (Added listeners for interstitial ad)
         restartBtn.addEventListener('click', restartCurrentLevel);
         newGameBtn.addEventListener('click', startNewGame);
         hintBtn.addEventListener('click', attemptUseHint);
@@ -481,18 +737,21 @@
         playAgainBtn.addEventListener('click', () => { hideModal('win-message'); startNewGame(); });
         watchMovesAdBtn.addEventListener('click', simulateWatchAdAndGetMoves);
         tryAgainBtn.addEventListener('click', handleLevelFailFromMoves);
-        continueInterstitialBtn.addEventListener('click', skipInterstitialAdAndContinue); // Listener for interstitial continue
-        interstitialAdModal.querySelector('.close-btn').addEventListener('click', skipInterstitialAdAndContinue); // Listener for interstitial close
-
+        continueInterstitialBtn.addEventListener('click', skipInterstitialAdAndContinue);
+        interstitialAdModal.querySelector('.close-btn').addEventListener('click', skipInterstitialAdAndContinue);
 
         // --- Initial Game Load ---
         document.addEventListener('DOMContentLoaded', () => {
-             const savedTheme = localStorage.getItem('mixMatchTheme') || 'light'; applyTheme(savedTheme);
-             loadProgress(); createBoard(); // Initial board creation
-             document.querySelectorAll('audio').forEach(audio => { audio.onerror = (e) => { console.error(`Error loading audio: ${audio.src}`, e); }; });
+             const savedTheme = localStorage.getItem('mixMatchTheme') || 'light'; 
+             applyTheme(savedTheme);
+             loadProgress(); 
+             createBoard();
+             document.querySelectorAll('audio').forEach(audio => { 
+                 audio.onerror = (e) => { 
+                     console.error(`Error loading audio: ${audio.src}`, e); 
+                 }; 
+             });
         });
-
     </script>
-
 </body>
 </html>
