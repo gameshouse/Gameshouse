@@ -47,6 +47,11 @@
         .ad-banner.top { margin-bottom: 15px; } .ad-banner.bottom { margin-top: 15px; }
         @media (max-width: 760px) { .ad-banner { height: 60px; font-size: 0.8em;} } @media (max-width: 400px) { .ad-banner { height: 50px; font-size: 0.7em;} }
 
+        /* Pop-up Ad Styles */
+        .popup-ad-container { width: 100%; max-width: 300px; height: 250px; margin: 0 auto 20px auto; background-color: var(--ad-bg); color: #333; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; border-radius: 8px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); padding: 10px; cursor: pointer; position: relative; overflow: hidden; }
+        .popup-ad-container:hover { transform: scale(1.02); transition: transform 0.3s ease; }
+        .popup-ad-container::after { content: "Ad"; position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.5); color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.7em; }
+
         /* Game Container & Info */
         .game-container { display: flex; flex-direction: column; align-items: center; padding: clamp(15px, 3vw, 20px) clamp(15px, 4vw, 25px); background: var(--card-bg); border-radius: 20px; box-shadow: var(--shadow); transition: background-color 0.4s ease, box-shadow 0.4s ease; max-width: 95%; width: fit-content; z-index: 1; margin: auto 10px; }
         h1 { font-size: clamp(1.6em, 4vw, 2.1em); margin-bottom: 5px; color: var(--accent-color-1); text-shadow: 1px 1px 3px rgba(0,0,0,0.1); font-weight: 600; }
@@ -61,7 +66,7 @@
         #moves-info.warning { color: var(--moves-warning-color); font-weight: bold; animation: pulseWarning 1.5s infinite ease-in-out; }
         @keyframes pulseWarning { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
         
-        /* Added: Button pulse animation for ad buttons */
+        /* Button pulse animation for ad buttons */
         @keyframes pulseButton { 
             0%, 100% { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,123,255,0.4); } 
             50% { transform: scale(1.1); box-shadow: 0 4px 20px rgba(0,123,255,0.6); } 
@@ -109,11 +114,13 @@
 
         /* Modal Specific */
         #win-message .final-stats { font-size: 1.1em; font-weight: 500; margin-bottom: 20px; display: none; } #win-message .final-stats span { color: var(--score-color); font-weight: bold; }
-        .ad-placeholder { width: 100%; max-width: 300px; height: 250px; margin: 0 auto 20px auto; background-color: var(--ad-bg); color: #333; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; border-radius: 8px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); padding: 10px; }
         #celebration-modal { background: none; overflow: hidden; } #celebration-modal .modal-content { background: var(--celebration-bg); color: white; }
         #celebration-modal h2 { color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); font-size: 1.8em; } #celebration-modal p { font-size: 1.2em; font-weight: 500; } #celebration-modal .close-btn { display: none; }
         #hint-ad-modal button#watch-hint-ad-btn, #out-of-moves-modal button#watch-moves-ad-btn, #interstitial-ad button#continue-btn { background: linear-gradient(145deg, var(--accent-color-2), color-mix(in srgb, var(--accent-color-2) 70%, black)); } /* Green buttons */
         #out-of-moves-modal button#try-again-btn { background: linear-gradient(145deg, #e74c3c, #c0392b); } /* Red button */
+
+        /* Ad Counting Display (for debugging) */
+        .ad-clicked-indicator { position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.8em; display: none; }
 
         /* Responsive */
         @media (max-width: 768px) { :root { --card-size: 60px; --gap-size: 8px; } }
@@ -126,7 +133,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-
+    <!-- Top Banner Ad -->
     <div class="ad-banner top">
     <script type="text/javascript">
         atOptions = {
@@ -138,7 +145,7 @@
         };
     </script>
     <script type="text/javascript" src="//www.highperformanceformat.com/f13b9aebb338988dc9099e067dd01302/invoke.js"></script>
-</div>
+    </div>
 
     <div class="game-container">
         <h1>Ultimate Mix & Match</h1>
@@ -172,7 +179,8 @@
         </div>
     </div>
 
-    <div class="ad-banner top">
+    <!-- Bottom Banner Ad -->
+    <div class="ad-banner bottom">
     <script type="text/javascript">
         atOptions = {
             'key' : 'f13b9aebb338988dc9099e067dd01302',
@@ -183,38 +191,120 @@
         };
     </script>
     <script type="text/javascript" src="//www.highperformanceformat.com/f13b9aebb338988dc9099e067dd01302/invoke.js"></script>
-</div>
+    </div>
 
     <!-- Modals -->
-    <div id="win-message" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('win-message')">×</span> <h2 id="win-title">Congratulations! 🎉</h2> <p id="win-stats">Level Complete!</p> <div class="final-stats"> Final Score: <span id="final-score">0</span><br> Highest Level: <span id="final-highest-level">Easy</span> </div> <button id="play-again-btn">Play Again (Level 1)</button> </div> </div>
-    <div id="rules-modal" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('rules-modal')">×</span> <h2>How to Play</h2> <ul> <li>Goal: Find all matching pairs.</li> <li>Click cards to flip. Matches stay open ✨. Mismatches flip back 🤔.</li> <li>Level 1: 20 Moves, Level 2: 25 Moves, Level 3+: 30 Moves.</li> <li>Earn points for speed & fewer moves. Get Combo bonuses!</li> <li>Out of moves? Watch an ad for +10 (once per level try).</li> <li>Use 'Hint' if stuck (3 hints per level, but 3rd hint requires ad).</li> <li>Complete levels to unlock harder ones.</li> <li>Ad shown after every 3 completed levels.</li><li>Progress saved automatically. Enjoy!</li> </ul> <button onclick="hideModal('rules-modal')">Got it!</button> </div> </div>
-    <div id="celebration-modal" class="modal"> <div class="modal-content"> <h2 id="celebration-title">Level Complete!</h2> <p id="celebration-stats">Score: +<span id="level-score">0</span></p> </div> </div>
-    <div id="hint-ad-modal" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('hint-ad-modal')">×</span> <h2>Watch Ad for Hint?</h2> <p>Watch a short ad to use your last hint for this level.</p> <div class="ad-placeholder">(Ad Simulation)</div> <button id="watch-hint-ad-btn">Watch Ad</button> <button onclick="hideModal('hint-ad-modal')">No Thanks</button> </div> </div>
-    <div id="out-of-moves-modal" class="modal"> <div class="modal-content"> <h2>Out of Moves!</h2> <p>You've run out of moves for this level.</p> <div class="ad-placeholder" id="moves-ad-placeholder">(Moves Ad Simulation)</div> <button id="watch-moves-ad-btn">Get +10 Moves (Ad)</button> <button id="try-again-btn">Try Again</button> </div> </div>
+    <div id="win-message" class="modal"> 
+        <div class="modal-content"> 
+            <span class="close-btn" onclick="hideModal('win-message')">×</span> 
+            <h2 id="win-title">Congratulations! 🎉</h2> 
+            <p id="win-stats">Level Complete!</p> 
+            <div class="final-stats"> 
+                Final Score: <span id="final-score">0</span><br> 
+                Highest Level: <span id="final-highest-level">Easy</span> 
+            </div> 
+            <button id="play-again-btn">Play Again (Level 1)</button> 
+        </div> 
+    </div>
+    
+    <div id="rules-modal" class="modal"> 
+        <div class="modal-content"> 
+            <span class="close-btn" onclick="hideModal('rules-modal')">×</span> 
+            <h2>How to Play</h2> 
+            <ul> 
+                <li>Goal: Find all matching pairs.</li> 
+                <li>Click cards to flip. Matches stay open ✨. Mismatches flip back 🤔.</li> 
+                <li>Level 1: 20 Moves, Level 2: 25 Moves, Level 3+: 30 Moves.</li> 
+                <li>Earn points for speed & fewer moves. Get Combo bonuses!</li> 
+                <li>Out of moves? Watch an ad for +10 (once per level try).</li> 
+                <li>Use 'Hint' if stuck (3 hints per level, but 3rd hint requires ad).</li> 
+                <li>Complete levels to unlock harder ones.</li> 
+                <li>Ad shown after every 3 completed levels.</li>
+                <li>Progress saved automatically. Enjoy!</li> 
+            </ul> 
+            <button onclick="hideModal('rules-modal')">Got it!</button> 
+        </div> 
+    </div>
+    
+    <div id="celebration-modal" class="modal"> 
+        <div class="modal-content"> 
+            <h2 id="celebration-title">Level Complete!</h2> 
+            <p id="celebration-stats">Score: +<span id="level-score">0</span></p> 
+        </div> 
+    </div>
+    
+    <!-- Hint Ad Modal -->
+    <div id="hint-ad-modal" class="modal"> 
+        <div class="modal-content"> 
+            <span class="close-btn" onclick="hideModal('hint-ad-modal')">×</span> 
+            <h2>Watch Ad for Hint?</h2> 
+            <p>Click on the ad below to get your hint!</p> 
+            <!-- Pop-up Ad Container for Hints -->
+            <div class="popup-ad-container" id="hint-ad-placeholder" onclick="registerAdClick('hint')">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '9cd94253e852b6ee34ddf00c801c1a34',
+                        'format' : 'iframe',
+                        'height' : 250,
+                        'width' : 300,
+                        'params' : {}
+                    };
+                    document.write('<scr' + 'ipt type="text/javascript" src="//www.highperformanceformat.com/9cd94253e852b6ee34ddf00c801c1a34/invoke.js"></scr' + 'ipt>');
+                </script>
+            </div>
+            <button id="watch-hint-ad-btn" disabled>Continue (After Ad Click)</button>
+            <button onclick="hideModal('hint-ad-modal')">No Thanks</button> 
+        </div> 
+    </div>
+    
+    <!-- Out of Moves Ad Modal -->
+    <div id="out-of-moves-modal" class="modal"> 
+        <div class="modal-content"> 
+            <h2>Out of Moves!</h2> 
+            <p>Click on the ad below to get +10 extra moves!</p> 
+            <!-- Pop-up Ad Container for Extra Moves -->
+            <div class="popup-ad-container" id="moves-ad-placeholder" onclick="registerAdClick('moves')">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '9cd94253e852b6ee34ddf00c801c1a34',
+                        'format' : 'iframe',
+                        'height' : 250,
+                        'width' : 300,
+                        'params' : {}
+                    };
+                    document.write('<scr' + 'ipt type="text/javascript" src="//www.highperformanceformat.com/9cd94253e852b6ee34ddf00c801c1a34/invoke.js"></scr' + 'ipt>');
+                </script>
+            </div>
+            <button id="watch-moves-ad-btn" disabled>Get +10 Moves (After Ad Click)</button>
+            <button id="try-again-btn">Try Again</button> 
+        </div> 
+    </div>
+    
     <!-- Interstitial Ad Modal -->
-     <div id="interstitial-ad" class="modal">
-          <div class="modal-content">
-               <span class="close-btn" onclick="skipInterstitialAdAndContinue()">×</span> <!-- Allow skipping -->
-              <h2>Advertisement</h2>
-              <div class="ad-placeholder">(Interstitial Ad Simulation)</div>
-              <p>Loading next level...</p>
-              <button id="continue-interstitial-btn">Continue</button> <!-- Specific Continue button -->
-          </div>
-     </div>
+    <div id="interstitial-ad" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="skipInterstitialAdAndContinue()">×</span>
+            <h2>Advertisement</h2>
+            <p>Click on the ad to continue to the next level!</p>
+            <!-- Pop-up Ad Container for Interstitial -->
+            <div class="popup-ad-container" id="interstitial-ad-placeholder" onclick="registerAdClick('interstitial')">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '9cd94253e852b6ee34ddf00c801c1a34',
+                        'format' : 'iframe',
+                        'height' : 250,
+                        'width' : 300,
+                        'params' : {}
+                    };
+                    document.write('<scr' + 'ipt type="text/javascript" src="//www.highperformanceformat.com/9cd94253e852b6ee34ddf00c801c1a34/invoke.js"></scr' + 'ipt>');
+                </script>
+            </div>
+            <button id="continue-interstitial-btn" disabled>Continue (After Ad Click)</button>
+        </div>
+    </div>
 
-
-    <!-- Audio Elements -->
-    <audio id="tap-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_133a6b857a.mp3?filename=mouse-click-153941.mp3" preload="auto"></audio>
-    <audio id="flip-sound" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_16cc52a8d7.mp3?filename=card-flip-84761.mp3" preload="auto"></audio>
-    <audio id="match-sound" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a86abe.mp3?filename=success-1-6297.mp3" preload="auto"></audio>
-    <audio id="mismatch-sound" src="https://cdn.pixabay.com/download/audio/2023/07/23/audio_791696f019.mp3?filename=error-147190.mp3" preload="auto"></audio>
-    <audio id="win-sound" src="https://cdn.pixabay.com/download/audio/2022/11/17/audio_706cf70774.mp3?filename=level-win-6416.mp3" preload="auto"></audio>
-    <audio id="level-up-sound" src="https://cdn.pixabay.com/download/audio/2022/10/14/audio_a63c209c96.mp3?filename=level-up-191997.mp3" preload="auto"></audio>
-    <audio id="celebration-sound" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a86abe.mp3?filename=success-1-6297.mp3" preload="auto"></audio>
-    <audio id="combo-sound" src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_71796106c4.mp3?filename=coin-upaif-14631.mp3" preload="auto"></audio>
-    <audio id="hint-sound" src="https://cdn.pixabay.com/download/audio/2022/03/25/audio_9a0b4a7c64.mp3?filename=interface-124464.mp3" preload="auto"></audio>
-    <audio id="fail-sound" src="https://cdn.pixabay.com/download/audio/2022/03/16/audio_1b0971d779.mp3?filename=negative_beeps-6008.mp3" preload="auto"></audio>
-
+    <!-- Ad Click Indicator (for debugging) -->
+    <div class="ad-clicked-indicator" id="ad-clicked-indicator">Ad Clicked!</div>
 
     <script>
         // --- DOM Elements ---
@@ -255,28 +345,15 @@
         const tryAgainBtn = document.getElementById('try-again-btn');
         const interstitialAdModal = document.getElementById('interstitial-ad');
         const continueInterstitialBtn = document.getElementById('continue-interstitial-btn');
+        const adClickedIndicator = document.getElementById('ad-clicked-indicator');
 
-        // Audio Elements Map
-        const sounds = {
-            tap: document.getElementById('tap-sound'),
-            flip: document.getElementById('flip-sound'),
-            match: document.getElementById('match-sound'),
-            mismatch: document.getElementById('mismatch-sound'),
-            win: document.getElementById('win-sound'),
-            levelUp: document.getElementById('level-up-sound'),
-            celebration: document.getElementById('celebration-sound'),
-            combo: document.getElementById('combo-sound'),
-            hint: document.getElementById('hint-sound'),
-            fail: document.getElementById('fail-sound')
-        };
-
-        // Emojis & Levels Config (Updated to have 3 hints for all levels)
+        // Emojis & Levels Config (All levels have 3 hints)
         const allEmojis = ['🍎', '🍌', '🍇', '🍉', '🍓', '🍒', '🍑', '🍍', '🥝', '🥭', '🥥', '🥑', '🍆', '🥕', '🌽', '🌶️', '🍄', '🥦', '🍕', '🍔', '🍟', '🍩', '🍪', '🎂', '🍦', '🍿'];
         const levels = {
             easy: { name: 'Easy', pairs: 6, cols: 4, emojis: allEmojis.slice(0, 6), baseScore: 1000, timePenalty: 5, movePenalty: 10, hints: 3 },
             medium: { name: 'Medium', pairs: 8, cols: 4, emojis: allEmojis.slice(0, 8), baseScore: 1500, timePenalty: 7, movePenalty: 15, hints: 3 },
-            hard: { name: 'Hard', pairs: 12, cols: 6, emojis: allEmojis.slice(0, 12), baseScore: 2500, timePenalty: 10, movePenalty: 20, hints: 3 }, // Changed to 3
-            expert: { name: 'Expert', pairs: 15, cols: 6, emojis: allEmojis.slice(0, 15), baseScore: 4000, timePenalty: 12, movePenalty: 25, hints: 3 }  // Changed to 3
+            hard: { name: 'Hard', pairs: 12, cols: 6, emojis: allEmojis.slice(0, 12), baseScore: 2500, timePenalty: 10, movePenalty: 20, hints: 3 },
+            expert: { name: 'Expert', pairs: 15, cols: 6, emojis: allEmojis.slice(0, 15), baseScore: 4000, timePenalty: 12, movePenalty: 25, hints: 3 }
         };
         const levelOrder = ['easy', 'medium', 'hard', 'expert'];
 
@@ -289,18 +366,40 @@
         let adWatchedForHintThisLevel = false; let currentMoveLimit = 0; let extraMovesGivenThisLevel = false;
         let levelsCompletedSinceLastAd = 0;
         let interstitialTimer = null;
+        
+        // Ad click tracking
+        let adClicked = {
+            hint: false,
+            moves: false,
+            interstitial: false
+        };
 
-        // --- Robust Sound Function ---
-        async function playSound(soundName, volume = 1.0) { 
-            const sound = sounds[soundName]; 
-            if (!sound) { console.warn(`Sound element "${soundName}" not found.`); return; } 
-            sound.volume = volume; 
-            sound.currentTime = 0; 
-            try { 
-                await sound.play(); 
-            } catch (error) { 
-                console.warn(`Could not play sound "${soundName}":`, error); 
-            } 
+        // --- Ad Click Handling ---
+        function registerAdClick(adType) {
+            console.log(`Ad clicked: ${adType}`);
+            adClicked[adType] = true;
+            
+            // Show indicator for visual feedback
+            adClickedIndicator.textContent = `${adType.charAt(0).toUpperCase() + adType.slice(1)} Ad Clicked!`;
+            adClickedIndicator.style.display = 'block';
+            setTimeout(() => {
+                adClickedIndicator.style.display = 'none';
+            }, 2000);
+            
+            // Enable appropriate continue button
+            if (adType === 'hint') {
+                watchHintAdBtn.disabled = false;
+                watchHintAdBtn.textContent = 'Continue';
+                watchHintAdBtn.style.animation = "pulseButton 1.5s infinite";
+            } else if (adType === 'moves') {
+                watchMovesAdBtn.disabled = false;
+                watchMovesAdBtn.textContent = 'Get +10 Moves';
+                watchMovesAdBtn.style.animation = "pulseButton 1.5s infinite";
+            } else if (adType === 'interstitial') {
+                continueInterstitialBtn.disabled = false;
+                continueInterstitialBtn.textContent = 'Continue to Next Level';
+                continueInterstitialBtn.style.animation = "pulseButton 1.5s infinite";
+            }
         }
 
         // --- Utility & Theme Functions ---
@@ -312,8 +411,10 @@
 
         // --- Progress Management ---
         function loadProgress() {
-            const savedLevelIndexStr = localStorage.getItem('mixMatchHighestLevel'); const savedScoreStr = localStorage.getItem('mixMatchTotalScore');
-            highestLevelReachedIndex = savedLevelIndexStr ? parseInt(savedLevelIndexStr, 10) : -1; totalScore = savedScoreStr ? parseInt(savedScoreStr, 10) : 0;
+            const savedLevelIndexStr = localStorage.getItem('mixMatchHighestLevel'); 
+            const savedScoreStr = localStorage.getItem('mixMatchTotalScore');
+            highestLevelReachedIndex = savedLevelIndexStr ? parseInt(savedLevelIndexStr, 10) : -1; 
+            totalScore = savedScoreStr ? parseInt(savedScoreStr, 10) : 0;
             levelsCompletedSinceLastAd = parseInt(localStorage.getItem('mixMatchLevelsSinceAd') || '0', 10);
             let startLevelIndex = (highestLevelReachedIndex >= levelOrder.length - 1) ? 0 : highestLevelReachedIndex + 1;
             currentLevelKey = levelOrder[startLevelIndex] || levelOrder[0];
@@ -336,7 +437,12 @@
         function updateHighestLevelDisplay() { let displayLevelName = "None"; if (highestLevelReachedIndex >= 0 && highestLevelReachedIndex < levelOrder.length) { displayLevelName = levels[levelOrder[highestLevelReachedIndex]].name; } highestLevelDisplay.textContent = displayLevelName; }
         function updateTimerDisplay() { timerSpan.textContent = `${seconds}s`; }
         function updateHintsDisplay() { hintsDisplay.textContent = hintsRemaining; hintBtnCount.textContent = hintsRemaining; hintBtn.disabled = hintsRemaining <= 0; }
-        function showComboMessage(count) { if (count <= 1) return; comboMessage.textContent = `Combo x${count}! +${(count -1) * COMBO_BASE_POINTS}`; comboMessage.classList.add('show'); setTimeout(() => { comboMessage.classList.remove('show'); }, 1200); playSound('combo', 0.8); }
+        function showComboMessage(count) { 
+            if (count <= 1) return; 
+            comboMessage.textContent = `Combo x${count}! +${(count -1) * COMBO_BASE_POINTS}`; 
+            comboMessage.classList.add('show'); 
+            setTimeout(() => { comboMessage.classList.remove('show'); }, 1200); 
+        }
         function updateLevelsClearedDisplay() { const clearedCount = highestLevelReachedIndex + 1; levelsClearedDisplay.textContent = clearedCount; }
         function updateMovesDisplay() { movesSpan.textContent = moves; movesLimitSpan.textContent = currentMoveLimit; if (currentMoveLimit > 0 && currentMoveLimit - moves <= 5 && currentMoveLimit - moves > 0) { movesInfoDiv.classList.add('warning'); } else { movesInfoDiv.classList.remove('warning'); } }
 
@@ -357,6 +463,22 @@
             clearTimeout(hintTimeout); stopTimer();
             hideModal('win-message'); hideModal('celebration-modal'); hideModal('hint-ad-modal'); hideModal('out-of-moves-modal'); hideModal('interstitial-ad');
             comboMessage.classList.remove('show'); movesInfoDiv.classList.remove('warning');
+            
+            // Reset ad click tracking
+            adClicked = { hint: false, moves: false, interstitial: false };
+            
+            // Reset button states
+            watchHintAdBtn.disabled = true;
+            watchHintAdBtn.textContent = "Continue (After Ad Click)";
+            watchHintAdBtn.style.animation = "none";
+            
+            watchMovesAdBtn.disabled = true;
+            watchMovesAdBtn.textContent = "Get +10 Moves (After Ad Click)";
+            watchMovesAdBtn.style.animation = "none";
+            
+            continueInterstitialBtn.disabled = true;
+            continueInterstitialBtn.textContent = "Continue (After Ad Click)";
+            continueInterstitialBtn.style.animation = "none";
 
             const levelConfig = levels[currentLevelKey];
             if (!levelConfig) { console.error("Invalid level key, defaulting to easy."); currentLevelKey = levelOrder[0]; levelConfig = levels[currentLevelKey]; }
@@ -364,12 +486,25 @@
             hintsRemaining = levelConfig.hints; updateHintsDisplay();
             currentMoveLimit = calculateMoveLimit(currentLevelKey);
             updateMovesDisplay(); updateLevelsClearedDisplay();
-            levelDisplay.textContent = `Level: ${levelConfig.name}`; let cardValues = shuffle([...levelConfig.emojis, ...levelConfig.emojis]);
+            levelDisplay.textContent = `Level: ${levelConfig.name}`; 
+            let cardValues = shuffle([...levelConfig.emojis, ...levelConfig.emojis]);
 
-            const columns = levelConfig.cols; const baseSize = 70; const scaleFactor = columns > 4 ? (columns > 5 ? 0.8 : 0.9) : 1; const finalCardSize = Math.max(40, baseSize * scaleFactor); document.documentElement.style.setProperty('--card-size', `${finalCardSize}px`); gameBoard.style.gridTemplateColumns = `repeat(${columns}, var(--card-size))`;
+            const columns = levelConfig.cols; 
+            const baseSize = 70; 
+            const scaleFactor = columns > 4 ? (columns > 5 ? 0.8 : 0.9) : 1; 
+            const finalCardSize = Math.max(40, baseSize * scaleFactor); 
+            document.documentElement.style.setProperty('--card-size', `${finalCardSize}px`); 
+            gameBoard.style.gridTemplateColumns = `repeat(${columns}, var(--card-size))`;
 
             // --- Card Creation Loop ---
-            cardValues.forEach(value => { const card = document.createElement('div'); card.classList.add('card'); card.dataset.value = value; card.innerHTML = `<div class="card-face card-front"></div><div class="card-face card-back">${value}</div>`; card.addEventListener('click', handleCardClick); gameBoard.appendChild(card); });
+            cardValues.forEach(value => { 
+                const card = document.createElement('div'); 
+                card.classList.add('card'); 
+                card.dataset.value = value; 
+                card.innerHTML = `<div class="card-face card-front"></div><div class="card-face card-back">${value}</div>`; 
+                card.addEventListener('click', handleCardClick); 
+                gameBoard.appendChild(card); 
+            });
             console.log(`--- Board creation complete. ${gameBoard.children.length} cards added. Move Limit: ${currentMoveLimit} ---`);
         }
 
@@ -379,11 +514,10 @@
                 return; 
             } 
             if (flippedCards.length === 1 && (moves + 1) > currentMoveLimit) { 
-                playSound('fail'); 
                 handleOutOfMoves(); 
                 return; 
             } 
-            playSound('tap', 0.6); 
+            
             const clickedCard = event.currentTarget; 
             if (!gameStarted) { 
                 startTimer(); 
@@ -394,7 +528,6 @@
         
         function flipCard(card) { 
             gameLocked = true; 
-            playSound('flip'); 
             card.classList.add('flipped'); 
             flippedCards.push(card); 
             setTimeout(() => { 
@@ -418,7 +551,6 @@
         }
         
         function handleMatch(card1, card2) { 
-            playSound('match'); 
             card1.classList.add('matched'); 
             card2.classList.add('matched'); 
             matchedPairs++; 
@@ -444,7 +576,6 @@
         }
         
         function handleMismatch(card1, card2) { 
-            playSound('mismatch', 0.8); 
             comboCount = 0; 
             setTimeout(() => { 
                 card1.classList.remove('flipped'); 
@@ -454,7 +585,7 @@
             }, 900); 
         }
 
-        // --- Hint System Logic --- (Modified to always require ad for last hint)
+        // --- Hint System Logic --- (Modified to require ad for last hint)
         function attemptUseHint() { 
             if (hintsRemaining <= 0 || gameLocked || flippedCards.length > 0) { 
                 return; 
@@ -462,25 +593,35 @@
             
             // Always require ad for last hint (3rd hint)
             if (hintsRemaining === 1 && !adWatchedForHintThisLevel) { 
-                playSound('tap', 0.7); 
                 showModal('hint-ad-modal'); 
             } else { 
                 executeHint(); 
             } 
         }
         
-        function simulateWatchAdAndUseHint() { 
+        function handleHintAfterAd() { 
+            if (!adClicked.hint) {
+                alert("Please click on the ad first to get your hint!");
+                return;
+            }
+            
             hideModal('hint-ad-modal'); 
-            console.log("Hint Ad watched (simulated)."); 
+            console.log("Hint Ad clicked and processed."); 
             adWatchedForHintThisLevel = true; 
             executeHint(); 
+            
+            // Reset button state
+            watchHintAdBtn.disabled = true;
+            watchHintAdBtn.textContent = "Continue (After Ad Click)";
+            watchHintAdBtn.style.animation = "none";
+            adClicked.hint = false;
         }
         
         function executeHint() { 
             if (hintsRemaining <= 0 || gameLocked || flippedCards.length > 0) { 
                 return; 
             } 
-            playSound('hint', 0.7); 
+            
             hintsRemaining--; 
             updateHintsDisplay(); 
             gameLocked = true; 
@@ -513,7 +654,7 @@
             } 
         }
 
-        // --- Move Limit Handling --- (Enhanced for better ad promotion)
+        // --- Move Limit Handling --- (Enhanced for ad integration)
         function incrementMoves() { 
             moves++; 
             updateMovesDisplay(); 
@@ -522,39 +663,46 @@
         function handleOutOfMoves() { 
             gameLocked = true; 
             stopTimer(); 
-            playSound('fail'); 
             
             // Enhanced: Highlight the ad button if not used yet
             if (!extraMovesGivenThisLevel) {
-                watchMovesAdBtn.style.animation = "pulseButton 1.5s infinite";
-                watchMovesAdBtn.style.transform = "scale(1.05)";
+                watchMovesAdBtn.style.animation = "none"; // Reset first
+                setTimeout(() => {
+                    watchMovesAdBtn.style.animation = "pulseButton 1.5s infinite";
+                }, 10);
             }
             
             watchMovesAdBtn.disabled = extraMovesGivenThisLevel;
             showModal('out-of-moves-modal'); 
         }
         
-        function simulateWatchAdAndGetMoves() { 
+        function handleMovesAfterAd() { 
+            if (!adClicked.moves) {
+                alert("Please click on the ad first to get extra moves!");
+                return;
+            }
+            
             hideModal('out-of-moves-modal'); 
-            console.log("Moves Ad watched (simulated)..."); 
+            console.log("Moves Ad clicked and processed..."); 
             gameLocked = true; 
             
-            // Reset any button styling
+            // Reset button styling
             watchMovesAdBtn.style.animation = "none";
-            watchMovesAdBtn.style.transform = "none";
+            watchMovesAdBtn.textContent = "Get +10 Moves (After Ad Click)";
             
             setTimeout(() => { 
-                console.log("Ad finished."); 
+                console.log("Extra moves granted."); 
                 currentMoveLimit += 10; 
                 extraMovesGivenThisLevel = true; 
                 gameLocked = false; 
                 updateMovesDisplay(); 
-            }, 1500); 
+                adClicked.moves = false;
+                watchMovesAdBtn.disabled = true;
+            }, 1000); 
         }
         
         function handleLevelFailFromMoves() { 
             hideModal('out-of-moves-modal'); 
-            playSound('fail'); 
             restartCurrentLevel(); 
         }
 
@@ -585,7 +733,6 @@
         }
         
         function showCelebration(levelScore) {
-            playSound('celebration'); 
             levelScoreSpan.textContent = levelScore; 
             celebrationTitle.textContent = `${levels[currentLevelKey].name} Complete!`; 
             showModal('celebration-modal');
@@ -637,19 +784,28 @@
             } else if (levelsCompletedSinceLastAd >= 3) {
                 levelsCompletedSinceLastAd = 0;
                 saveProgress();
-                playSound('levelUp');
                 showModal('interstitial-ad');
                 
                 clearTimeout(interstitialTimer);
                 interstitialTimer = setTimeout(() => {
-                    if (interstitialAdModal.classList.contains('show')) {
+                    if (interstitialAdModal.classList.contains('show') && !adClicked.interstitial) {
+                        // Only auto-proceed if no ad click yet
                         skipInterstitialAdAndContinue();
                     }
-                }, 5000);
+                }, 10000); // Give 10 seconds for ad interaction
             } else {
-                playSound('levelUp');
                 setupNextLevel();
             }
+        }
+        
+        function handleInterstitialAfterClick() {
+            if (!adClicked.interstitial) {
+                alert("Please click on the ad first to continue!");
+                return;
+            }
+            
+            skipInterstitialAdAndContinue();
+            adClicked.interstitial = false;
         }
         
         function setupNextLevel() {
@@ -666,11 +822,13 @@
         function skipInterstitialAdAndContinue() {
              hideModal('interstitial-ad'); 
              clearTimeout(interstitialTimer);
+             continueInterstitialBtn.disabled = true;
+             continueInterstitialBtn.textContent = "Continue (After Ad Click)";
+             continueInterstitialBtn.style.animation = "none";
              setupNextLevel();
          }
         
         function showFinalWinScreen() {
-            playSound('win');
             winTitle.textContent = "You've beaten all levels! 🏆";
             winStatsP.textContent = `Congratulations! You've completed every level in the game.`;
             finalScoreSpan.textContent = totalScore;
@@ -730,14 +888,14 @@
         restartBtn.addEventListener('click', restartCurrentLevel);
         newGameBtn.addEventListener('click', startNewGame);
         hintBtn.addEventListener('click', attemptUseHint);
-        watchHintAdBtn.addEventListener('click', simulateWatchAdAndUseHint);
+        watchHintAdBtn.addEventListener('click', handleHintAfterAd);
         themeToggleBtn.addEventListener('click', toggleTheme);
         shareBtn.addEventListener('click', shareScore);
         rulesBtn.addEventListener('click', () => showModal('rules-modal'));
         playAgainBtn.addEventListener('click', () => { hideModal('win-message'); startNewGame(); });
-        watchMovesAdBtn.addEventListener('click', simulateWatchAdAndGetMoves);
+        watchMovesAdBtn.addEventListener('click', handleMovesAfterAd);
         tryAgainBtn.addEventListener('click', handleLevelFailFromMoves);
-        continueInterstitialBtn.addEventListener('click', skipInterstitialAdAndContinue);
+        continueInterstitialBtn.addEventListener('click', handleInterstitialAfterClick);
         interstitialAdModal.querySelector('.close-btn').addEventListener('click', skipInterstitialAdAndContinue);
 
         // --- Initial Game Load ---
@@ -746,11 +904,6 @@
              applyTheme(savedTheme);
              loadProgress(); 
              createBoard();
-             document.querySelectorAll('audio').forEach(audio => { 
-                 audio.onerror = (e) => { 
-                     console.error(`Error loading audio: ${audio.src}`, e); 
-                 }; 
-             });
         });
     </script>
 </body>
