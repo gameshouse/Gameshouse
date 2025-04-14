@@ -184,18 +184,53 @@
     <div id="win-message" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('win-message')">×</span> <h2 id="win-title">Congratulations! 🎉</h2> <p id="win-stats">Level Complete!</p> <div class="final-stats"> Final Score: <span id="final-score">0</span><br> Highest Level: <span id="final-highest-level">Easy</span> </div> <button id="play-again-btn">Play Again (Level 1)</button> </div> </div>
     <div id="rules-modal" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('rules-modal')">×</span> <h2>How to Play</h2> <ul> <li>Goal: Find all matching pairs.</li> <li>Click cards to flip. Matches stay open ✨. Mismatches flip back 🤔.</li> <li>Level 1: 20 Moves, Level 2: 25 Moves, Level 3+: 30 Moves.</li> <li>Earn points for speed & fewer moves. Get Combo bonuses!</li> <li>Out of moves? Watch an ad for +10 (once per level try).</li> <li>Use 'Hint' if stuck (limited uses, last hint may require ad).</li> <li>Complete levels to unlock harder ones.</li> <li>Ad shown after every 3 completed levels.</li><li>Progress saved automatically. Enjoy!</li> </ul> <button onclick="hideModal('rules-modal')">Got it!</button> </div> </div>
     <div id="celebration-modal" class="modal"> <div class="modal-content"> <h2 id="celebration-title">Level Complete!</h2> <p id="celebration-stats">Score: +<span id="level-score">0</span></p> </div> </div>
-    <div id="hint-ad-modal" class="modal"> <div class="modal-content"> <span class="close-btn" onclick="hideModal('hint-ad-modal')">×</span> <h2>Watch Ad for Hint?</h2> <p>Watch a short ad to use your last hint for this level.</p> <div class="ad-placeholder">(Ad Simulation)</div> <button id="watch-hint-ad-btn">Watch Ad</button> <button onclick="hideModal('hint-ad-modal')">No Thanks</button> </div> </div>
-    <div id="out-of-moves-modal" class="modal"> <div class="modal-content"> <h2>Out of Moves!</h2> <p>You've run out of moves for this level.</p> <div class="ad-placeholder" id="moves-ad-placeholder">(Moves Ad Simulation)</div> <button id="watch-moves-ad-btn">Get +10 Moves (Ad)</button> <button id="try-again-btn">Try Again</button> </div> </div>
-    <!-- Interstitial Ad Modal -->
-     <div id="interstitial-ad" class="modal">
-          <div class="modal-content">
-               <span class="close-btn" onclick="skipInterstitialAdAndContinue()">×</span> <!-- Allow skipping -->
-              <h2>Advertisement</h2>
-              <div class="ad-placeholder">(Interstitial Ad Simulation)</div>
-              <p>Loading next level...</p>
-              <button id="continue-interstitial-btn">Continue</button> <!-- Specific Continue button -->
-          </div>
-     </div>
+    <div id="hint-ad-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="hideModal('hint-ad-modal')">×</span>
+    <h2>Watch Ad for Hint?</h2>
+    <p>Watch a short ad to use your last hint for this level.</p>
+    
+    <div class="ad-placeholder">
+      <script type='text/javascript' src='//pl26378193.profitableratecpm.com/97/8f/7e/978f7e688126f92bf6433370ca361bf1.js'></script>
+    </div>
+    
+  </div>
+</div>
+
+<div id="out-of-moves-modal" class="modal">
+  <div class="modal-content">
+    <h2>Out of Moves!</h2>
+    <p>You've run out of moves for this level.</p>
+
+    <div class="ad-placeholder">
+      <script type='text/javascript' src='//pl26378193.profitableratecpm.com/97/8f/7e/978f7e688126f92bf6433370ca361bf1.js'></script>
+    </div>
+
+  </div>
+</div>
+
+<div id="interstitial-ad" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="skipInterstitialAdAndContinue()">×</span>
+    <h2>Advertisement</h2>
+
+    <div class="ad-placeholder">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : 'f13b9aebb338988dc9099e067dd01302',
+          'format' : 'iframe',
+          'height' : 90,
+          'width' : 728,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/f13b9aebb338988dc9099e067dd01302/invoke.js"></script>
+    </div>
+
+    <p>Loading next level...</p>
+    <button id="continue-interstitial-btn">Continue</button>
+  </div>
+</div>
 
 
     <!-- Audio Elements -->
