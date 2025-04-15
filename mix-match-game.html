@@ -3,904 +3,1483 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Mix & Match Pro - Final Balance</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <title>Ultimate Mix & Match</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- CSS Styles --- */
         :root {
-            --bg-color-light: #f0f8ff; --card-bg-light: #ffffff; --text-color-light: #333d4f;
-            --accent-color-light-1: #007bff; --accent-color-light-2: #28a745; --border-color-light: #ced4da;
-            --shadow-light: 0 6px 24px rgba(0, 123, 255, 0.15); --matched-overlay-light: rgba(40, 167, 69, 0.7);
-            --ad-bg-light: #ffc107; --score-color-light: #fd7e14; --celebration-bg-light: linear-gradient(135deg, #56ccf2, #2f80ed);
-            --hint-color-light: #6f42c1; --combo-color-light: #dc3545; --cleared-color-light: #17a2b8;
-            --moves-warning-color-light: #ff7f50;
-
-            --bg-color-dark: #1a202c; --card-bg-dark: #2d3748; --text-color-dark: #e2e8f0;
-            --accent-color-dark-1: #4299e1; --accent-color-dark-2: #48bb78; --border-color-dark: #4a5568;
-            --shadow-dark: 0 6px 24px rgba(0, 0, 0, 0.3); --matched-overlay-dark: rgba(72, 187, 120, 0.6);
-            --ad-bg-dark: #f6ad55; --score-color-dark: #f6ad55; --celebration-bg-dark: linear-gradient(135deg, #4776e6, #8e54e9);
-            --hint-color-dark: #b794f4; --combo-color-dark: #f56565; --cleared-color-dark: #38b2ac;
-            --moves-warning-color-dark: #ffa07a;
-
-            --bg-color: var(--bg-color-light); --card-bg: var(--card-bg-light); --text-color: var(--text-color-light);
-            --accent-color-1: var(--accent-color-light-1); --accent-color-2: var(--accent-color-light-2); --border-color: var(--border-color-light);
-            --shadow: var(--shadow-light); --matched-overlay: var(--matched-overlay-light); --ad-bg: var(--ad-bg-light);
-            --score-color: var(--score-color-light); --celebration-bg: var(--celebration-bg-light); --hint-color: var(--hint-color-light);
-            --combo-color: var(--combo-color-light); --cleared-color: var(--cleared-color-light);
-            --moves-warning-color: var(--moves-warning-color-light);
-
-            --card-size: 70px; --gap-size: 10px; --modal-bg-opacity: rgba(0, 0, 0, 0.75);
+            --primary-color: #0088cc;
+            --secondary-color: #4ade80;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --accent-color: #8b5cf6;
+            --card-front-gradient-1: #38bdf8;
+            --card-front-gradient-2: #0284c7;
+            --card-back-gradient-1: #4ade80;
+            --card-back-gradient-2: #22c55e;
+            --header-gradient-1: #0088cc;
+            --header-gradient-2: #4facfe;
+            --dark-header-gradient-1: #1e3a8a;
+            --dark-header-gradient-2: #3b82f6;
         }
-        .dark-mode {
-            --bg-color: var(--bg-color-dark); --card-bg: var(--card-bg-dark); --text-color: var(--text-color-dark);
-            --accent-color-1: var(--accent-color-dark-1); --accent-color-2: var(--accent-color-dark-2); --border-color: var(--border-color-dark);
-            --shadow: var(--shadow-dark); --matched-overlay: var(--matched-overlay-dark); --ad-bg: var(--ad-bg-dark);
-            --score-color: var(--score-color-dark); --celebration-bg: var(--celebration-bg-dark); --hint-color: var(--hint-color-dark);
-            --combo-color: var(--combo-color-dark); --cleared-color: var(--cleared-color-dark);
-            --moves-warning-color: var(--moves-warning-color-dark);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', sans-serif; }
-        body { display: flex; flex-direction: column; justify-content: space-between; align-items: center; min-height: 100vh; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.4s ease, color 0.4s ease; padding: 10px 0; position: relative; overflow-x: hidden; }
-
-        /* Ad Banner Styles */
-        .ad-banner { width: 95%; max-width: 728px; height: 70px; background-color: var(--ad-bg); color: #333; display: flex; justify-content: center; align-items: center; font-weight: bold; border-radius: 8px; margin: 10px auto; box-shadow: var(--shadow); transition: background-color 0.4s ease; flex-shrink: 0; font-size: 0.9em; text-align: center; padding: 5px; }
-        .ad-banner.top { margin-bottom: 15px; } .ad-banner.bottom { margin-top: 15px; }
-        @media (max-width: 760px) { .ad-banner { height: 60px; font-size: 0.8em;} } @media (max-width: 400px) { .ad-banner { height: 50px; font-size: 0.7em;} }
-
-        /* Pop-up Ad Styles */
-        .popup-ad-container { width: 100%; max-width: 300px; height: 250px; margin: 0 auto 20px auto; background-color: var(--ad-bg); color: #333; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; border-radius: 8px; box-shadow: inset 0 0 10px rgba(0,0,0,0.1); padding: 10px; cursor: pointer; position: relative; overflow: hidden; }
-        .popup-ad-container:hover { transform: scale(1.02); transition: transform 0.3s ease; }
-        .popup-ad-container::after { content: "Ad"; position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.5); color: white; padding: 2px 5px; border-radius: 3px; font-size: 0.7em; }
-
-        /* Game Container & Info */
-        .game-container { display: flex; flex-direction: column; align-items: center; padding: clamp(15px, 3vw, 20px) clamp(15px, 4vw, 25px); background: var(--card-bg); border-radius: 20px; box-shadow: var(--shadow); transition: background-color 0.4s ease, box-shadow 0.4s ease; max-width: 95%; width: fit-content; z-index: 1; margin: auto 10px; }
-        h1 { font-size: clamp(1.6em, 4vw, 2.1em); margin-bottom: 5px; color: var(--accent-color-1); text-shadow: 1px 1px 3px rgba(0,0,0,0.1); font-weight: 600; }
-        .game-info { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 8px 15px; width: 100%; margin-bottom: 15px; font-size: clamp(0.8em, 2.5vw, 0.9em); color: var(--text-color); text-align: center; }
-        .game-info > div { padding: 3px 6px; background: rgba(127, 140, 141, 0.08); border-radius: 4px; }
-        .game-info span { font-weight: bold; } #score-display span { color: var(--score-color); } #level-display { color: var(--accent-color-2); font-weight: 500;} #hints-display span { color: var(--hint-color); } #levels-cleared-display span { color: var(--cleared-color); } #highest-level-display span { color: var(--accent-color-1); }
-
-        /* Stats (Time/Moves) */
-        .stats { display: flex; justify-content: space-evenly; width: 100%; margin-bottom: 15px; font-size: clamp(0.9em, 3vw, 1.0em); gap: 15px; }
-        .stats > div { padding: 5px 10px; border-radius: 5px; min-width: 80px; text-align: center; background: rgba(127, 140, 141, 0.08); }
-        .stats span { font-weight: bold; color: var(--accent-color-1); }
-        #moves-info.warning { color: var(--moves-warning-color); font-weight: bold; animation: pulseWarning 1.5s infinite ease-in-out; }
-        @keyframes pulseWarning { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
         
-        /* Button pulse animation for ad buttons */
-        @keyframes pulseButton { 
-            0%, 100% { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,123,255,0.4); } 
-            50% { transform: scale(1.1); box-shadow: 0 4px 20px rgba(0,123,255,0.6); } 
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+            min-height: 100vh;
+            transition: background 0.3s ease;
         }
-
-        /* Combo Message */
-        #combo-message { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 1.3em; font-weight: bold; color: var(--combo-color); opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; text-shadow: 1px 1px 2px rgba(255,255,255,0.7); pointer-events: none; z-index: 5; }
-        #combo-message.show { opacity: 1; transform: translateX(-50%) translateY(-5px); }
-
-        /* Game Board & Cards */
-        .game-board-area { position: relative; margin-bottom: 20px; }
-        .game-board { display: grid; gap: var(--gap-size); perspective: 1200px; }
-        .card { width: var(--card-size); height: var(--card-size); position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); opacity: 1; visibility: visible; display: block; }
-        .card.hint-reveal .card-face { border: 2px solid var(--hint-color); }
-        .card.flipped, .card.matched { transform: rotateY(180deg); cursor: default; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .card.matched { animation: pulse 0.5s ease-in-out; }
-        @keyframes pulse { 0%, 100% { transform: rotateY(180deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.06); } }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; justify-content: center; align-items: center; font-size: calc(var(--card-size) * 0.6); border-radius: 10px; border: 1px solid var(--border-color); transition: background-color 0.4s ease, border-color 0.4s ease; }
-        .card-front { background: linear-gradient(145deg, var(--accent-color-1), var(--accent-color-2)); color: white; }
-        .card-front::before { content: '?'; font-size: calc(var(--card-size) * 0.7); opacity: 0.9; font-weight: bold; }
-        .card-back { background-color: var(--card-bg); transform: rotateY(180deg); color: var(--text-color); border-color: var(--accent-color-1); }
-        .card.matched .card-back { opacity: 0.8; border-color: var(--accent-color-2);}
-        .card.matched .card-back::after { content: '✔'; position: absolute; font-size: calc(var(--card-size) * 0.5); color: white; background: var(--matched-overlay); width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; border-radius: 8px; opacity: 1; font-weight: bold; }
-
-        /* Controls */
-        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 1.5vw, 10px); margin-top: 15px; width: 100%; }
-        button { padding: clamp(7px, 1.8vw, 9px) clamp(14px, 3.5vw, 18px); font-size: clamp(0.8em, 2.5vw, 0.9em); font-weight: 500; cursor: pointer; border: none; border-radius: 20px; background: linear-gradient(145deg, var(--accent-color-1), var(--accent-color-2)); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease; letter-spacing: 0.5px; white-space: nowrap; }
-        button:hover:not(:disabled) { transform: translateY(-2px) scale(1.03); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-        button:active:not(:disabled) { transform: translateY(0) scale(1); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        button:disabled { background: #bdc3c7; cursor: not-allowed; opacity: 0.7; }
-        #theme-toggle { background: var(--text-color); color: var(--bg-color); } .dark-mode #theme-toggle { background: var(--text-color); color: var(--bg-color); }
-        #new-game-btn { background: linear-gradient(145deg, #e74c3c, #c0392b); } #hint-btn { background: linear-gradient(145deg, var(--hint-color), color-mix(in srgb, var(--hint-color) 70%, black)); }
-
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: var(--light-color);
+        }
+        
+        .game-container {
+            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode .game-container {
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-header {
+            background: linear-gradient(to right, var(--header-gradient-1), var(--header-gradient-2));
+            border-radius: 20px 20px 0 0;
+            padding: 1.25rem;
+            color: white;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-mode .game-header {
+            background: linear-gradient(to right, var(--dark-header-gradient-1), var(--dark-header-gradient-2));
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 0.75rem;
+            background: rgba(241, 245, 249, 0.7);
+            border-radius: 12px;
+            margin: 0.75rem;
+        }
+        
+        body.dark-mode .stats-container {
+            background: rgba(30, 41, 59, 0.7);
+        }
+        
+        .stat-box {
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            min-width: 90px;
+            margin: 0.25rem;
+            transition: transform 0.2s;
+        }
+        
+        body.dark-mode .stat-box {
+            background: #334155;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #64748b;
+        }
+        
+        body.dark-mode .stat-label {
+            color: #94a3b8;
+        }
+        
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        
+        body.dark-mode .stat-value {
+            color: #f1f5f9;
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            padding: 0.75rem;
+        }
+        
+        .card {
+            position: relative;
+            height: 0;
+            padding-bottom: 100%;
+            border-radius: 12px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card.matched {
+            transform: rotateY(180deg) scale(0.95);
+            box-shadow: 0 0 0 3px var(--secondary-color);
+        }
+        
+        .card-face {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, var(--card-front-gradient-1) 0%, var(--card-front-gradient-2) 100%);
+            color: white;
+            transform: rotateY(0deg);
+        }
+        
+        .card-back {
+            background: linear-gradient(135deg, var(--card-back-gradient-1) 0%, var(--card-back-gradient-2) 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .card i, .card .emoji {
+            font-size: 2rem;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+        }
+        
+        .game-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            border: none;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px -2px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-restart {
+            background: linear-gradient(to right, #0891b2, #06b6d4);
+        }
+        
+        .btn-new {
+            background: linear-gradient(to right, #ef4444, #f43f5e);
+        }
+        
+        .btn-hint {
+            background: linear-gradient(to right, #8b5cf6, #a855f7);
+        }
+        
+        .btn-rules {
+            background: linear-gradient(to right, #0284c7, #38bdf8);
+        }
+        
+        .btn-dark {
+            background: linear-gradient(to right, #1e293b, #334155);
+        }
+        
+        .btn-share {
+            background: linear-gradient(to right, #0891b2, #0ea5e9);
+        }
+        
+        .btn-theme {
+            background: linear-gradient(to right, #f59e0b, #fbbf24);
+        }
+        
+        body.dark-mode .btn-dark {
+            background: linear-gradient(to right, #e2e8f0, #f8fafc);
+            color: #1e293b;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            10% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+            30% { transform: rotate(5deg); }
+            40% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+            60% { transform: rotate(-5deg); }
+            70% { transform: rotate(0deg); }
+            80% { transform: scale(1.1); }
+            90% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+        
+        .celebrate {
+            animation: celebrate 1.5s ease;
+        }
+        
         /* Modal Styles */
-        .modal { display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: var(--modal-bg-opacity); justify-content: center; align-items: center; z-index: 1000; opacity: 0; transition: opacity 0.4s ease; padding: 15px; }
-        .modal.show { display: flex; opacity: 1; }
-        .modal-content { background: var(--card-bg); padding: clamp(20px, 4vw, 25px) clamp(25px, 5vw, 35px); border-radius: 15px; box-shadow: var(--shadow); color: var(--text-color); text-align: center; max-width: 90%; width: 420px; position: relative; animation: slideIn 0.4s ease-out; }
-        @keyframes slideIn { from { transform: translateY(-25px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
-        .modal-content h2 { color: var(--accent-color-1); margin-bottom: 15px; font-weight: 600; font-size: clamp(1.2em, 4vw, 1.5em); }
-        .modal-content p { margin-bottom: 20px; font-size: clamp(0.9em, 3vw, 1.0em); line-height: 1.6; }
-        .modal-content ul { text-align: left; margin-bottom: 20px; padding-left: 20px; } .modal-content li { margin-bottom: 8px; font-size: clamp(0.85em, 2.8vw, 0.95em); }
-        .modal-content button { margin-top: 10px; margin-left: 5px; margin-right: 5px; }
-        .close-btn { position: absolute; top: 8px; right: 12px; font-size: 1.6em; font-weight: bold; width: 30px; height: 30px; line-height: 30px; color: var(--border-color); background: rgba(127, 140, 141, 0.1); border-radius: 50%; cursor: pointer; transition: color 0.3s ease, background-color 0.3s ease; }
-        .close-btn:hover { color: var(--accent-color-1); background: rgba(127, 140, 141, 0.2); }
-
-        /* Modal Specific */
-        #win-message .final-stats { font-size: 1.1em; font-weight: 500; margin-bottom: 20px; display: none; } #win-message .final-stats span { color: var(--score-color); font-weight: bold; }
-        #celebration-modal { background: none; overflow: hidden; } #celebration-modal .modal-content { background: var(--celebration-bg); color: white; }
-        #celebration-modal h2 { color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.3); font-size: 1.8em; } #celebration-modal p { font-size: 1.2em; font-weight: 500; } #celebration-modal .close-btn { display: none; }
-        #hint-ad-modal button#watch-hint-ad-btn, #out-of-moves-modal button#watch-moves-ad-btn, #interstitial-ad button#continue-btn { background: linear-gradient(145deg, var(--accent-color-2), color-mix(in srgb, var(--accent-color-2) 70%, black)); } /* Green buttons */
-        #out-of-moves-modal button#try-again-btn { background: linear-gradient(145deg, #e74c3c, #c0392b); } /* Red button */
-
-        /* Ad Counting Display (for debugging) */
-        .ad-clicked-indicator { position: fixed; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.8em; display: none; }
-
-        /* Responsive */
-        @media (max-width: 768px) { :root { --card-size: 60px; --gap-size: 8px; } }
-        @media (max-width: 480px) { :root { --card-size: 48px; --gap-size: 6px; } .game-info { flex-direction: column; align-items: center; gap: 5px; } .stats { flex-direction: row; justify-content: space-evenly; } }
-        @media (max-width: 360px) { :root { --card-size: 42px; --gap-size: 5px; } }
-
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            padding: 1.5rem;
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        body.dark-mode .modal-content {
+            background: #1e293b;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .modal-close:hover {
+            color: #ef4444;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #0088cc, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        body.dark-mode .modal-title {
+            background: linear-gradient(to right, #38bdf8, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .modal-button {
+            margin-top: 1rem;
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: linear-gradient(to right, #0088cc, #4facfe);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Ad Containers */
+        .ad-container {
+            background: #f1f5f9;
+            border-radius: 8px;
+            margin: 0.75rem;
+            padding: 0.5rem;
+            text-align: center;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+        }
+        
+        body.dark-mode .ad-container {
+            background: #334155;
+        }
+        
+        .ad-container-top {
+            margin-bottom: 0;
+            height: 90px;
+        }
+        
+        .ad-container-bottom {
+            margin-top: 0;
+            height: 90px;
+        }
+        
+        .ad-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+        
+        body.dark-mode .ad-text {
+            color: #94a3b8;
+        }
+        
+        .ad-banner {
+            width: 100%;
+            height: 70px;
+            background: linear-gradient(45deg, #f1f5f9 25%, #e2e8f0 25%, #e2e8f0 50%, #f1f5f9 50%, #f1f5f9 75%, #e2e8f0 75%);
+            background-size: 20px 20px;
+            animation: moveBackground 30s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #64748b;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .ad-banner:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-mode .ad-banner {
+            background: linear-gradient(45deg, #334155 25%, #1e293b 25%, #1e293b 50%, #334155 50%, #334155 75%, #1e293b 75%);
+            background-size: 20px 20px;
+            color: #94a3b8;
+        }
+        
+        @keyframes moveBackground {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 0; }
+        }
+        
+        /* Modal Ad Container */
+        .modal-ad-container {
+            position: relative;
+            margin: 1rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-ad-container:hover {
+            transform: scale(1.02);
+        }
+        
+        .modal-ad-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-ad-container:hover .modal-ad-overlay {
+            opacity: 1;
+        }
+        
+        .modal-ad-content {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            color: white;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-ad-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .clicked-indicator {
+            display: none;
+            background: #22c55e;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .clicked-indicator.visible {
+            display: block;
+            animation: pulse 1s;
+        }
+        
+        /* Confetti Effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f43f5e;
+            opacity: 0.7;
+            animation: confetti-fall 3s ease-in-out forwards;
+            z-index: 100;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(1000px) rotate(1080deg); opacity: 0; }
+        }
+        
+        /* Theme Customization Styles */
+        .theme-option {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            border: 3px solid transparent;
+        }
+        
+        .theme-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .theme-option.active {
+            border-color: #3b82f6;
+            transform: scale(1.1);
+        }
+        
+        .theme-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 640px) {
+            .game-header {
+                font-size: 1.5rem;
+                padding: 1rem;
+            }
+            
+            .game-board {
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+            
+            .stat-box {
+                min-width: 70px;
+                padding: 0.4rem;
+            }
+            
+            .stat-label {
+                font-size: 0.7rem;
+            }
+            
+            .stat-value {
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+        }
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Top Banner Ad -->
-    <div class="ad-banner top">
-    <script type="text/javascript">
-        atOptions = {
-            'key' : 'f13b9aebb338988dc9099e067dd01302',
-            'format' : 'iframe',
-            'height' : 90,
-            'width' : 728,
-            'params' : {}
-        };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/f13b9aebb338988dc9099e067dd01302/invoke.js"></script>
-    </div>
-
-    <div class="game-container">
-        <h1>Ultimate Mix & Match</h1>
-        <div class="game-info">
-            <div id="level-display">Level: Easy</div>
-            <div id="score-display">Score: <span>0</span></div>
-            <div id="highest-level-display">Highest: <span>None</span></div>
-            <div id="levels-cleared-display">Cleared: <span>0</span></div>
-            <div id="hints-display">Hints: <span id="hints-remaining">3</span></div>
-        </div>
-
-        <div class="stats">
-            <div>Time: <span id="timer">0s</span></div>
-            <div id="moves-info">Moves: <span id="moves">0</span> / <span id="moves-limit">?</span></div>
-        </div>
-
-        <div class="game-board-area">
-            <div id="combo-message"></div>
-            <div class="game-board" id="game-board">
-                <!-- Cards will be populated here -->
+    <div class="flex min-h-screen w-full items-center justify-center p-4">
+        <div class="game-container w-full">
+            <!-- Top Ad Banner -->
+            <div class="ad-container ad-container-top">
+                <div class="ad-text">Advertisement (728x90)</div>
+                <div class="ad-banner" onclick="handleAdClick(this, null)">Banner Advertisement</div>
+            </div>
+            
+            <div class="game-header">Ultimate Mix & Match</div>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-label">Level</div>
+                    <div class="stat-value level-display">Easy</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Score</div>
+                    <div class="stat-value score-display">50</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Highest</div>
+                    <div class="stat-value highest-display">None</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Cleared</div>
+                    <div class="stat-value cleared-display">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Hints</div>
+                    <div class="stat-value hints-display">2</div>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-label">Time</div>
+                    <div class="stat-value time-display">27s</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Moves</div>
+                    <div class="stat-value moves-display">7 / 20</div>
+                </div>
+            </div>
+            
+            <div class="game-board">
+                <!-- Cards will be generated here by JavaScript -->
+            </div>
+            
+            <div class="game-controls">
+                <button class="btn btn-restart">
+                    <i class="fas fa-redo-alt"></i> Restart
+                </button>
+                <button class="btn btn-new">
+                    <i class="fas fa-plus"></i> New Game
+                </button>
+                <button class="btn btn-hint">
+                    <i class="fas fa-lightbulb"></i> Hint (2)
+                </button>
+                <button class="btn btn-rules">
+                    <i class="fas fa-book"></i> Rules
+                </button>
+                <button class="btn btn-dark">
+                    <i class="fas fa-moon"></i> Dark Mode
+                </button>
+                <button class="btn btn-theme">
+                    <i class="fas fa-palette"></i> Themes
+                </button>
+                <button class="btn btn-share">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+            </div>
+            
+            <!-- Bottom Ad Banner -->
+            <div class="ad-container ad-container-bottom">
+                <div class="ad-text">Advertisement (728x90)</div>
+                <div class="ad-banner" onclick="handleAdClick(this, null)">Banner Advertisement</div>
             </div>
         </div>
-
-        <div class="controls">
-            <button id="restart-btn">Restart</button>
-            <button id="new-game-btn">New Game</button>
-            <button id="hint-btn">Hint (<span id="hint-btn-count">3</span>)</button>
-            <button id="rules-btn">Rules</button>
-            <button id="theme-toggle">Dark Mode</button>
-            <button id="share-btn">Share</button>
-        </div>
     </div>
-
-    <!-- Bottom Banner Ad -->
-    <div class="ad-banner bottom">
-    <script type="text/javascript">
-        atOptions = {
-            'key' : 'f13b9aebb338988dc9099e067dd01302',
-            'format' : 'iframe',
-            'height' : 90,
-            'width' : 728,
-            'params' : {}
-        };
-    </script>
-    <script type="text/javascript" src="//www.highperformanceformat.com/f13b9aebb338988dc9099e067dd01302/invoke.js"></script>
-    </div>
-
+    
     <!-- Modals -->
-    <div id="win-message" class="modal"> 
-        <div class="modal-content"> 
-            <span class="close-btn" onclick="hideModal('win-message')">×</span> 
-            <h2 id="win-title">Congratulations! 🎉</h2> 
-            <p id="win-stats">Level Complete!</p> 
-            <div class="final-stats"> 
-                Final Score: <span id="final-score">0</span><br> 
-                Highest Level: <span id="final-highest-level">Easy</span> 
-            </div> 
-            <button id="play-again-btn">Play Again (Level 1)</button> 
-        </div> 
-    </div>
-    
-    <div id="rules-modal" class="modal"> 
-        <div class="modal-content"> 
-            <span class="close-btn" onclick="hideModal('rules-modal')">×</span> 
-            <h2>How to Play</h2> 
-            <ul> 
-                <li>Goal: Find all matching pairs.</li> 
-                <li>Click cards to flip. Matches stay open ✨. Mismatches flip back 🤔.</li> 
-                <li>Level 1: 20 Moves, Level 2: 25 Moves, Level 3+: 30 Moves.</li> 
-                <li>Earn points for speed & fewer moves. Get Combo bonuses!</li> 
-                <li>Out of moves? Watch an ad for +10 (once per level try).</li> 
-                <li>Use 'Hint' if stuck (3 hints per level, but 3rd hint requires ad).</li> 
-                <li>Complete levels to unlock harder ones.</li> 
-                <li>Ad shown after every 3 completed levels.</li>
-                <li>Progress saved automatically. Enjoy!</li> 
-            </ul> 
-            <button onclick="hideModal('rules-modal')">Got it!</button> 
-        </div> 
-    </div>
-    
-    <div id="celebration-modal" class="modal"> 
-        <div class="modal-content"> 
-            <h2 id="celebration-title">Level Complete!</h2> 
-            <p id="celebration-stats">Score: +<span id="level-score">0</span></p> 
-        </div> 
-    </div>
-    
-    <!-- Hint Ad Modal -->
-    <div id="hint-ad-modal" class="modal"> 
-    <div class="modal-content"> 
-        <span class="close-btn" onclick="hideModal('hint-ad-modal')">×</span> 
-        <h2>Watch Ad for Hint?</h2> 
-        <p>Click on the ad below to get your hint!</p> 
-        <div class="popup-ad-container" id="hint-ad-placeholder" onclick="registerAdClick('hint')">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '8446eb731faeed6b7e16b794c774dfef',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/8446eb731faeed6b7e16b794c774dfef/invoke.js"></script>
+    <div class="modal-overlay" id="rulesModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeRulesModal">&times;</span>
+            <h2 class="modal-title">How To Play</h2>
+            <p class="mb-3">Flip cards to find matching pairs. Match all pairs to complete the level.</p>
+            <ul class="text-left mb-4">
+                <li class="mb-2">• Click on cards to flip them</li>
+                <li class="mb-2">• Find all matching pairs before moves run out</li>
+                <li class="mb-2">• Use hints when you're stuck</li>
+                <li class="mb-2">• Complete levels to increase difficulty</li>
+            </ul>
+            <button class="modal-button" id="closeRulesBtn">Got It!</button>
         </div>
-        <button id="watch-hint-ad-btn" disabled>Continue (After Ad Click)</button>
-        <button onclick="hideModal('hint-ad-modal')">No Thanks</button> 
-    </div> 
-</div>
-    
-    <!-- Out of Moves Ad Modal -->
-    <div id="out-of-moves-modal" class="modal"> 
-    <div class="modal-content"> 
-        <h2>Out of Moves!</h2> 
-        <p>Click on the ad below to get +10 extra moves!</p> 
-        <div class="popup-ad-container" id="moves-ad-placeholder" onclick="registerAdClick('moves')">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '8446eb731faeed6b7e16b794c774dfef',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/8446eb731faeed6b7e16b794c774dfef/invoke.js"></script>
-        </div>
-        <button id="watch-moves-ad-btn" disabled>Get +10 Moves (After Ad Click)</button>
-        <button id="try-again-btn">Try Again</button> 
-    </div> 
-</div>
-    
-    <!-- Interstitial Ad Modal -->
-    <div id="interstitial-ad" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="skipInterstitialAdAndContinue()">×</span>
-        <h2>Advertisement</h2>
-        <p>Click on the ad to continue to the next level!</p>
-        <div class="popup-ad-container" id="interstitial-ad-placeholder" onclick="registerAdClick('interstitial')">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : '8446eb731faeed6b7e16b794c774dfef',
-                    'format' : 'iframe',
-                    'height' : 250,
-                    'width' : 300,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/8446eb731faeed6b7e16b794c774dfef/invoke.js"></script>
-        </div>
-        <button id="continue-interstitial-btn" disabled>Continue (After Ad Click)</button>
     </div>
-</div>
-
-    <!-- Ad Click Indicator (for debugging) -->
-    <div class="ad-clicked-indicator" id="ad-clicked-indicator">Ad Clicked!</div>
-
+    
+    <div class="modal-overlay" id="levelCompleteModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Level Complete!</h2>
+            <p class="mb-3">Congratulations! You've completed this level.</p>
+            <div class="my-4">
+                <div class="flex justify-between mb-2">
+                    <span>Score:</span>
+                    <span class="font-bold level-score"></span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span>Time:</span>
+                    <span class="font-bold level-time"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Moves:</span>
+                    <span class="font-bold level-moves"></span>
+                </div>
+            </div>
+            <button class="modal-button" id="nextLevelBtn">Next Level</button>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="adModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Advertisement</h2>
+            <p class="mb-3" id="adModalText">Please click on the advertisement to get benefits.</p>
+            
+            <div class="modal-ad-container" id="modalAdContainer">
+                <div class="modal-ad-badge">Click Now!</div>
+                <div class="modal-ad-content">
+                    <i class="fas fa-ad fa-3x mb-4"></i>
+                    <div class="text-xl">Advertisement (300x250)</div>
+                    <div class="text-sm mt-2">Click to get your benefits</div>
+                </div>
+                <div class="modal-ad-overlay">
+                    <span class="text-white font-bold py-2 px-4 bg-blue-600 rounded-full">Click here</span>
+                </div>
+            </div>
+            
+            <div class="clicked-indicator" id="adClickedIndicator">
+                <i class="fas fa-check-circle mr-2"></i> Thank you! You've clicked
+            </div>
+            
+            <button class="modal-button" id="adModalBtn" disabled>Continue</button>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="outOfMovesModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Out of Moves!</h2>
+            <p class="mb-3">Click on the advertisement to get 10 additional moves.</p>
+            
+            <div class="modal-ad-container" id="movesAdContainer">
+                <div class="modal-ad-badge">Click Now!</div>
+                <div class="modal-ad-content">
+                    <i class="fas fa-ad fa-3x mb-4"></i>
+                    <div class="text-xl">Advertisement (300x250)</div>
+                    <div class="text-sm mt-2">Click to get your 10 additional moves</div>
+                </div>
+                <div class="modal-ad-overlay">
+                    <span class="text-white font-bold py-2 px-4 bg-blue-600 rounded-full">Click here</span>
+                </div>
+            </div>
+            
+            <div class="clicked-indicator" id="movesAdClickedIndicator">
+                <i class="fas fa-check-circle mr-2"></i> Thank you! You've clicked
+            </div>
+            
+            <button class="modal-button" id="getMoreMovesBtn" disabled>Get 10 Additional Moves</button>
+        </div>
+    </div>
+    
+    <!-- Theme Selection Modal -->
+    <div class="modal-overlay" id="themeModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeThemeModal">&times;</span>
+            <h2 class="modal-title">Choose a Theme</h2>
+            <p class="mb-3">Select a color theme for your game:</p>
+            
+            <div class="theme-container">
+                <div class="theme-option active" style="background: linear-gradient(135deg, #0088cc, #4facfe);" data-theme="blue" data-front1="#38bdf8" data-front2="#0284c7" data-back1="#4ade80" data-back2="#22c55e" data-header1="#0088cc" data-header2="#4facfe" data-dark-header1="#1e3a8a" data-dark-header2="#3b82f6"></div>
+                
+                <div class="theme-option" style="background: linear-gradient(135deg, #f97316, #f59e0b);" data-theme="orange" data-front1="#fb923c" data-front2="#ea580c" data-back1="#4ade80" data-back2="#22c55e" data-header1="#f97316" data-header2="#f59e0b" data-dark-header1="#9a3412" data-dark-header2="#ea580c"></div>
+                
+                <div class="theme-option" style="background: linear-gradient(135deg, #ec4899, #d946ef);" data-theme="pink" data-front1="#f472b6" data-front2="#db2777" data-back1="#a78bfa" data-back2="#8b5cf6" data-header1="#ec4899" data-header2="#d946ef" data-dark-header1="#9d174d" data-dark-header2="#db2777"></div>
+                
+                <div class="theme-option" style="background: linear-gradient(135deg, #10b981, #059669);" data-theme="green" data-front1="#34d399" data-front2="#059669" data-back1="#60a5fa" data-back2="#3b82f6" data-header1="#10b981" data-header2="#059669" data-dark-header1="#065f46" data-dark-header2="#10b981"></div>
+                
+                <div class="theme-option" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);" data-theme="purple" data-front1="#a78bfa" data-front2="#7c3aed" data-back1="#f472b6" data-back2="#ec4899" data-header1="#7c3aed" data-header2="#6d28d9" data-dark-header1="#5b21b6" data-dark-header2="#7c3aed"></div>
+                
+                <div class="theme-option" style="background: linear-gradient(135deg, #ef4444, #dc2626);" data-theme="red" data-front1="#f87171" data-front2="#dc2626" data-back1="#fbbf24" data-back2="#d97706" data-header1="#ef4444" data-header2="#dc2626" data-dark-header1="#991b1b" data-dark-header2="#ef4444"></div>
+            </div>
+            
+            <button class="modal-button" id="applyThemeBtn">Apply Theme</button>
+        </div>
+    </div>
+    
+    <audio id="cardFlipSound" preload="auto">
+        <source src="https://cdn.jsdelivr.net/gh/soundkit/free-sound-effects@main/mp3/Card-flip-sound-effect.mp3" type="audio/mp3">
+    </audio>
+    
+    <audio id="matchSound" preload="auto">
+        <source src="https://cdn.jsdelivr.net/gh/soundkit/free-sound-effects@main/mp3/Correct-answer-sound-effect.mp3" type="audio/mp3">
+    </audio>
+    
+    <audio id="hintSound" preload="auto">
+        <source src="https://cdn.jsdelivr.net/gh/soundkit/free-sound-effects@main/mp3/Interface-pop-sound.mp3" type="audio/mp3">
+    </audio>
+    
+    <audio id="levelCompleteSound" preload="auto">
+        <source src="https://cdn.jsdelivr.net/gh/soundkit/free-sound-effects@main/mp3/Success-sound-effect.mp3" type="audio/mp3">
+    </audio>
+    
+    <audio id="adClickSound" preload="auto">
+        <source src="https://cdn.jsdelivr.net/gh/soundkit/free-sound-effects@main/mp3/Button-click-sound.mp3" type="audio/mp3">
+    </audio>
+    
     <script>
-        // --- DOM Elements ---
-        const gameBoard = document.getElementById('game-board');
-        const movesInfoDiv = document.getElementById('moves-info');
-        const movesSpan = document.getElementById('moves');
-        const movesLimitSpan = document.getElementById('moves-limit');
-        const timerSpan = document.getElementById('timer');
-        const levelDisplay = document.getElementById('level-display');
-        const scoreDisplay = document.getElementById('score-display').querySelector('span');
-        const highestLevelDisplay = document.getElementById('highest-level-display').querySelector('span');
-        const levelsClearedDisplay = document.getElementById('levels-cleared-display').querySelector('span');
-        const hintsDisplay = document.getElementById('hints-remaining');
-        const restartBtn = document.getElementById('restart-btn');
-        const newGameBtn = document.getElementById('new-game-btn');
-        const hintBtn = document.getElementById('hint-btn');
-        const hintBtnCount = document.getElementById('hint-btn-count');
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const shareBtn = document.getElementById('share-btn');
-        const rulesBtn = document.getElementById('rules-btn');
-        const comboMessage = document.getElementById('combo-message');
-        const winMessageDiv = document.getElementById('win-message');
-        const winTitle = document.getElementById('win-title');
-        const winStatsP = document.getElementById('win-stats');
-        const finalStatsDiv = winMessageDiv.querySelector('.final-stats');
-        const finalScoreSpan = document.getElementById('final-score');
-        const finalHighestLevelSpan = document.getElementById('final-highest-level');
-        const playAgainBtn = document.getElementById('play-again-btn');
-        const rulesModal = document.getElementById('rules-modal');
-        const celebrationModal = document.getElementById('celebration-modal');
-        const celebrationTitle = document.getElementById('celebration-title');
-        const celebrationStats = document.getElementById('celebration-stats');
-        const levelScoreSpan = document.getElementById('level-score');
-        const hintAdModal = document.getElementById('hint-ad-modal');
-        const watchHintAdBtn = document.getElementById('watch-hint-ad-btn');
-        const outOfMovesModal = document.getElementById('out-of-moves-modal');
-        const watchMovesAdBtn = document.getElementById('watch-moves-ad-btn');
-        const tryAgainBtn = document.getElementById('try-again-btn');
-        const interstitialAdModal = document.getElementById('interstitial-ad');
-        const continueInterstitialBtn = document.getElementById('continue-interstitial-btn');
-        const adClickedIndicator = document.getElementById('ad-clicked-indicator');
-
-        // Emojis & Levels Config (All levels have 3 hints)
-        const allEmojis = ['🍎', '🍌', '🍇', '🍉', '🍓', '🍒', '🍑', '🍍', '🥝', '🥭', '🥥', '🥑', '🍆', '🥕', '🌽', '🌶️', '🍄', '🥦', '🍕', '🍔', '🍟', '🍩', '🍪', '🎂', '🍦', '🍿'];
-        const levels = {
-            easy: { name: 'Easy', pairs: 6, cols: 4, emojis: allEmojis.slice(0, 6), baseScore: 1000, timePenalty: 5, movePenalty: 10, hints: 3 },
-            medium: { name: 'Medium', pairs: 8, cols: 4, emojis: allEmojis.slice(0, 8), baseScore: 1500, timePenalty: 7, movePenalty: 15, hints: 3 },
-            hard: { name: 'Hard', pairs: 12, cols: 6, emojis: allEmojis.slice(0, 12), baseScore: 2500, timePenalty: 10, movePenalty: 20, hints: 3 },
-            expert: { name: 'Expert', pairs: 15, cols: 6, emojis: allEmojis.slice(0, 15), baseScore: 4000, timePenalty: 12, movePenalty: 25, hints: 3 }
-        };
-        const levelOrder = ['easy', 'medium', 'hard', 'expert'];
-
-        // --- Game State Variables ---
-        let flippedCards = []; let matchedPairs = 0; let moves = 0; let timerInterval = null; let seconds = 0;
-        let gameLocked = false; let gameStarted = false; let currentLevelKey = levelOrder[0];
-        let highestLevelReachedIndex = -1; let totalScore = 0;
-        let hintsRemaining = 0; let comboCount = 0; let lastMatchTime = 0; const COMBO_WINDOW = 3000;
-        const COMBO_BASE_POINTS = 50; let hintTimeout = null;
-        let adWatchedForHintThisLevel = false; let currentMoveLimit = 0; let extraMovesGivenThisLevel = false;
-        let levelsCompletedSinceLastAd = 0;
-        let interstitialTimer = null;
-        
-        // Ad click tracking
-        let adClicked = {
-            hint: false,
-            moves: false,
-            interstitial: false
-        };
-
-        // --- Ad Click Handling ---
-        function registerAdClick(adType) {
-            console.log(`Ad clicked: ${adType}`);
-            adClicked[adType] = true;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Game State
+            const gameState = {
+                level: 1,
+                score: 0,
+                highest: localStorage.getItem('highest') ? parseInt(localStorage.getItem('highest')) : 0,
+                cleared: 0,
+                hints: 3,
+                time: 0,
+                movesUsed: 0,
+                movesLimit: 20,
+                timer: null,
+                cards: [],
+                flippedCards: [],
+                matchedPairs: 0,
+                totalPairs: 8,
+                canFlip: true,
+                levelCount: 0,
+                isTimerRunning: false,
+                adCallbacks: new Map(), // Store callbacks for ad clicks
+                adClicked: false,       // Track if the current ad has been clicked
+                currentTheme: localStorage.getItem('gameTheme') || 'blue' // Default theme
+            };
             
-            // Show indicator for visual feedback
-            adClickedIndicator.textContent = `${adType.charAt(0).toUpperCase() + adType.slice(1)} Ad Clicked!`;
-            adClickedIndicator.style.display = 'block';
-            setTimeout(() => {
-                adClickedIndicator.style.display = 'none';
-            }, 2000);
+            // Game elements
+            const gameBoard = document.querySelector('.game-board');
+            const levelDisplay = document.querySelector('.level-display');
+            const scoreDisplay = document.querySelector('.score-display');
+            const highestDisplay = document.querySelector('.highest-display');
+            const clearedDisplay = document.querySelector('.cleared-display');
+            const hintsDisplay = document.querySelector('.hints-display');
+            const timeDisplay = document.querySelector('.time-display');
+            const movesDisplay = document.querySelector('.moves-display');
+            const restartBtn = document.querySelector('.btn-restart');
+            const newGameBtn = document.querySelector('.btn-new');
+            const hintBtn = document.querySelector('.btn-hint');
+            const rulesBtn = document.querySelector('.btn-rules');
+            const darkModeBtn = document.querySelector('.btn-dark');
+            const themeBtn = document.querySelector('.btn-theme');
+            const shareBtn = document.querySelector('.btn-share');
             
-            // Enable appropriate continue button
-            if (adType === 'hint') {
-                watchHintAdBtn.disabled = false;
-                watchHintAdBtn.textContent = 'Continue';
-                watchHintAdBtn.style.animation = "pulseButton 1.5s infinite";
-            } else if (adType === 'moves') {
-                watchMovesAdBtn.disabled = false;
-                watchMovesAdBtn.textContent = 'Get +10 Moves';
-                watchMovesAdBtn.style.animation = "pulseButton 1.5s infinite";
-            } else if (adType === 'interstitial') {
-                continueInterstitialBtn.disabled = false;
-                continueInterstitialBtn.textContent = 'Continue to Next Level';
-                continueInterstitialBtn.style.animation = "pulseButton 1.5s infinite";
-            }
-        }
-
-        // --- Utility & Theme Functions ---
-        function applyTheme(theme) { document.body.classList.toggle('dark-mode', theme === 'dark'); themeToggleBtn.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode'; localStorage.setItem('mixMatchTheme', theme); }
-        function toggleTheme() { const newTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark'; applyTheme(newTheme); }
-        function showModal(modalId) { const modal = document.getElementById(modalId); if(modal) modal.classList.add('show'); }
-        function hideModal(modalId) { const modal = document.getElementById(modalId); if(modal) modal.classList.remove('show'); }
-        function shuffle(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
-
-        // --- Progress Management ---
-        function loadProgress() {
-            const savedLevelIndexStr = localStorage.getItem('mixMatchHighestLevel'); 
-            const savedScoreStr = localStorage.getItem('mixMatchTotalScore');
-            highestLevelReachedIndex = savedLevelIndexStr ? parseInt(savedLevelIndexStr, 10) : -1; 
-            totalScore = savedScoreStr ? parseInt(savedScoreStr, 10) : 0;
-            levelsCompletedSinceLastAd = parseInt(localStorage.getItem('mixMatchLevelsSinceAd') || '0', 10);
-            let startLevelIndex = (highestLevelReachedIndex >= levelOrder.length - 1) ? 0 : highestLevelReachedIndex + 1;
-            currentLevelKey = levelOrder[startLevelIndex] || levelOrder[0];
-            updateScoreDisplay(); updateHighestLevelDisplay(); updateLevelsClearedDisplay();
-         }
-        function saveProgress() {
-            localStorage.setItem('mixMatchHighestLevel', highestLevelReachedIndex.toString());
-            localStorage.setItem('mixMatchTotalScore', totalScore.toString());
-            localStorage.setItem('mixMatchLevelsSinceAd', levelsCompletedSinceLastAd.toString());
-        }
-        function resetProgress() {
-             highestLevelReachedIndex = -1; totalScore = 0; currentLevelKey = levelOrder[0];
-             levelsCompletedSinceLastAd = 0;
-             saveProgress();
-             updateScoreDisplay(); updateHighestLevelDisplay(); updateLevelsClearedDisplay();
-         }
-
-        // --- UI Updates ---
-        function updateScoreDisplay() { scoreDisplay.textContent = totalScore; }
-        function updateHighestLevelDisplay() { let displayLevelName = "None"; if (highestLevelReachedIndex >= 0 && highestLevelReachedIndex < levelOrder.length) { displayLevelName = levels[levelOrder[highestLevelReachedIndex]].name; } highestLevelDisplay.textContent = displayLevelName; }
-        function updateTimerDisplay() { timerSpan.textContent = `${seconds}s`; }
-        function updateHintsDisplay() { hintsDisplay.textContent = hintsRemaining; hintBtnCount.textContent = hintsRemaining; hintBtn.disabled = hintsRemaining <= 0; }
-        function showComboMessage(count) { 
-            if (count <= 1) return; 
-            comboMessage.textContent = `Combo x${count}! +${(count -1) * COMBO_BASE_POINTS}`; 
-            comboMessage.classList.add('show'); 
-            setTimeout(() => { comboMessage.classList.remove('show'); }, 1200); 
-        }
-        function updateLevelsClearedDisplay() { const clearedCount = highestLevelReachedIndex + 1; levelsClearedDisplay.textContent = clearedCount; }
-        function updateMovesDisplay() { movesSpan.textContent = moves; movesLimitSpan.textContent = currentMoveLimit; if (currentMoveLimit > 0 && currentMoveLimit - moves <= 5 && currentMoveLimit - moves > 0) { movesInfoDiv.classList.add('warning'); } else { movesInfoDiv.classList.remove('warning'); } }
-
-        // --- Calculate Move Limit ---
-        function calculateMoveLimit(levelKey) {
-            const levelIndex = levelOrder.indexOf(levelKey);
-            if (levelIndex === 0) return 20; // Level 1
-            if (levelIndex === 1) return 25; // Level 2
-            return 30; // Level 3 and onwards
-        }
-
-        // --- Game Setup: createBoard() ---
-        function createBoard() {
-            console.log(`--- Creating board for level: ${currentLevelKey} ---`);
-            gameBoard.innerHTML = '';
-            matchedPairs = 0; moves = 0; seconds = 0; gameStarted = false; gameLocked = false;
-            flippedCards = []; comboCount = 0; lastMatchTime = 0; adWatchedForHintThisLevel = false; extraMovesGivenThisLevel = false;
-            clearTimeout(hintTimeout); stopTimer();
-            hideModal('win-message'); hideModal('celebration-modal'); hideModal('hint-ad-modal'); hideModal('out-of-moves-modal'); hideModal('interstitial-ad');
-            comboMessage.classList.remove('show'); movesInfoDiv.classList.remove('warning');
+            // Ad-related elements
+            const adModalBtn = document.getElementById('adModalBtn');
+            const getMoreMovesBtn = document.getElementById('getMoreMovesBtn');
+            const modalAdContainer = document.getElementById('modalAdContainer');
+            const movesAdContainer = document.getElementById('movesAdContainer');
+            const adClickedIndicator = document.getElementById('adClickedIndicator');
+            const movesAdClickedIndicator = document.getElementById('movesAdClickedIndicator');
             
-            // Reset ad click tracking
-            adClicked = { hint: false, moves: false, interstitial: false };
+            // Theme elements
+            const themeModal = document.getElementById('themeModal');
+            const closeThemeModal = document.getElementById('closeThemeModal');
+            const applyThemeBtn = document.getElementById('applyThemeBtn');
+            const themeOptions = document.querySelectorAll('.theme-option');
             
-            // Reset button states
-            watchHintAdBtn.disabled = true;
-            watchHintAdBtn.textContent = "Continue (After Ad Click)";
-            watchHintAdBtn.style.animation = "none";
+            // Sound elements
+            const cardFlipSound = document.getElementById('cardFlipSound');
+            const matchSound = document.getElementById('matchSound');
+            const hintSound = document.getElementById('hintSound');
+            const levelCompleteSound = document.getElementById('levelCompleteSound');
+            const adClickSound = document.getElementById('adClickSound');
             
-            watchMovesAdBtn.disabled = true;
-            watchMovesAdBtn.textContent = "Get +10 Moves (After Ad Click)";
-            watchMovesAdBtn.style.animation = "none";
+            // Modal elements
+            const rulesModal = document.getElementById('rulesModal');
+            const closeRulesModal = document.getElementById('closeRulesModal');
+            const closeRulesBtn = document.getElementById('closeRulesBtn');
+            const levelCompleteModal = document.getElementById('levelCompleteModal');
+            const nextLevelBtn = document.getElementById('nextLevelBtn');
+            const adModal = document.getElementById('adModal');
+            const adModalText = document.getElementById('adModalText');
+            const outOfMovesModal = document.getElementById('outOfMovesModal');
             
-            continueInterstitialBtn.disabled = true;
-            continueInterstitialBtn.textContent = "Continue (After Ad Click)";
-            continueInterstitialBtn.style.animation = "none";
-
-            const levelConfig = levels[currentLevelKey];
-            if (!levelConfig) { console.error("Invalid level key, defaulting to easy."); currentLevelKey = levelOrder[0]; levelConfig = levels[currentLevelKey]; }
-
-            hintsRemaining = levelConfig.hints; updateHintsDisplay();
-            currentMoveLimit = calculateMoveLimit(currentLevelKey);
-            updateMovesDisplay(); updateLevelsClearedDisplay();
-            levelDisplay.textContent = `Level: ${levelConfig.name}`; 
-            let cardValues = shuffle([...levelConfig.emojis, ...levelConfig.emojis]);
-
-            const columns = levelConfig.cols; 
-            const baseSize = 70; 
-            const scaleFactor = columns > 4 ? (columns > 5 ? 0.8 : 0.9) : 1; 
-            const finalCardSize = Math.max(40, baseSize * scaleFactor); 
-            document.documentElement.style.setProperty('--card-size', `${finalCardSize}px`); 
-            gameBoard.style.gridTemplateColumns = `repeat(${columns}, var(--card-size))`;
-
-            // --- Card Creation Loop ---
-            cardValues.forEach(value => { 
-                const card = document.createElement('div'); 
-                card.classList.add('card'); 
-                card.dataset.value = value; 
-                card.innerHTML = `<div class="card-face card-front"></div><div class="card-face card-back">${value}</div>`; 
-                card.addEventListener('click', handleCardClick); 
-                gameBoard.appendChild(card); 
-            });
-            console.log(`--- Board creation complete. ${gameBoard.children.length} cards added. Move Limit: ${currentMoveLimit} ---`);
-        }
-
-        // --- Game Logic ---
-        function handleCardClick(event) { 
-            if (gameLocked || event.currentTarget.classList.contains('matched') || event.currentTarget.classList.contains('flipped')) { 
-                return; 
-            } 
-            if (flippedCards.length === 1 && (moves + 1) > currentMoveLimit) { 
-                handleOutOfMoves(); 
-                return; 
-            } 
+            // Emojis for cards
+            const cardEmojis = [
+                '🚀', '🌟', '🎮', '🎯', '🎨', '🎭', '🎪', '🎢',
+                '🎁', '🎉', '🎸', '🎹', '🎺', '🎻', '🎬', '📱',
+                '📷', '🎈', '🎲', '🎯', '🏆', '💎', '🔮', '✨'
+            ];
             
-            const clickedCard = event.currentTarget; 
-            if (!gameStarted) { 
-                startTimer(); 
-                gameStarted = true; 
-            } 
-            flipCard(clickedCard); 
-        }
-        
-        function flipCard(card) { 
-            gameLocked = true; 
-            card.classList.add('flipped'); 
-            flippedCards.push(card); 
-            setTimeout(() => { 
-                if(flippedCards.length < 2) gameLocked = false; 
-            }, 200); 
-            if (flippedCards.length === 2) { 
-                gameLocked = true; 
-                incrementMoves(); 
-                setTimeout(checkForMatch, 600); 
-            } 
-        }
-        
-        function checkForMatch() { 
-            const [card1, card2] = flippedCards; 
-            const isEqual = card1.dataset.value === card2.dataset.value; 
-            if (isEqual) { 
-                handleMatch(card1, card2); 
-            } else { 
-                handleMismatch(card1, card2); 
-            } 
-        }
-        
-        function handleMatch(card1, card2) { 
-            card1.classList.add('matched'); 
-            card2.classList.add('matched'); 
-            matchedPairs++; 
-            const now = Date.now(); 
-            if (now - lastMatchTime <= COMBO_WINDOW) { 
-                comboCount++; 
-            } else { 
-                comboCount = 1; 
-            } 
-            lastMatchTime = now; 
-            if (comboCount > 1) { 
-                const comboBonus = (comboCount - 1) * COMBO_BASE_POINTS; 
-                totalScore += comboBonus; 
-                updateScoreDisplay(); 
-            } 
-            showComboMessage(comboCount); 
-            flippedCards = []; 
-            gameLocked = false; 
-            if (matchedPairs === levels[currentLevelKey].pairs) { 
-                stopTimer(); 
-                handleLevelComplete(); 
-            } 
-        }
-        
-        function handleMismatch(card1, card2) { 
-            comboCount = 0; 
-            setTimeout(() => { 
-                card1.classList.remove('flipped'); 
-                card2.classList.remove('flipped'); 
-                flippedCards = []; 
-                gameLocked = false; 
-            }, 900); 
-        }
-
-        // --- Hint System Logic --- (Modified to require ad for last hint)
-        function attemptUseHint() { 
-            if (hintsRemaining <= 0 || gameLocked || flippedCards.length > 0) { 
-                return; 
-            } 
+            // Icon classes for cards
+            const cardIcons = [
+                'fa-heart', 'fa-star', 'fa-bell', 'fa-gem', 
+                'fa-bolt', 'fa-sun', 'fa-moon', 'fa-cloud',
+                'fa-leaf', 'fa-fire', 'fa-snowflake', 'fa-tree',
+                'fa-gift', 'fa-music', 'fa-car', 'fa-plane',
+                'fa-crown', 'fa-key', 'fa-apple-alt', 'fa-medal',
+                'fa-basketball-ball', 'fa-football-ball', 'fa-pizza-slice', 'fa-ice-cream'
+            ];
             
-            // Always require ad for last hint (3rd hint)
-            if (hintsRemaining === 1 && !adWatchedForHintThisLevel) { 
-                showModal('hint-ad-modal'); 
-            } else { 
-                executeHint(); 
-            } 
-        }
-        
-        function handleHintAfterAd() { 
-            if (!adClicked.hint) {
-                alert("Please click on the ad first to get your hint!");
-                return;
-            }
+            // Level difficulties
+            const levels = [
+                { name: 'Easy', pairs: 8, movesLimit: 20 },
+                { name: 'Medium', pairs: 10, movesLimit: 24 },
+                { name: 'Hard', pairs: 12, movesLimit: 30 }
+            ];
             
-            hideModal('hint-ad-modal'); 
-            console.log("Hint Ad clicked and processed."); 
-            adWatchedForHintThisLevel = true; 
-            executeHint(); 
-            
-            // Reset button state
-            watchHintAdBtn.disabled = true;
-            watchHintAdBtn.textContent = "Continue (After Ad Click)";
-            watchHintAdBtn.style.animation = "none";
-            adClicked.hint = false;
-        }
-        
-        function executeHint() { 
-            if (hintsRemaining <= 0 || gameLocked || flippedCards.length > 0) { 
-                return; 
-            } 
-            
-            hintsRemaining--; 
-            updateHintsDisplay(); 
-            gameLocked = true; 
-            const unmatchedCards = Array.from(gameBoard.querySelectorAll('.card:not(.matched):not(.flipped)')); 
-            let card1 = null, card2 = null; 
-            const foundValues = {}; 
-            for (const card of unmatchedCards) { 
-                const value = card.dataset.value; 
-                if (foundValues[value]) { 
-                    card1 = foundValues[value]; 
-                    card2 = card; 
-                    break; 
-                } 
-                foundValues[value] = card; 
-            } 
-            if (card1 && card2) { 
-                card1.classList.add('flipped', 'hint-reveal'); 
-                card2.classList.add('flipped', 'hint-reveal'); 
-                clearTimeout(hintTimeout); 
-                hintTimeout = setTimeout(() => { 
-                    card1.classList.remove('flipped', 'hint-reveal'); 
-                    card2.classList.remove('flipped', 'hint-reveal'); 
-                    gameLocked = false; 
-                }, 1000); 
-            } else { 
-                console.warn("No suitable pair found for hint."); 
-                hintsRemaining++; 
-                updateHintsDisplay(); 
-                gameLocked = false; 
-            } 
-        }
-
-        // --- Move Limit Handling --- (Enhanced for ad integration)
-        function incrementMoves() { 
-            moves++; 
-            updateMovesDisplay(); 
-        }
-        
-        function handleOutOfMoves() { 
-            gameLocked = true; 
-            stopTimer(); 
-            
-            // Enhanced: Highlight the ad button if not used yet
-            if (!extraMovesGivenThisLevel) {
-                watchMovesAdBtn.style.animation = "none"; // Reset first
+            // Ad click handler
+            function handleAdClick(adElement, callback) {
+                // Play click sound
+                playSound(adClickSound);
+                
+                // Visual feedback
+                adElement.style.transform = 'scale(0.95)';
                 setTimeout(() => {
-                    watchMovesAdBtn.style.animation = "pulseButton 1.5s infinite";
-                }, 10);
-            }
-            
-            watchMovesAdBtn.disabled = extraMovesGivenThisLevel;
-            showModal('out-of-moves-modal'); 
-        }
-        
-        function handleMovesAfterAd() { 
-            if (!adClicked.moves) {
-                alert("Please click on the ad first to get extra moves!");
-                return;
-            }
-            
-            hideModal('out-of-moves-modal'); 
-            console.log("Moves Ad clicked and processed..."); 
-            gameLocked = true; 
-            
-            // Reset button styling
-            watchMovesAdBtn.style.animation = "none";
-            watchMovesAdBtn.textContent = "Get +10 Moves (After Ad Click)";
-            
-            setTimeout(() => { 
-                console.log("Extra moves granted."); 
-                currentMoveLimit += 10; 
-                extraMovesGivenThisLevel = true; 
-                gameLocked = false; 
-                updateMovesDisplay(); 
-                adClicked.moves = false;
-                watchMovesAdBtn.disabled = true;
-            }, 1000); 
-        }
-        
-        function handleLevelFailFromMoves() { 
-            hideModal('out-of-moves-modal'); 
-            restartCurrentLevel(); 
-        }
-
-        // --- Score Calculation ---
-        function calculateLevelScore() { 
-            const levelConfig = levels[currentLevelKey]; 
-            const timeScorePenalty = seconds * levelConfig.timePenalty; 
-            const moveScorePenalty = moves * levelConfig.movePenalty; 
-            let levelScore = Math.max(0, levelConfig.baseScore - timeScorePenalty - moveScorePenalty); 
-            levelScore = Math.max(10, levelScore); 
-            return Math.round(levelScore); 
-        }
-
-        // --- Level Complete & Progression ---
-        function handleLevelComplete() {
-            const levelScore = calculateLevelScore(); 
-            totalScore += levelScore; 
-            updateScoreDisplay();
-            const currentLevelIndex = levelOrder.indexOf(currentLevelKey);
-            if (currentLevelIndex > highestLevelReachedIndex) { 
-                highestLevelReachedIndex = currentLevelIndex; 
-                updateHighestLevelDisplay(); 
-                updateLevelsClearedDisplay(); 
-            }
-            levelsCompletedSinceLastAd++;
-            saveProgress();
-            showCelebration(levelScore);
-        }
-        
-        function showCelebration(levelScore) {
-            levelScoreSpan.textContent = levelScore; 
-            celebrationTitle.textContent = `${levels[currentLevelKey].name} Complete!`; 
-            showModal('celebration-modal');
-            
-            if (typeof confetti === 'function') { 
-                const duration = 2 * 1000; 
-                const animationEnd = Date.now() + duration; 
-                const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1001 }; 
+                    adElement.style.transform = '';
+                }, 200);
                 
-                function randomInRange(min, max) { 
-                    return Math.random() * (max - min) + min; 
-                } 
+                // Set ad as clicked
+                gameState.adClicked = true;
                 
-                const interval = setInterval(function() { 
-                    const timeLeft = animationEnd - Date.now(); 
-                    if (timeLeft <= 0) { 
-                        return clearInterval(interval); 
-                    } 
-                    const particleCount = 50 * (timeLeft / duration); 
-                    confetti(Object.assign({}, defaults, { 
-                        particleCount, 
-                        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, 
-                        colors: ['#FFD700', '#FFFFFF', '#00BFFF', '#FF69B4'], 
-                        shapes: ['star'] 
-                    })); 
-                    confetti(Object.assign({}, defaults, { 
-                        particleCount, 
-                        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, 
-                        colors: ['#FFD700', '#FFFFFF', '#28a745', '#FFA500'], 
-                        shapes: ['circle'] 
-                    })); 
-                }, 250); 
-            } else { 
-                console.warn("Confetti function not found."); 
+                // For modal ads, show success indicator and enable continue button
+                if (adElement === modalAdContainer) {
+                    adClickedIndicator.classList.add('visible');
+                    adModalBtn.disabled = false;
+                } else if (adElement === movesAdContainer) {
+                    movesAdClickedIndicator.classList.add('visible');
+                    getMoreMovesBtn.disabled = false;
+                }
+                
+                // Execute callback if provided
+                if (callback) {
+                    callback();
+                }
+                
+                // Generate some "revenue" feedback
+                console.log("Ad clicked! Revenue generated.");
             }
             
-            setTimeout(() => { 
-                hideModal('celebration-modal'); 
-                proceedAfterCelebration(); 
-            }, 2500);
-        }
-        
-        function proceedAfterCelebration() {
-            const currentLevelIndex = levelOrder.indexOf(currentLevelKey);
-            const isLastLevel = currentLevelIndex === levelOrder.length - 1;
-
-            if (isLastLevel) {
-                showFinalWinScreen();
-            } else if (levelsCompletedSinceLastAd >= 3) {
-                levelsCompletedSinceLastAd = 0;
-                saveProgress();
-                showModal('interstitial-ad');
+            // Initialize the game
+            function initGame() {
+                gameState.level = 1;
+                gameState.score = 0;
+                gameState.cleared = 0;
+                gameState.hints = 3;
+                gameState.time = 0;
+                gameState.movesUsed = 0;
+                gameState.levelCount = 0;
+                gameState.adClicked = false;
                 
-                clearTimeout(interstitialTimer);
-                interstitialTimer = setTimeout(() => {
-                    if (interstitialAdModal.classList.contains('show') && !adClicked.interstitial) {
-                        // Only auto-proceed if no ad click yet
-                        skipInterstitialAdAndContinue();
+                updateDisplay();
+                setupLevel();
+                
+                // Check if dark mode was previously set
+                if (localStorage.getItem('darkMode') === 'true') {
+                    document.body.classList.add('dark-mode');
+                    darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                }
+                
+                // Apply saved theme if exists
+                applyTheme(gameState.currentTheme);
+            }
+            
+            // Set up current level
+            function setupLevel() {
+                gameState.matchedPairs = 0;
+                gameState.flippedCards = [];
+                gameState.movesUsed = 0;
+                gameState.canFlip = true;
+                
+                const currentLevel = levels[(gameState.level - 1) % levels.length];
+                gameState.totalPairs = currentLevel.pairs;
+                gameState.movesLimit = currentLevel.movesLimit;
+                levelDisplay.textContent = currentLevel.name;
+                
+                resetTimer();
+                startTimer();
+                createGameBoard();
+                updateDisplay();
+                updateHintButton();
+            }
+            
+            // Create the game board with cards
+            function createGameBoard() {
+                gameBoard.innerHTML = '';
+                gameState.cards = [];
+                
+                // Calculate pairs based on current level
+                const totalPairs = gameState.totalPairs;
+                
+                // Create arrays of pairs
+                let pairValues = [];
+                for (let i = 0; i < totalPairs; i++) {
+                    pairValues.push(i);
+                    pairValues.push(i);
+                }
+                
+                // Shuffle the pairs
+                pairValues = shuffleArray(pairValues);
+                
+                // Determine grid size based on total pairs
+                let gridColumns = 4;
+                if (totalPairs === 10) gridColumns = 5;
+                if (totalPairs === 12) gridColumns = 6;
+                
+                gameBoard.style.gridTemplateColumns = `repeat(${gridColumns}, 1fr)`;
+                
+                // Create cards
+                pairValues.forEach((value, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.dataset.index = index;
+                    card.dataset.value = value;
+                    
+                    const cardFront = document.createElement('div');
+                    cardFront.className = 'card-face card-front';
+                    cardFront.innerHTML = '<i class="fas fa-question"></i>';
+                    
+                    const cardBack = document.createElement('div');
+                    cardBack.className = 'card-face card-back';
+                    
+                    // Use emojis or icons alternately between levels
+                    if (gameState.level % 2 === 0) {
+                        cardBack.innerHTML = `<i class="fas ${cardIcons[value]}"></i>`;
+                    } else {
+                        cardBack.innerHTML = `<span class="emoji">${cardEmojis[value]}</span>`;
                     }
-                }, 10000); // Give 10 seconds for ad interaction
-            } else {
-                setupNextLevel();
-            }
-        }
-        
-        function handleInterstitialAfterClick() {
-            if (!adClicked.interstitial) {
-                alert("Please click on the ad first to continue!");
-                return;
+                    
+                    card.appendChild(cardFront);
+                    card.appendChild(cardBack);
+                    card.addEventListener('click', () => flipCard(card));
+                    
+                    gameBoard.appendChild(card);
+                    gameState.cards.push(card);
+                });
             }
             
-            skipInterstitialAdAndContinue();
-            adClicked.interstitial = false;
-        }
-        
-        function setupNextLevel() {
-             const currentLevelIndex = levelOrder.indexOf(currentLevelKey); 
-             const nextLevelIndex = currentLevelIndex + 1;
-             if (nextLevelIndex < levelOrder.length) { 
-                 currentLevelKey = levelOrder[nextLevelIndex]; 
-                 setTimeout(createBoard, 200); 
-             } else { 
-                 showFinalWinScreen(); 
-             }
-        }
-        
-        function skipInterstitialAdAndContinue() {
-             hideModal('interstitial-ad'); 
-             clearTimeout(interstitialTimer);
-             continueInterstitialBtn.disabled = true;
-             continueInterstitialBtn.textContent = "Continue (After Ad Click)";
-             continueInterstitialBtn.style.animation = "none";
-             setupNextLevel();
-         }
-        
-        function showFinalWinScreen() {
-            winTitle.textContent = "You've beaten all levels! 🏆";
-            winStatsP.textContent = `Congratulations! You've completed every level in the game.`;
-            finalScoreSpan.textContent = totalScore;
-            finalHighestLevelSpan.textContent = levels[levelOrder[highestLevelReachedIndex]].name;
-            finalStatsDiv.style.display = 'block';
-            showModal('win-message');
-        }
-
-        // --- Timer & Moves ---
-        function startTimer() { 
-            stopTimer(); 
-            seconds = 0; 
-            updateTimerDisplay(); 
-            timerInterval = setInterval(() => { 
-                seconds++; 
-                updateTimerDisplay(); 
-            }, 1000); 
-        }
-        
-        function stopTimer() { 
-            clearInterval(timerInterval); 
-            timerInterval = null; 
-        }
-
-        // --- Restart / New Game / Share ---
-        function restartCurrentLevel() { 
-            stopTimer(); 
-            createBoard(); 
-        }
-        
-        function startNewGame() { 
-            stopTimer(); 
-            if (confirm("Start a new game? This will reset your score and progress.")) { 
-                resetProgress(); 
-                createBoard(); 
-            } 
-        }
-        
-        async function shareScore() {
-            const text = `I scored ${totalScore} points in Ultimate Mix & Match! My highest level: ${levels[levelOrder[Math.max(0, highestLevelReachedIndex)]].name}`;
-            try {
-                if (navigator.share) {
-                    await navigator.share({
-                        title: 'Ultimate Mix & Match Score',
-                        text: text
+            // Flip a card
+            function flipCard(card) {
+                if (!gameState.canFlip) return;
+                if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+                if (gameState.flippedCards.length >= 2) return;
+                
+                playSound(cardFlipSound);
+                card.classList.add('flipped');
+                gameState.flippedCards.push(card);
+                
+                if (gameState.flippedCards.length === 2) {
+                    gameState.movesUsed++;
+                    updateDisplay();
+                    checkForMatch();
+                    
+                    // Check if out of moves
+                    if (gameState.movesUsed >= gameState.movesLimit && gameState.matchedPairs < gameState.totalPairs) {
+                        setTimeout(() => {
+                            showOutOfMovesModal();
+                        }, 1000);
+                    }
+                }
+            }
+            
+            // Check if two flipped cards match
+            function checkForMatch() {
+                const [card1, card2] = gameState.flippedCards;
+                const match = card1.dataset.value === card2.dataset.value;
+                
+                gameState.canFlip = false;
+                
+                setTimeout(() => {
+                    if (match) {
+                        playSound(matchSound);
+                        card1.classList.add('matched');
+                        card2.classList.add('matched');
+                        gameState.matchedPairs++;
+                        gameState.score += 10;
+                        
+                        if (gameState.matchedPairs === gameState.totalPairs) {
+                            handleLevelComplete();
+                        }
+                    } else {
+                        card1.classList.remove('flipped');
+                        card2.classList.remove('flipped');
+                    }
+                    
+                    gameState.flippedCards = [];
+                    gameState.canFlip = true;
+                    updateDisplay();
+                }, 800);
+            }
+            
+            // Handle level completion
+            function handleLevelComplete() {
+                gameState.canFlip = false;
+                stopTimer();
+                
+                // Add bonus points based on remaining moves and time
+                const movesBonus = Math.max(0, gameState.movesLimit - gameState.movesUsed) * 5;
+                const timeBonus = Math.max(0, 120 - gameState.time) * 2;
+                gameState.score += movesBonus + timeBonus;
+                
+                // Update highest score
+                if (gameState.score > gameState.highest) {
+                    gameState.highest = gameState.score;
+                    localStorage.setItem('highest', gameState.highest.toString());
+                }
+                
+                gameState.cleared++;
+                gameState.levelCount++;
+                
+                // Create confetti effect
+                createConfetti();
+                
+                // Play celebration sound
+                playSound(levelCompleteSound);
+                
+                // Show celebration animation on game board
+                gameBoard.classList.add('celebrate');
+                setTimeout(() => {
+                    gameBoard.classList.remove('celebrate');
+                }, 1500);
+                
+                // Update UI
+                updateDisplay();
+                
+                // Show completion modal
+                setTimeout(() => {
+                    document.querySelector('.level-score').textContent = gameState.score;
+                    document.querySelector('.level-time').textContent = formatTime(gameState.time);
+                    document.querySelector('.level-moves').textContent = `${gameState.movesUsed} / ${gameState.movesLimit}`;
+                    
+                    // Check if we need to show ad after 3 levels
+                    if (gameState.levelCount % 3 === 0) {
+                        gameState.adClicked = false;
+                        adClickedIndicator.classList.remove('visible');
+                        adModalBtn.disabled = true;
+                        adModalText.textContent = "3 levels completed! Click on the advertisement to continue playing.";
+                        showAdModal(() => {
+                            showLevelCompleteModal();
+                        });
+                    } else {
+                        showLevelCompleteModal();
+                    }
+                }, 1500);
+            }
+            
+            // Start the next level
+            function startNextLevel() {
+                gameState.level++;
+                setupLevel();
+            }
+            
+            // Timer functions
+            function startTimer() {
+                if (!gameState.isTimerRunning) {
+                    gameState.timer = setInterval(() => {
+                        gameState.time++;
+                        updateDisplay();
+                    }, 1000);
+                    gameState.isTimerRunning = true;
+                }
+            }
+            
+            function stopTimer() {
+                if (gameState.isTimerRunning) {
+                    clearInterval(gameState.timer);
+                    gameState.isTimerRunning = false;
+                }
+            }
+            
+            function resetTimer() {
+                stopTimer();
+                gameState.time = 0;
+            }
+            
+            // Use a hint
+            function useHint() {
+                if (gameState.hints <= 0) return;
+                
+                // For third hint, show ad
+                if (gameState.hints === 1) {
+                    gameState.adClicked = false;
+                    adClickedIndicator.classList.remove('visible');
+                    adModalBtn.disabled = true;
+                    adModalText.textContent = "Click on the advertisement to use your last hint.";
+                    showAdModal(() => {
+                        processHintLogic();
                     });
                 } else {
-                    alert(`Share this score: ${text}`);
+                    processHintLogic();
                 }
-            } catch(e) {
-                console.error('Sharing failed:', e);
-                alert(`Share this score: ${text}`);
             }
-        }
-
-        // --- Event Listeners ---
-        restartBtn.addEventListener('click', restartCurrentLevel);
-        newGameBtn.addEventListener('click', startNewGame);
-        hintBtn.addEventListener('click', attemptUseHint);
-        watchHintAdBtn.addEventListener('click', handleHintAfterAd);
-        themeToggleBtn.addEventListener('click', toggleTheme);
-        shareBtn.addEventListener('click', shareScore);
-        rulesBtn.addEventListener('click', () => showModal('rules-modal'));
-        playAgainBtn.addEventListener('click', () => { hideModal('win-message'); startNewGame(); });
-        watchMovesAdBtn.addEventListener('click', handleMovesAfterAd);
-        tryAgainBtn.addEventListener('click', handleLevelFailFromMoves);
-        continueInterstitialBtn.addEventListener('click', handleInterstitialAfterClick);
-        interstitialAdModal.querySelector('.close-btn').addEventListener('click', skipInterstitialAdAndContinue);
-
-        // --- Initial Game Load ---
-        document.addEventListener('DOMContentLoaded', () => {
-             const savedTheme = localStorage.getItem('mixMatchTheme') || 'light'; 
-             applyTheme(savedTheme);
-             loadProgress(); 
-             createBoard();
+            
+            // Process hint logic after any required ad viewing
+            function processHintLogic() {
+                gameState.hints--;
+                playSound(hintSound);
+                
+                // Find unmatched pairs
+                const unmatchedCards = gameState.cards.filter(
+                    card => !card.classList.contains('matched') && !card.classList.contains('flipped')
+                );
+                
+                // If no unmatched cards, return
+                if (unmatchedCards.length === 0) return;
+                
+                // Find a pair that hasn't been matched yet
+                const values = new Map();
+                for (const card of unmatchedCards) {
+                    const value = card.dataset.value;
+                    if (values.has(value)) {
+                        // We found a pair! Briefly show both cards
+                        const pairCard = values.get(value);
+                        
+                        // Temporarily flip both cards
+                        pairCard.classList.add('flipped');
+                        card.classList.add('flipped');
+                        
+                        // Flip them back after a brief moment
+                        setTimeout(() => {
+                            if (!pairCard.classList.contains('matched')) {
+                                pairCard.classList.remove('flipped');
+                            }
+                            if (!card.classList.contains('matched')) {
+                                card.classList.remove('flipped');
+                            }
+                        }, 1000);
+                        
+                        break;
+                    } else {
+                        values.set(value, card);
+                    }
+                }
+                
+                updateHintButton();
+                updateDisplay();
+            }
+            
+            // Update the hint button text
+            function updateHintButton() {
+                hintBtn.innerHTML = `<i class="fas fa-lightbulb"></i> Hint (${gameState.hints})`;
+            }
+            
+            // Update all displays
+            function updateDisplay() {
+                scoreDisplay.textContent = gameState.score;
+                highestDisplay.textContent = gameState.highest > 0 ? gameState.highest : 'None';
+                clearedDisplay.textContent = gameState.cleared;
+                hintsDisplay.textContent = gameState.hints;
+                timeDisplay.textContent = formatTime(gameState.time);
+                movesDisplay.textContent = `${gameState.movesUsed} / ${gameState.movesLimit}`;
+                updateHintButton();
+            }
+            
+            // Apply selected theme
+            function applyTheme(themeName) {
+                // Find the selected theme option
+                const selectedTheme = Array.from(themeOptions).find(option => option.dataset.theme === themeName);
+                
+                if (selectedTheme) {
+                    // Update active theme in the modal
+                    themeOptions.forEach(option => {
+                        option.classList.remove('active');
+                        if (option.dataset.theme === themeName) {
+                            option.classList.add('active');
+                        }
+                    });
+                    
+                    // Apply theme colors to CSS variables
+                    document.documentElement.style.setProperty('--card-front-gradient-1', selectedTheme.dataset.front1);
+                    document.documentElement.style.setProperty('--card-front-gradient-2', selectedTheme.dataset.front2);
+                    document.documentElement.style.setProperty('--card-back-gradient-1', selectedTheme.dataset.back1);
+                    document.documentElement.style.setProperty('--card-back-gradient-2', selectedTheme.dataset.back2);
+                    document.documentElement.style.setProperty('--header-gradient-1', selectedTheme.dataset.header1);
+                    document.documentElement.style.setProperty('--header-gradient-2', selectedTheme.dataset.header2);
+                    document.documentElement.style.setProperty('--dark-header-gradient-1', selectedTheme.dataset.darkHeader1);
+                    document.documentElement.style.setProperty('--dark-header-gradient-2', selectedTheme.dataset.darkHeader2);
+                    
+                    // Save theme preference
+                    gameState.currentTheme = themeName;
+                    localStorage.setItem('gameTheme', themeName);
+                }
+            }
+            
+            // Format time as mm:ss
+            function formatTime(seconds) {
+                if (seconds < 60) {
+                    return `${seconds}s`;
+                } else {
+                    const mins = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    return `${mins}m ${secs}s`;
+                }
+            }
+            
+            // Create confetti effect
+            function createConfetti() {
+                const container = document.querySelector('.game-container');
+                
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    
+                    // Random position, color, and delay
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = Math.random() * 10 + 5 + 'px';
+                    confetti.style.background = getRandomColor();
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    
+                    container.appendChild(confetti);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 5000);
+                }
+            }
+            
+            // Get a random color for confetti
+            function getRandomColor() {
+                const colors = [
+                    '#f43f5e', '#ec4899', '#d946ef', '#a855f7', 
+                    '#8b5cf6', '#6366f1', '#3b82f6', '#0ea5e9',
+                    '#06b6d4', '#14b8a6', '#10b981', '#22c55e',
+                    '#84cc16', '#eab308', '#f59e0b', '#f97316',
+                    '#ef4444'
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            // Shuffle array (Fisher-Yates algorithm)
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            // Play sound with error handling
+            function playSound(soundElement) {
+                if (soundElement) {
+                    soundElement.currentTime = 0;
+                    soundElement.play().catch(e => console.log("Audio play error:", e));
+                }
+            }
+            
+            // Show rules modal
+            function showRulesModal() {
+                rulesModal.classList.add('active');
+            }
+            
+            // Show theme modal
+            function showThemeModal() {
+                themeModal.classList.add('active');
+            }
+            
+            // Show level complete modal
+            function showLevelCompleteModal() {
+                levelCompleteModal.classList.add('active');
+            }
+            
+            // Show advertisement modal
+            function showAdModal(callback) {
+                adModal.classList.add('active');
+                
+                // Set up the modal ad container click handler
+                modalAdContainer.onclick = function() {
+                    handleAdClick(modalAdContainer, null);
+                };
+                
+                // Store the callback to run after ad is viewed and continue button clicked
+                adModalBtn.onclick = function() {
+                    if (gameState.adClicked) {
+                        adModal.classList.remove('active');
+                        if (callback) callback();
+                    }
+                };
+            }
+            
+            // Show out of moves modal
+            function showOutOfMovesModal() {
+                stopTimer();
+                gameState.adClicked = false;
+                movesAdClickedIndicator.classList.remove('visible');
+                getMoreMovesBtn.disabled = true;
+                
+                // Set up the moves ad container click handler
+                movesAdContainer.onclick = function() {
+                    handleAdClick(movesAdContainer, null);
+                };
+                
+                outOfMovesModal.classList.add('active');
+            }
+            
+            // Event Listeners
+            restartBtn.addEventListener('click', function() {
+                setupLevel();
+            });
+            
+            newGameBtn.addEventListener('click', function() {
+                initGame();
+            });
+            
+            hintBtn.addEventListener('click', function() {
+                useHint();
+            });
+            
+            rulesBtn.addEventListener('click', function() {
+                showRulesModal();
+            });
+            
+            themeBtn.addEventListener('click', function() {
+                showThemeModal();
+            });
+            
+            closeRulesModal.addEventListener('click', function() {
+                rulesModal.classList.remove('active');
+            });
+            
+            closeRulesBtn.addEventListener('click', function() {
+                rulesModal.classList.remove('active');
+            });
+            
+            closeThemeModal.addEventListener('click', function() {
+                themeModal.classList.remove('active');
+            });
+            
+            // Theme option selection
+            themeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    themeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            applyThemeBtn.addEventListener('click', function() {
+                const selectedTheme = document.querySelector('.theme-option.active');
+                if (selectedTheme) {
+                    applyTheme(selectedTheme.dataset.theme);
+                }
+                themeModal.classList.remove('active');
+            });
+            
+            nextLevelBtn.addEventListener('click', function() {
+                levelCompleteModal.classList.remove('active');
+                startNextLevel();
+            });
+            
+            getMoreMovesBtn.addEventListener('click', function() {
+                if (gameState.adClicked) {
+                    outOfMovesModal.classList.remove('active');
+                    gameState.movesLimit += 10;
+                    updateDisplay();
+                    startTimer();
+                }
+            });
+            
+            darkModeBtn.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    darkModeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                    localStorage.setItem('darkMode', 'true');
+                } else {
+                    darkModeBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+                    localStorage.setItem('darkMode', 'false');
+                }
+            });
+            
+            shareBtn.addEventListener('click', function() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Ultimate Mix & Match',
+                        text: `I just scored ${gameState.score} points in Ultimate Mix & Match! Can you beat my score?`,
+                        url: window.location.href
+                    }).catch(err => console.log('Error sharing:', err));
+                } else {
+                    alert('Sharing is not supported in your browser.');
+                }
+            });
+            
+            // Click outside modal to close (only for non-ad modals)
+            window.addEventListener('click', function(event) {
+                if (event.target === rulesModal) {
+                    rulesModal.classList.remove('active');
+                }
+                if (event.target === themeModal) {
+                    themeModal.classList.remove('active');
+                }
+            });
+            
+            // Initialize the game
+            initGame();
         });
     </script>
 </body>
