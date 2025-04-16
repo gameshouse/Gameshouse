@@ -612,7 +612,7 @@
                 </div>
                 <div class="stat-box">
                     <div class="stat-label">Hints</div>
-                    <div class="stat-value hints-display">2</div>
+                    <div class="stat-value hints-display">3</div>
                 </div>
             </div>
             
@@ -639,7 +639,7 @@
                     <i class="fas fa-plus"></i> New Game
                 </button>
                 <button class="btn btn-hint">
-                    <i class="fas fa-lightbulb"></i> Hint (2)
+                    <i class="fas fa-lightbulb"></i> Hint (3)
                 </button>
                 <button class="btn btn-rules">
                     <i class="fas fa-book"></i> Rules
@@ -674,6 +674,7 @@
                 <li class="mb-2">• Find all matching pairs before moves run out</li>
                 <li class="mb-2">• Use hints when you're stuck</li>
                 <li class="mb-2">• Complete levels to increase difficulty</li>
+                <li class="mb-2">• There are 6 levels in total to complete</li>
             </ul>
             <button class="modal-button" id="closeRulesBtn">Got It!</button>
         </div>
@@ -776,6 +777,24 @@
         </div>
     </div>
     
+    <div class="modal-overlay" id="gameCompleteModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Game Complete!</h2>
+            <p class="mb-3">Congratulations! You've completed all 6 levels!</p>
+            <div class="my-4">
+                <div class="flex justify-between mb-2">
+                    <span>Final Score:</span>
+                    <span class="font-bold final-score"></span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span>Levels Cleared:</span>
+                    <span class="font-bold">6/6</span>
+                </div>
+            </div>
+            <button class="modal-button" id="playAgainBtn">Play Again</button>
+        </div>
+    </div>
+    
     <audio id="cardFlipSound" preload="auto">
         <source src="https://cdn.jsdelivr.net/gh/soundkit/free-sound-effects@main/mp3/Card-flip-sound-effect.mp3" type="audio/mp3">
     </audio>
@@ -818,7 +837,8 @@
                 isTimerRunning: false,
                 adCallbacks: new Map(), // Store callbacks for ad clicks
                 adClicked: false,       // Track if the current ad has been clicked
-                currentTheme: localStorage.getItem('gameTheme') || 'blue' // Default theme
+                currentTheme: localStorage.getItem('gameTheme') || 'blue', // Default theme
+                maxLevel: 6  // Total number of levels in the game
             };
             
             // Game elements
@@ -868,12 +888,16 @@
             const adModal = document.getElementById('adModal');
             const adModalText = document.getElementById('adModalText');
             const outOfMovesModal = document.getElementById('outOfMovesModal');
+            const gameCompleteModal = document.getElementById('gameCompleteModal');
+            const playAgainBtn = document.getElementById('playAgainBtn');
             
             // Emojis for cards
             const cardEmojis = [
                 '🚀', '🌟', '🎮', '🎯', '🎨', '🎭', '🎪', '🎢',
                 '🎁', '🎉', '🎸', '🎹', '🎺', '🎻', '🎬', '📱',
-                '📷', '🎈', '🎲', '🎯', '🏆', '💎', '🔮', '✨'
+                '📷', '🎈', '🎲', '🎯', '🏆', '💎', '🔮', '✨',
+                '⚽', '🏀', '🏈', '⚾', '🎾', '🏐', '🏉', '🎱',
+                '⛄', '🌞', '🌈', '🌊', '🍕', '🍔', '🍦', '🍩'
             ];
             
             // Icon classes for cards
@@ -883,14 +907,19 @@
                 'fa-leaf', 'fa-fire', 'fa-snowflake', 'fa-tree',
                 'fa-gift', 'fa-music', 'fa-car', 'fa-plane',
                 'fa-crown', 'fa-key', 'fa-apple-alt', 'fa-medal',
-                'fa-basketball-ball', 'fa-football-ball', 'fa-pizza-slice', 'fa-ice-cream'
+                'fa-basketball-ball', 'fa-football-ball', 'fa-pizza-slice', 'fa-ice-cream',
+                'fa-anchor', 'fa-umbrella', 'fa-rocket', 'fa-bicycle',
+                'fa-book', 'fa-camera', 'fa-coffee', 'fa-fish'
             ];
             
-            // Level difficulties
+            // Level difficulties (6 levels)
             const levels = [
-                { name: 'Easy', pairs: 8, movesLimit: 20 },
-                { name: 'Medium', pairs: 10, movesLimit: 24 },
-                { name: 'Hard', pairs: 12, movesLimit: 30 }
+                { name: 'Level 1 - Easy', pairs: 8, movesLimit: 20 },
+                { name: 'Level 2 - Medium', pairs: 10, movesLimit: 24 },
+                { name: 'Level 3 - Hard', pairs: 12, movesLimit: 30 },
+                { name: 'Level 4 - Expert', pairs: 14, movesLimit: 35 },
+                { name: 'Level 5 - Master', pairs: 16, movesLimit: 40 },
+                { name: 'Level 6 - Ultimate', pairs: 18, movesLimit: 48 }
             ];
             
             // Ad click handler
@@ -955,6 +984,7 @@
                 gameState.flippedCards = [];
                 gameState.movesUsed = 0;
                 gameState.canFlip = true;
+                gameState.hints = 3;  // Reset hints to 3 for each level
                 
                 const currentLevel = levels[(gameState.level - 1) % levels.length];
                 gameState.totalPairs = currentLevel.pairs;
@@ -988,8 +1018,9 @@
                 
                 // Determine grid size based on total pairs
                 let gridColumns = 4;
-                if (totalPairs === 10) gridColumns = 5;
-                if (totalPairs === 12) gridColumns = 6;
+                if (totalPairs <= 10) gridColumns = 4;
+                else if (totalPairs <= 15) gridColumns = 5;
+                else gridColumns = 6;
                 
                 gameBoard.style.gridTemplateColumns = `repeat(${gridColumns}, 1fr)`;
                 
@@ -1110,6 +1141,14 @@
                 // Update UI
                 updateDisplay();
                 
+                // Check if all levels completed
+                if (gameState.level >= gameState.maxLevel) {
+                    setTimeout(() => {
+                        showGameCompleteModal();
+                    }, 1500);
+                    return;
+                }
+                
                 // Show completion modal
                 setTimeout(() => {
                     document.querySelector('.level-score').textContent = gameState.score;
@@ -1129,6 +1168,12 @@
                         showLevelCompleteModal();
                     }
                 }, 1500);
+            }
+            
+            // Show game complete modal
+            function showGameCompleteModal() {
+                document.querySelector('.final-score').textContent = gameState.score;
+                gameCompleteModal.classList.add('active');
             }
             
             // Start the next level
@@ -1436,6 +1481,11 @@
                 startNextLevel();
             });
             
+            playAgainBtn.addEventListener('click', function() {
+                gameCompleteModal.classList.remove('active');
+                initGame();
+            });
+            
             getMoreMovesBtn.addEventListener('click', function() {
                 if (gameState.adClicked) {
                     outOfMovesModal.classList.remove('active');
@@ -1475,6 +1525,9 @@
                 }
                 if (event.target === themeModal) {
                     themeModal.classList.remove('active');
+                }
+                if (event.target === gameCompleteModal) {
+                    gameCompleteModal.classList.remove('active');
                 }
             });
             
