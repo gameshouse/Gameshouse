@@ -270,6 +270,19 @@
             animation: celebrate 1.5s ease;
         }
         
+        /* Ad-specific animations */
+        @keyframes adPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        
+        @keyframes adGlow {
+            0% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+            100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+        }
+        
         /* Modal Styles */
         .modal-overlay {
             position: fixed;
@@ -367,7 +380,7 @@
             box-shadow: none;
         }
         
-        /* Ad Containers */
+        /* Enhanced Ad Containers */
         .ad-container {
             background: #f1f5f9;
             border-radius: 8px;
@@ -375,20 +388,42 @@
             padding: 0.5rem;
             text-align: center;
             box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
         }
         
         body.dark-mode .ad-container {
             background: #334155;
         }
         
-        .ad-container-top {
-            margin-bottom: 0;
+        .ad-container-top, .ad-container-bottom {
             height: 90px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
-        .ad-container-bottom {
-            margin-top: 0;
-            height: 90px;
+        .ad-container-top:hover, .ad-container-bottom:hover {
+            transform: scale(1.02);
+        }
+        
+        .ad-container-side {
+            position: absolute;
+            right: -310px;
+            top: 100px;
+            width: 300px;
+            height: 250px;
+            transition: right 0.5s ease;
+            z-index: 10;
+        }
+        
+        @media (min-width: 1024px) {
+            .game-container.with-side-ad {
+                margin-right: 320px;
+            }
+            
+            .ad-container-side {
+                right: 10px;
+            }
         }
         
         .ad-text {
@@ -401,39 +436,79 @@
             color: #94a3b8;
         }
         
+        .ad-cta-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ef4444;
+            color: white;
+            padding: 0.2rem 0.4rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            z-index: 5;
+            animation: adPulse 2s infinite;
+        }
+        
         .ad-banner {
             width: 100%;
             height: 70px;
-            background: linear-gradient(45deg, #f1f5f9 25%, #e2e8f0 25%, #e2e8f0 50%, #f1f5f9 50%, #f1f5f9 75%, #e2e8f0 75%);
-            background-size: 20px 20px;
-            animation: moveBackground 30s linear infinite;
+            background: linear-gradient(45deg, #3b82f6 0%, #2563eb 100%);
+            animation: adGlow 3s infinite;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            color: #64748b;
+            color: white;
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
         
-        .ad-banner:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .ad-banner:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+            transform: skewX(-25deg);
+            transition: all 1s ease;
+        }
+        
+        .ad-banner:hover:before {
+            left: 100%;
+            transition: all 1s ease;
+        }
+        
+        .ad-banner-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .ad-banner-headline {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+        }
+        
+        .ad-banner-subtext {
+            font-size: 0.75rem;
+            opacity: 0.9;
         }
         
         body.dark-mode .ad-banner {
-            background: linear-gradient(45deg, #334155 25%, #1e293b 25%, #1e293b 50%, #334155 50%, #334155 75%, #1e293b 75%);
-            background-size: 20px 20px;
-            color: #94a3b8;
+            background: linear-gradient(45deg, #4f46e5 0%, #3730a3 100%);
+            color: white;
         }
         
-        @keyframes moveBackground {
-            from { background-position: 0 0; }
-            to { background-position: 1000px 0; }
-        }
-        
-        /* Modal Ad Container */
+        /* Modal Ad Container - Enhanced */
         .modal-ad-container {
             position: relative;
             margin: 1rem 0;
@@ -441,6 +516,10 @@
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            animation: adGlow 3s infinite;
         }
         
         .modal-ad-container:hover {
@@ -453,7 +532,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -467,8 +546,7 @@
         
         .modal-ad-content {
             text-align: center;
-            padding: 3rem 1rem;
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            padding: 2rem 1rem;
             color: white;
             font-weight: bold;
             display: flex;
@@ -476,6 +554,18 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .modal-ad-size-label {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            font-size: 0.6rem;
         }
         
         .modal-ad-badge {
@@ -488,7 +578,43 @@
             border-radius: 50px;
             font-size: 0.75rem;
             font-weight: bold;
-            animation: pulse 1.5s infinite;
+            animation: adPulse 1.5s infinite;
+            z-index: 5;
+        }
+        
+        .modal-ad-image {
+            max-width: 80px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-ad-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .modal-ad-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            max-width: 90%;
+            margin: 0 auto 1rem;
+        }
+        
+        .modal-ad-button {
+            background: white;
+            color: #3b82f6;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transform: scale(1);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        .modal-ad-container:hover .modal-ad-button {
+            transform: scale(1.1);
         }
         
         .clicked-indicator {
@@ -550,6 +676,72 @@
             margin: 1rem 0;
         }
         
+        /* Video Ad Container */
+        .video-ad-container {
+            width: 100%;
+            margin: 1rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .video-ad-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .video-ad-play {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        /* Ad Rotation Animation */
+        @keyframes adRotation {
+            0% { opacity: 0; transform: translateX(-20px); }
+            5% { opacity: 1; transform: translateX(0); }
+            45% { opacity: 1; transform: translateX(0); }
+            50% { opacity: 0; transform: translateX(20px); }
+            100% { opacity: 0; transform: translateX(20px); }
+        }
+        
+        .rotating-ad-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            animation: adRotation 10s infinite;
+        }
+        
+        .rotating-ad-content:nth-child(2) {
+            animation-delay: 5s;
+        }
+        
+        /* More Ad-specific Styles */
+        .premium-badge {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #fbbf24;
+            color: #7c2d12;
+            padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+            border-radius: 0 0 0.5rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: bold;
+            transform: rotate(-3deg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 5;
+        }
+        
         /* Responsive Adjustments */
         @media (max-width: 640px) {
             .game-header {
@@ -579,25 +771,39 @@
                 padding: 0.5rem 0.8rem;
                 font-size: 0.8rem;
             }
+            
+            .ad-container-top, .ad-container-bottom {
+                height: 70px;
+            }
+            
+            .ad-banner {
+                height: 50px;
+            }
+            
+            .ad-banner-headline {
+                font-size: 0.8rem;
+            }
+            
+            .ad-banner-subtext {
+                font-size: 0.65rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="flex min-h-screen w-full items-center justify-center p-4">
+    <div class="flex min-h-screen w-full items-center justify-center p-4 relative">
         <div class="game-container w-full">
-            <!-- Top Ad Banner -->
-<div class="ad-banner w-full flex justify-center mb-12">
-  <script type="text/javascript">
-    atOptions = {
-      'key' : 'f13b9aebb338988dc9099e067dd01302',
-      'format' : 'iframe',
-      'height' : 90,
-      'width' : 728,
-      'params' : {}
-    };
-  </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/f13b9aebb338988dc9099e067dd01302/invoke.js"></script>
-</div>
+            <!-- Top Ad Banner - 728x90 -->
+            <div class="ad-container ad-container-top">
+                <div class="ad-text">Advertisement (728x90)</div>
+                <div class="ad-cta-badge">Hot Deal!</div>
+                <div class="ad-banner" onclick="handleAdClick(this, 'topBanner')">
+                    <div class="ad-banner-content">
+                        <div class="ad-banner-headline">Exclusive Game Offers Inside!</div>
+                        <div class="ad-banner-subtext">Click now for special gaming discounts</div>
+                    </div>
+                </div>
+            </div>
             
             <div class="game-header">Ultimate Mix & Match</div>
             
@@ -663,19 +869,41 @@
                 </button>
             </div>
             
-            <!-- Bottom Ad Banner -->
-<div class="ad-container ad-container-bottom">
-  <script type="text/javascript">
-    atOptions = {
-      'key' : 'f13b9aebb338988dc9099e067dd01302',
-      'format' : 'iframe',
-      'height' : 90,
-      'width' : 728,
-      'params' : {}
-    };
-  </script>
-  <script type="text/javascript" src="//www.highperformanceformat.com/f13b9aebb338988dc9099e067dd01302/invoke.js"></script>
-</div>
+            <!-- Bottom Ad Banner - 728x90 -->
+            <div class="ad-container ad-container-bottom">
+                <div class="ad-text">Advertisement (728x90)</div>
+                <div class="ad-cta-badge">New Games!</div>
+                <div class="ad-banner" onclick="handleAdClick(this, 'bottomBanner')">
+                    <div class="rotating-ad-content">
+                        <div class="ad-banner-content">
+                            <div class="ad-banner-headline">Earn Free Game Coins</div>
+                            <div class="ad-banner-subtext">Click to claim your reward</div>
+                        </div>
+                    </div>
+                    <div class="rotating-ad-content">
+                        <div class="ad-banner-content">
+                            <div class="ad-banner-headline">Try Premium Games</div>
+                            <div class="ad-banner-subtext">Limited time offer - Click now!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Side Ad - 300x250 (appears on larger screens) -->
+        <div class="ad-container ad-container-side">
+            <div class="ad-text">Advertisement (300x250)</div>
+            <div class="premium-badge">Premium Deal</div>
+            <div class="ad-cta-badge">50% Off!</div>
+            <div class="modal-ad-container" onclick="handleAdClick(this, 'sideAd')">
+                <div class="modal-ad-content">
+                    <i class="fas fa-gamepad fa-3x modal-ad-image"></i>
+                    <div class="modal-ad-title">Ultimate Game Collection</div>
+                    <div class="modal-ad-description">Get access to 500+ premium games at half price!</div>
+                    <div class="modal-ad-button">Claim Offer</div>
+                </div>
+                <div class="modal-ad-size-label">300x250</div>
+            </div>
         </div>
     </div>
     
@@ -719,55 +947,71 @@
     </div>
     
     <div class="modal-overlay" id="adModal">
-  <div class="modal-content">
-    <h2 class="modal-title">Advertisement</h2>
-    <p class="mb-3" id="adModalText">Please click on the advertisement to get benefits</p>
-
-    <div class="modal-ad-container" id="modalAdContainer">
-      <div class="modal-ad-badge">Click Now!</div>
-
-      <div class="modal-ad-content">
-        <!-- Ad Script -->
-        <script type='text/javascript' src='//pl26378193.profitableratecpm.com/97/8f/7e/978f7e688126f92bf6433370ca361bf1.js'></script>
-      </div>
-
-      <div class="modal-ad-overlay">
-        <span class="text-white font-bold py-2 px-4 bg-blue-600 rounded-full">
-          CLICK HERE
-        </span>
-      </div>
+        <div class="modal-content">
+            <h2 class="modal-title">Advertisement</h2>
+            <p class="mb-3" id="adModalText">Please click on the advertisement to get rewards.</p>
+            
+            <div class="modal-ad-container" id="modalAdContainer" onclick="handleAdClick(this, 'modalAd')">
+                <div class="modal-ad-badge">Click Now!</div>
+                <div class="modal-ad-content">
+                    <i class="fas fa-gift fa-3x modal-ad-image"></i>
+                    <div class="modal-ad-title">Unlock Premium Rewards</div>
+                    <div class="modal-ad-description">Click to receive exclusive in-game bonuses and continue your adventure!</div>
+                    <div class="modal-ad-button">Claim Reward</div>
+                </div>
+                <div class="modal-ad-size-label">300x250</div>
+            </div>
+            
+            <div class="clicked-indicator" id="adClickedIndicator">
+                <i class="fas fa-check-circle mr-2"></i> Thank you! Reward unlocked
+            </div>
+            
+            <button class="modal-button" id="adModalBtn" disabled>Continue</button>
+        </div>
     </div>
-
-    <div class="clicked-indicator" id="adClickedIndicator">
-      <i class="fas fa-check-circle mr-2"></i> Thank you! You've clicked
-    </div>
-
-    <button class="modal-button" id="adModalBtn" disabled>Continue</button>
-  </div>
-</div>
     
     <div class="modal-overlay" id="outOfMovesModal">
         <div class="modal-content">
             <h2 class="modal-title">Out of Moves!</h2>
             <p class="mb-3">Click on the advertisement to get 10 additional moves.</p>
             
-            <div class="modal-ad-container" id="movesAdContainer">
+            <div class="modal-ad-container" id="movesAdContainer" onclick="handleAdClick(this, 'movesAd')">
                 <div class="modal-ad-badge">Click Now!</div>
                 <div class="modal-ad-content">
-                    <i class="fas fa-ad fa-3x mb-4"></i>
-                    <div class="text-xl">Advertisement (300x250)</div>
-                    <div class="text-sm mt-2">Click to get your 10 additional moves</div>
+                    <i class="fas fa-sync-alt fa-3x modal-ad-image"></i>
+                    <div class="modal-ad-title">Need More Moves?</div>
+                    <div class="modal-ad-description">Click here to instantly get 10 additional moves and continue playing!</div>
+                    <div class="modal-ad-button">Get 10 Extra Moves</div>
                 </div>
-                <div class="modal-ad-overlay">
-                    <span class="text-white font-bold py-2 px-4 bg-blue-600 rounded-full">Click here</span>
-                </div>
+                <div class="modal-ad-size-label">300x250</div>
             </div>
             
             <div class="clicked-indicator" id="movesAdClickedIndicator">
-                <i class="fas fa-check-circle mr-2"></i> Thank you! You've clicked
+                <i class="fas fa-check-circle mr-2"></i> Thank you! +10 moves added
             </div>
             
             <button class="modal-button" id="getMoreMovesBtn" disabled>Get 10 Additional Moves</button>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="hintAdModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Get More Hints</h2>
+            <p class="mb-3">Click on the advertisement to get 3 additional hints.</p>
+            
+            <div class="video-ad-container" id="videoAdContainer">
+                <div class="video-ad-placeholder" onclick="handleAdClick(this, 'videoAd')">
+                    <i class="fas fa-play-circle video-ad-play"></i>
+                    <div class="text-xl mb-1">Watch a short video</div>
+                    <div class="text-sm">Get 3 bonus hints instantly!</div>
+                </div>
+            </div>
+            
+            <div class="clicked-indicator" id="hintAdClickedIndicator">
+                <i class="fas fa-check-circle mr-2"></i> Thank you! +3 hints added
+            </div>
+            
+            <button class="modal-button" id="getMoreHintsBtn" disabled>Get 3 Additional Hints</button>
         </div>
     </div>
     
@@ -810,7 +1054,20 @@
                     <span class="font-bold">6/6</span>
                 </div>
             </div>
-            <button class="modal-button" id="playAgainBtn">Play Again</button>
+            
+            <!-- Celebratory ad - 300x250 -->
+            <div class="modal-ad-container" onclick="handleAdClick(this, 'celebrationAd')">
+                <div class="modal-ad-badge">Special Offer!</div>
+                <div class="modal-ad-content">
+                    <i class="fas fa-trophy fa-3x modal-ad-image"></i>
+                    <div class="modal-ad-title">Champion's Reward!</div>
+                    <div class="modal-ad-description">You've earned a special bonus! Click to claim your prize.</div>
+                    <div class="modal-ad-button">Claim Champion Bonus</div>
+                </div>
+                <div class="modal-ad-size-label">300x250</div>
+            </div>
+            
+            <button class="modal-button" id="playAgainBtn" style="margin-top: 2rem;">Play Again</button>
         </div>
     </div>
     
@@ -856,12 +1113,18 @@
                 isTimerRunning: false,
                 adCallbacks: new Map(), // Store callbacks for ad clicks
                 adClicked: false,       // Track if the current ad has been clicked
+                adStats: {              // Track ad performance
+                    impressions: {},
+                    clicks: {}
+                },
                 currentTheme: localStorage.getItem('gameTheme') || 'blue', // Default theme
-                maxLevel: 6  // Total number of levels in the game
+                maxLevel: 6,  // Total number of levels in the game
+                adDisplayed: false // Track if side ad is displayed
             };
             
             // Game elements
             const gameBoard = document.querySelector('.game-board');
+            const gameContainer = document.querySelector('.game-container');
             const levelDisplay = document.querySelector('.level-display');
             const scoreDisplay = document.querySelector('.score-display');
             const highestDisplay = document.querySelector('.highest-display');
@@ -880,10 +1143,14 @@
             // Ad-related elements
             const adModalBtn = document.getElementById('adModalBtn');
             const getMoreMovesBtn = document.getElementById('getMoreMovesBtn');
+            const getMoreHintsBtn = document.getElementById('getMoreHintsBtn');
             const modalAdContainer = document.getElementById('modalAdContainer');
             const movesAdContainer = document.getElementById('movesAdContainer');
+            const videoAdContainer = document.getElementById('videoAdContainer');
             const adClickedIndicator = document.getElementById('adClickedIndicator');
             const movesAdClickedIndicator = document.getElementById('movesAdClickedIndicator');
+            const hintAdClickedIndicator = document.getElementById('hintAdClickedIndicator');
+            const sideAdContainer = document.querySelector('.ad-container-side');
             
             // Theme elements
             const themeModal = document.getElementById('themeModal');
@@ -907,6 +1174,7 @@
             const adModal = document.getElementById('adModal');
             const adModalText = document.getElementById('adModalText');
             const outOfMovesModal = document.getElementById('outOfMovesModal');
+            const hintAdModal = document.getElementById('hintAdModal');
             const gameCompleteModal = document.getElementById('gameCompleteModal');
             const playAgainBtn = document.getElementById('playAgainBtn');
             
@@ -941,8 +1209,8 @@
                 { name: 'Level 6 - Ultimate', pairs: 18, movesLimit: 48 }
             ];
             
-            // Ad click handler
-            function handleAdClick(adElement, callback) {
+            // Enhanced Ad click handler
+            function handleAdClick(adElement, adId) {
                 // Play click sound
                 playSound(adClickSound);
                 
@@ -955,6 +1223,15 @@
                 // Set ad as clicked
                 gameState.adClicked = true;
                 
+                // Log analytics
+                if (adId) {
+                    if (!gameState.adStats.clicks[adId]) {
+                        gameState.adStats.clicks[adId] = 0;
+                    }
+                    gameState.adStats.clicks[adId]++;
+                    console.log(`Ad clicked: ${adId}. Total clicks: ${gameState.adStats.clicks[adId]}`);
+                }
+                
                 // For modal ads, show success indicator and enable continue button
                 if (adElement === modalAdContainer) {
                     adClickedIndicator.classList.add('visible');
@@ -962,15 +1239,38 @@
                 } else if (adElement === movesAdContainer) {
                     movesAdClickedIndicator.classList.add('visible');
                     getMoreMovesBtn.disabled = false;
-                }
-                
-                // Execute callback if provided
-                if (callback) {
-                    callback();
+                } else if (adElement === videoAdContainer) {
+                    hintAdClickedIndicator.classList.add('visible');
+                    getMoreHintsBtn.disabled = false;
+                    
+                    // Simulate video ad watching
+                    const videoPlaceholder = adElement.querySelector('.video-ad-placeholder');
+                    videoPlaceholder.innerHTML = '<div class="flex items-center justify-center h-full"><div class="text-white text-center"><i class="fas fa-check-circle fa-3x mb-3"></i><div>Video watched successfully!</div></div></div>';
                 }
                 
                 // Generate some "revenue" feedback
                 console.log("Ad clicked! Revenue generated.");
+            }
+            
+            // Log ad impression
+            function logAdImpression(adId) {
+                if (!gameState.adStats.impressions[adId]) {
+                    gameState.adStats.impressions[adId] = 0;
+                }
+                gameState.adStats.impressions[adId]++;
+                console.log(`Ad impression: ${adId}. Total impressions: ${gameState.adStats.impressions[adId]}`);
+            }
+            
+            // Check screen size and show side ad if appropriate
+            function checkScreenSize() {
+                if (window.innerWidth >= 1024 && !gameState.adDisplayed) {
+                    gameContainer.classList.add('with-side-ad');
+                    logAdImpression('sideAd');
+                    gameState.adDisplayed = true;
+                } else if (window.innerWidth < 1024 && gameState.adDisplayed) {
+                    gameContainer.classList.remove('with-side-ad');
+                    gameState.adDisplayed = false;
+                }
             }
             
             // Initialize the game
@@ -983,6 +1283,11 @@
                 gameState.movesUsed = 0;
                 gameState.levelCount = 0;
                 gameState.adClicked = false;
+                
+                // Log initial ad impressions
+                logAdImpression('topBanner');
+                logAdImpression('bottomBanner');
+                checkScreenSize();
                 
                 updateDisplay();
                 setupLevel();
@@ -1164,6 +1469,7 @@
                 if (gameState.level >= gameState.maxLevel) {
                     setTimeout(() => {
                         showGameCompleteModal();
+                        logAdImpression('celebrationAd');
                     }, 1500);
                     return;
                 }
@@ -1183,6 +1489,7 @@
                         showAdModal(() => {
                             showLevelCompleteModal();
                         });
+                        logAdImpression('modalAd');
                     } else {
                         showLevelCompleteModal();
                     }
@@ -1226,7 +1533,11 @@
             
             // Use a hint
             function useHint() {
-                if (gameState.hints <= 0) return;
+                if (gameState.hints <= 0) {
+                    // No hints left - show hint ad modal
+                    showHintAdModal();
+                    return;
+                }
                 
                 // For third hint, show ad
                 if (gameState.hints === 1) {
@@ -1237,6 +1548,7 @@
                     showAdModal(() => {
                         processHintLogic();
                     });
+                    logAdImpression('modalAd');
                 } else {
                     processHintLogic();
                 }
@@ -1285,6 +1597,23 @@
                 
                 updateHintButton();
                 updateDisplay();
+            }
+            
+            // Show hint ad modal
+            function showHintAdModal() {
+                hintAdModal.classList.add('active');
+                gameState.adClicked = false;
+                hintAdClickedIndicator.classList.remove('visible');
+                getMoreHintsBtn.disabled = true;
+                logAdImpression('videoAd');
+                
+                // Reset video placeholder if it was previously watched
+                videoAdContainer.innerHTML = `
+                <div class="video-ad-placeholder" onclick="handleAdClick(this, 'videoAd')">
+                    <i class="fas fa-play-circle video-ad-play"></i>
+                    <div class="text-xl mb-1">Watch a short video</div>
+                    <div class="text-sm">Get 3 bonus hints instantly!</div>
+                </div>`;
             }
             
             // Update the hint button text
@@ -1419,7 +1748,7 @@
                 
                 // Set up the modal ad container click handler
                 modalAdContainer.onclick = function() {
-                    handleAdClick(modalAdContainer, null);
+                    handleAdClick(modalAdContainer, 'modalAd');
                 };
                 
                 // Store the callback to run after ad is viewed and continue button clicked
@@ -1440,10 +1769,11 @@
                 
                 // Set up the moves ad container click handler
                 movesAdContainer.onclick = function() {
-                    handleAdClick(movesAdContainer, null);
+                    handleAdClick(movesAdContainer, 'movesAd');
                 };
                 
                 outOfMovesModal.classList.add('active');
+                logAdImpression('movesAd');
             }
             
             // Event Listeners
@@ -1514,6 +1844,15 @@
                 }
             });
             
+            getMoreHintsBtn.addEventListener('click', function() {
+                if (gameState.adClicked) {
+                    hintAdModal.classList.remove('active');
+                    gameState.hints += 3;
+                    updateHintButton();
+                    updateDisplay();
+                }
+            });
+            
             darkModeBtn.addEventListener('click', function() {
                 document.body.classList.toggle('dark-mode');
                 if (document.body.classList.contains('dark-mode')) {
@@ -1536,6 +1875,9 @@
                     alert('Sharing is not supported in your browser.');
                 }
             });
+            
+            // Check screen size on resize
+            window.addEventListener('resize', checkScreenSize);
             
             // Click outside modal to close (only for non-ad modals)
             window.addEventListener('click', function(event) {
