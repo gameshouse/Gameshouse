@@ -45,6 +45,13 @@
             transition: all 0.3s ease;
         }
         
+        /* Improved responsiveness for desktop */
+        @media (min-width: 768px) {
+            .game-container {
+                max-width: 600px;
+            }
+        }
+        
         body.dark-mode .game-container {
             background: rgba(15, 23, 42, 0.9);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -404,26 +411,6 @@
         
         .ad-container-top:hover, .ad-container-bottom:hover {
             transform: scale(1.02);
-        }
-        
-        .ad-container-side {
-            position: absolute;
-            right: -310px;
-            top: 100px;
-            width: 300px;
-            height: 250px;
-            transition: right 0.5s ease;
-            z-index: 10;
-        }
-        
-        @media (min-width: 1024px) {
-            .game-container.with-side-ad {
-                margin-right: 320px;
-            }
-            
-            .ad-container-side {
-                right: 10px;
-            }
         }
         
         .ad-text {
@@ -788,6 +775,32 @@
                 font-size: 0.65rem;
             }
         }
+        
+        /* Enhanced desktop responsiveness */
+        @media (min-width: 1024px) {
+            .game-container {
+                max-width: 700px;
+            }
+            
+            .game-board {
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .card i, .card .emoji {
+                font-size: 2.25rem;
+            }
+            
+            .game-header {
+                font-size: 2rem;
+                padding: 1.5rem;
+            }
+            
+            .btn {
+                padding: 0.75rem 1.25rem;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -887,22 +900,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Side Ad - 300x250 (appears on larger screens) -->
-        <div class="ad-container ad-container-side">
-            <div class="ad-text">Advertisement (300x250)</div>
-            <div class="premium-badge">Premium Deal</div>
-            <div class="ad-cta-badge">50% Off!</div>
-            <div class="modal-ad-container" onclick="handleAdClick(this, 'sideAd')">
-                <div class="modal-ad-content">
-                    <i class="fas fa-gamepad fa-3x modal-ad-image"></i>
-                    <div class="modal-ad-title">Ultimate Game Collection</div>
-                    <div class="modal-ad-description">Get access to 500+ premium games at half price!</div>
-                    <div class="modal-ad-button">Claim Offer</div>
-                </div>
-                <div class="modal-ad-size-label">300x250</div>
             </div>
         </div>
     </div>
@@ -1118,8 +1115,7 @@
                     clicks: {}
                 },
                 currentTheme: localStorage.getItem('gameTheme') || 'blue', // Default theme
-                maxLevel: 6,  // Total number of levels in the game
-                adDisplayed: false // Track if side ad is displayed
+                maxLevel: 6  // Total number of levels in the game
             };
             
             // Game elements
@@ -1150,7 +1146,6 @@
             const adClickedIndicator = document.getElementById('adClickedIndicator');
             const movesAdClickedIndicator = document.getElementById('movesAdClickedIndicator');
             const hintAdClickedIndicator = document.getElementById('hintAdClickedIndicator');
-            const sideAdContainer = document.querySelector('.ad-container-side');
             
             // Theme elements
             const themeModal = document.getElementById('themeModal');
@@ -1261,18 +1256,6 @@
                 console.log(`Ad impression: ${adId}. Total impressions: ${gameState.adStats.impressions[adId]}`);
             }
             
-            // Check screen size and show side ad if appropriate
-            function checkScreenSize() {
-                if (window.innerWidth >= 1024 && !gameState.adDisplayed) {
-                    gameContainer.classList.add('with-side-ad');
-                    logAdImpression('sideAd');
-                    gameState.adDisplayed = true;
-                } else if (window.innerWidth < 1024 && gameState.adDisplayed) {
-                    gameContainer.classList.remove('with-side-ad');
-                    gameState.adDisplayed = false;
-                }
-            }
-            
             // Initialize the game
             function initGame() {
                 gameState.level = 1;
@@ -1287,7 +1270,6 @@
                 // Log initial ad impressions
                 logAdImpression('topBanner');
                 logAdImpression('bottomBanner');
-                checkScreenSize();
                 
                 updateDisplay();
                 setupLevel();
@@ -1875,9 +1857,6 @@
                     alert('Sharing is not supported in your browser.');
                 }
             });
-            
-            // Check screen size on resize
-            window.addEventListener('resize', checkScreenSize);
             
             // Click outside modal to close (only for non-ad modals)
             window.addEventListener('click', function(event) {
