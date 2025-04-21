@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta Information -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tic Tac Toe Deluxe - Ultimate Premium Edition</title>
-
+  
   <!-- External Libraries -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
 
-  <!-- Internal Styles (Unchanged from previous version) -->
+  <!-- Internal Styles -->
   <style>
     /*--------------------------------------------------*/
-    /*  1. ROOT VARIABLES & FINAL PREMIUM THEMES (15) */
+    /*  1. ROOT VARIABLES & VIBRANT THEMES (15 Colors) */
     /*--------------------------------------------------*/
-    :root { /* ... Colors remain the same vibrant set ... */
+    :root {
+      /* --- Final Premium Theme Colors --- */
       --theme1: #E63946; --theme1-rgb: 230, 57, 70;    /* Red Pantone */
       --theme2: #F4A261; --theme2-rgb: 244, 162, 97;   /* Sandy Brown */
       --theme3: #2A9D8F; --theme3-rgb: 42, 157, 143;   /* Persian Green */
@@ -32,23 +32,44 @@
       --theme13: #00F5D4; --theme13-rgb: 0, 245, 212;  /* Turquoise */
       --theme14: #FEE440; --theme14-rgb: 254, 228, 64; /* Jonquil */
       --theme15: #00BBF9; --theme15-rgb: 0, 187, 249;  /* Capri */
-      /* --- UI Variables --- */
-      --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); --premium-shadow: 0 10px 35px rgba(0, 0, 0, 0.2); --premium-shadow-hover: 0 15px 45px rgba(0, 0, 0, 0.25); --premium-gradient: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%); --cell-bg: #f3f3f3; --cell-shadow: 0 4px 12px 0 rgba(0,0,0,0.10); --win-bg: #fffbe6; --win-shadow: 0 0 24px 6px #ffe066; --font-main: 'Poppins', 'Montserrat', Arial, sans-serif; --font-body: 'Roboto', Arial, sans-serif;
+
+      /* --- UI Variables (Unchanged) --- */
+      --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+      --premium-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+      --premium-shadow-hover: 0 15px 45px rgba(0, 0, 0, 0.25);
+      --premium-gradient: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+      --cell-bg: #f3f3f3;
+      --cell-shadow: 0 4px 12px 0 rgba(0,0,0,0.10);
+      --win-bg: #fffbe6;
+      --win-shadow: 0 0 24px 6px #ffe066;
+      --font-main: 'Poppins', 'Montserrat', Arial, sans-serif;
+      --font-body: 'Roboto', Arial, sans-serif;
+
       /* --- Dynamic Variables --- */
-      --main-color: var(--theme1); --main-color-rgb: var(--theme1-rgb); --bg-color: #ffffff; --text-color: #333333; --header-color: #222222; --border-color: #e0e0e0; --element-tint-opacity-light: 0.07; --element-tint-opacity-dark: 0.10;
+      --main-color: var(--theme1); /* Default theme */
+      --main-color-rgb: var(--theme1-rgb); /* Default RGB */
+      --bg-color: #ffffff;
+      --text-color: #333333;
+      --header-color: #222222;
+      --border-color: #e0e0e0;
+      --element-tint-opacity-light: 0.07;
+      --element-tint-opacity-dark: 0.10;
     }
+
     /*--------------------------------------------------*/
     /*  2. BASE & DARK MODE STYLES                    */
     /*--------------------------------------------------*/
-    body { background: var(--bg-color); min-height: 100vh; margin: 0; font-family: var(--font-body); transition: background 0.5s; }
+    body { background: var(--bg-color); min-height: 100vh; margin: 0; font-family: var(--font-body); transition: background 0.3s; }
     body.dark-mode { --bg-color: #121212; --text-color: #e0e0e0; --header-color: #f0f0f0; --border-color: #333333; --cell-bg: #2a2a2a; background: var(--bg-color); }
+
     /*--------------------------------------------------*/
     /*  3. GAME CONTAINER & LAYOUT                    */
     /*--------------------------------------------------*/
-    .game-container { max-width: 480px; margin: 36px auto; background: rgba(255,255,255,0.96); border-radius: 24px; box-shadow: var(--shadow); padding: 24px 12px 18px 12px; display: flex; flex-direction: column; align-items: center; transition: background-color 0.5s; }
+    .game-container { max-width: 480px; margin: 36px auto; background: rgba(255,255,255,0.96); border-radius: 24px; box-shadow: var(--shadow); padding: 24px 12px 18px 12px; display: flex; flex-direction: column; align-items: center; transition: background-color 0.3s; }
     body.dark-mode .game-container { background: rgba(30,30,30,0.95); color: var(--text-color); }
     h1 { font-family: var(--font-main); font-size: 2.2rem; font-weight: 800; color: var(--main-color); margin-bottom: 16px; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: color 0.3s; text-transform: uppercase; }
     body.dark-mode h1 { text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+
     /*--------------------------------------------------*/
     /*  4. CONTROLS & INPUTS                          */
     /*--------------------------------------------------*/
@@ -61,10 +82,12 @@
     select { width: 100%; padding: 6px 6px; border-radius: 8px; border: 1.5px solid var(--main-color); background: rgba(255,255,255,0.9); font-size: 0.9rem; font-family: var(--font-body); color: #333; outline: none; transition: all 0.3s; margin-bottom: 2px; cursor: pointer; position: relative; z-index: 1; }
     body.dark-mode select { background: rgba(60,60,60,0.9); color: #e0e0e0; border-color: var(--main-color); }
     select:focus { border: 1.5px solid var(--main-color); box-shadow: 0 0 0 2px rgba(var(--main-color-rgb), 0.25); }
+    /* Theme Picker */
     .color-picker { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; position: relative; z-index: 1; }
     .color-option { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.11); cursor: pointer; transition: transform 0.2s, border 0.2s, outline 0.2s; outline: 2px solid transparent; }
     body.dark-mode .color-option { border: 2px solid #333; }
     .color-option.selected { outline: 2px solid var(--main-color); transform: scale(1.16); }
+    /* Emoji Selection */
     .emoji-selection { width: 100%; display: flex; justify-content: space-between; margin: 10px 0 2px 0; gap: 10px; }
     .emoji-group { flex: 1 1 110px; min-width: 110px; background: var(--premium-gradient), rgba(255,255,255,0.85); border-radius: 12px; padding: 8px 10px 5px 10px; box-shadow: var(--premium-shadow); display: flex; flex-direction: column; align-items: flex-start; transition: all 0.3s ease; border: 1.5px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); position: relative; overflow: hidden; }
     .emoji-group:hover { box-shadow: var(--premium-shadow-hover); transform: translateY(-2px); }
@@ -94,14 +117,14 @@
     .board-3 { grid-template-columns: repeat(3, 90px); grid-template-rows: repeat(3, 90px);}
     .board-4 { grid-template-columns: repeat(4, 70px); grid-template-rows: repeat(4, 70px);}
     .board-5 { grid-template-columns: repeat(5, 58px); grid-template-rows: repeat(5, 58px);}
-    .cell { box-shadow: var(--cell-shadow); border-radius: 16px; display: flex; justify-content: center; align-items: center; font-family: var(--font-main); cursor: pointer; transition: all 0.3s ease-out; user-select: none; color: var(--main-color); border: 2.5px solid var(--border-color); overflow: hidden; position: relative; background: linear-gradient(145deg, rgba(255,255,255,0.8), rgba(255,255,255,0.5)); }
+    .cell { box-shadow: var(--cell-shadow); border-radius: 16px; display: flex; justify-content: center; align-items: center; font-family: var(--font-main); cursor: pointer; transition: all 0.2s ease-out; user-select: none; color: var(--main-color); border: 2.5px solid var(--border-color); overflow: hidden; position: relative; background: linear-gradient(145deg, rgba(255,255,255,0.8), rgba(255,255,255,0.5)); }
     body.dark-mode .cell { background: linear-gradient(145deg, var(--cell-bg), #333); border-color: #444; }
     .cell:hover { background: linear-gradient(145deg, #e0e0e0, #fff); box-shadow: 0 6px 18px 0 rgba(0,0,0,0.13); transform: translateY(-2px); }
     body.dark-mode .cell:hover { background: linear-gradient(145deg, #333, #444); }
     .cell:active { box-shadow: 0 2px 6px 0 rgba(0,0,0,0.10) inset; transform: translateY(0); }
     .cell.winner { background: var(--win-bg); box-shadow: var(--win-shadow); border-color: var(--main-color); animation: pulse 1.1s infinite; }
     /* Emoji Styling */
-    .emoji-appear { font-weight: 700; animation: emojiPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
+    .emoji-appear { font-weight: 700; /* Bolder appearance */ animation: emojiPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
     .board-3 .cell .emoji-appear { font-size: 2.8rem; }
     .board-4 .cell .emoji-appear { font-size: 2.2rem; }
     .board-5 .cell .emoji-appear { font-size: 1.8rem; }
@@ -176,13 +199,13 @@
     /*--------------------------------------------------*/
     /*  12. PREMIUM FEATURES & LOCKS                  */
     /*--------------------------------------------------*/
-    .premium-badge { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--main-color), #FFBE0B); /* Use theme yellow */ color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 0 8px 0 8px; z-index: 2; font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    .premium-badge { position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--main-color), #FFBE0B); /* Using theme yellow */ color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 0 8px 0 8px; z-index: 2; font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
     .feature-lock { position: relative; }
     .feature-lock::after { content: '🔒'; font-size: 0.8rem; position: absolute; right: 5px; top: 50%; transform: translateY(-50%); }
-    .reward-btn { background: linear-gradient(90deg, var(--main-color) 0%, #FB5607 100%); /* Use theme orange */ color: white; font-family: var(--font-main); font-size: 0.9rem; padding: 8px 16px; border-radius: 8px; border: none; font-weight: 600; margin-top: 16px; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+    .reward-btn { background: linear-gradient(90deg, var(--main-color) 0%, #FB5607 100%); /* Using theme orange */ color: white; font-family: var(--font-main); font-size: 0.9rem; padding: 8px 16px; border-radius: 8px; border: none; font-weight: 600; margin-top: 16px; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
     .reward-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
     .reward-btn i { font-size: 1.1rem; }
-    .premium-ad { background: linear-gradient(135deg, var(--main-color) 0%, #FFBE0B 100%); /* Use theme yellow */ color: white; padding: 15px; border-radius: 12px; text-align: center; margin: 15px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; overflow: hidden; }
+    .premium-ad { background: linear-gradient(135deg, var(--main-color) 0%, #FFBE0B 100%); /* Using theme yellow */ color: white; padding: 15px; border-radius: 12px; text-align: center; margin: 15px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.2); position: relative; overflow: hidden; }
     .premium-ad::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%); animation: shine 2s infinite; }
     @keyframes shine { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
     .premium-ad h3 { font-size: 1.1rem; margin-bottom: 10px; font-weight: 700; }
@@ -194,7 +217,6 @@
     @media (min-width: 1200px) { .ad-sticky { display: flex; } }
     @media (max-width: 600px) { .game-container { max-width: 98vw; padding: 15px 2vw 10px 2vw;} .board-3 { grid-template-columns: repeat(3, 70px); grid-template-rows: repeat(3, 70px);} .board-4 { grid-template-columns: repeat(4, 50px); grid-template-rows: repeat(4, 50px);} .board-5 { grid-template-columns: repeat(5, 40px); grid-template-rows: repeat(5, 40px);} .board-3 .cell .emoji-appear { font-size: 2.2rem; } .board-4 .cell .emoji-appear { font-size: 1.7rem; } .board-5 .cell .emoji-appear { font-size: 1.4rem; } .cell { border-radius: 12px;} #gameStats { font-size: 0.9rem;} .stat .value { font-size: 1.1rem;} .action-buttons { flex-wrap: wrap; } .btn { font-size: 0.9rem; padding: 8px 16px; } .ad-top { min-height: 50px; } .control-group, .emoji-group { min-width: 100px; padding: 6px 8px 4px 8px; } h1 { font-size: 1.8rem; } }
     @media (max-width: 400px) { .game-container { padding: 10px 1vw 8px 1vw;} h1 { font-size: 1.6rem; } .board-3 { grid-template-columns: repeat(3, 60px); grid-template-rows: repeat(3, 60px);} .board-4 { grid-template-columns: repeat(4, 42px); grid-template-rows: repeat(4, 42px);} .board-5 { grid-template-columns: repeat(5, 34px); grid-template-rows: repeat(5, 34px);} .board-3 .cell .emoji-appear { font-size: 2rem; } .board-4 .cell .emoji-appear { font-size: 1.5rem; } .board-5 .cell .emoji-appear { font-size: 1.2rem; } .control-group, .emoji-group { min-width: 90px; flex: 1 1 90px; } .control-group label, .emoji-group label { font-size: 0.75rem; } select { font-size: 0.85rem; } .emoji-select { font-size: 1.2rem; } .utility-buttons { gap: 10px; } .icon-btn { width: 35px; height: 35px; } .icon-btn i { font-size: 1rem; } }
-
   </style>
 </head>
 <body>
@@ -268,8 +290,36 @@
         <label for="player1Emoji">Player 1</label>
         <select id="player1Emoji" class="emoji-select">
           <!-- Final Curated Emojis (30 total) -->
-          <option>X</option><option>👑</option><option>🦁</option><option>🐉</option><option>🦅</option><option>☀️</option><option>🔥</option><option>💎</option><option>⚔️</option><option>🧙</option><option>🐺</option><option>🎯</option><option>⚡</option><option>🔑</option><option>🎩</option>
-          <option>🦊</option><option>👻</option><option>💯</option><option>🏆</option><option>🥇</option><option>🚀</option><option>⭐</option><option>😎</option><option>😇</option><option>💪</option><option>💡</option><option>💰</option><option>🎁</option><option>🎉</option><option>✅</option>
+          <option>X</option>     <!-- Default -->
+          <option>👑</option>     <!-- Royalty: Crown -->
+          <option>🦁</option>     <!-- Animal: Lion -->
+          <option>🐉</option>     <!-- Monster: Dragon -->
+          <option>🦅</option>     <!-- Bird: Eagle -->
+          <option>☀️</option>     <!-- Fun: Sun -->
+          <option>🔥</option>     <!-- Fun: Fire -->
+          <option>💎</option>     <!-- Fun: Gem -->
+          <option>⚔️</option>     <!-- Fun: Swords -->
+          <option>🧙</option>     <!-- Royalty/Wizard -->
+          <option>🐺</option>     <!-- Animal: Wolf -->
+          <option>🎯</option>     <!-- Fun: Target -->
+          <option>⚡</option>     <!-- Fun: Lightning -->
+          <option>🔑</option>     <!-- Fun: Key -->
+          <option>🎩</option>     <!-- Fun: Top Hat -->
+          <option>🦊</option>     <!-- Animal: Fox -->
+          <option>👻</option>     <!-- Ghost -->
+          <option>💯</option>     <!-- Fun: 100 -->
+          <option>🏆</option>     <!-- Fun: Trophy -->
+          <option>🥇</option>     <!-- Fun: Medal -->
+          <option>🚀</option>     <!-- Fun: Rocket -->
+          <option>⭐</option>     <!-- Fun: Star -->
+          <option>😎</option>     <!-- Fun: Cool Face -->
+          <option>😇</option>     <!-- Fun: Angel -->
+          <option>💪</option>     <!-- Fun: Muscle -->
+          <option>💡</option>     <!-- Fun: Idea -->
+          <option>💰</option>     <!-- Fun: Money Bag -->
+          <option>🎁</option>     <!-- Fun: Gift -->
+          <option>🎉</option>     <!-- Fun: Party Popper -->
+          <option>✅</option>     <!-- Fun: Check Mark -->
         </select>
       </div>
       <!-- Player 2 Emoji Selector -->
@@ -277,8 +327,36 @@
         <label for="player2Emoji">Player 2</label>
         <select id="player2Emoji" class="emoji-select">
           <!-- Final Curated Emojis (30 total) -->
-          <option>O</option><option>👸</option><option>🐼</option><option>🐙</option><option>🦉</option><option>🌙</option><option>💧</option><option>✨</option><option>🛡️</option><option>🧚</option><option>🦄</option><option>🧩</option><option>🌀</option><option>⏳</option><option>🎭</option>
-          <option>👽</option><option>🦢</option><option>💔</option><option>❤️‍🔥</option><option>🥈</option><option>🛸</option><option>💮</option><option>🥶</option><option>😈</option><option>👎</option><option>❓</option><option>❌</option><option>🕹️</option><option>💣</option><option>🏁</option>
+          <option>O</option>       <!-- Default -->
+          <option>👸</option>     <!-- Royalty: Princess -->
+          <option>🐼</option>     <!-- Animal: Panda -->
+          <option>🐙</option>     <!-- Monster: Octopus -->
+          <option>🦉</option>     <!-- Bird: Owl -->
+          <option>🌙</option>     <!-- Fun: Moon -->
+          <option>💧</option>     <!-- Fun: Water Drop -->
+          <option>✨</option>     <!-- Fun: Sparkles -->
+          <option>🛡️</option>     <!-- Fun: Shield -->
+          <option>🧚</option>     <!-- Royalty/Fairy -->
+          <option>🦄</option>     <!-- Animal: Unicorn -->
+          <option>🧩</option>     <!-- Fun: Puzzle Piece -->
+          <option>🌀</option>     <!-- Fun: Cyclone -->
+          <option>⏳</option>     <!-- Fun: Hourglass -->
+          <option>🎭</option>     <!-- Fun: Masks -->
+          <option>👽</option>     <!-- Ghost/Alien -->
+          <option>🦢</option>     <!-- Bird: Swan -->
+          <option>💔</option>     <!-- Fun: Broken Heart -->
+          <option>❤️‍🔥</option> <!-- Fun: Heart on Fire -->
+          <option>🥈</option>     <!-- Fun: Silver Medal -->
+          <option>🛸</option>     <!-- Fun: UFO -->
+          <option>💮</option>     <!-- Fun: White Flower -->
+          <option>🥶</option>     <!-- Fun: Cold Face -->
+          <option>😈</option>     <!-- Fun: Devil -->
+          <option>👎</option>     <!-- Fun: Thumbs Down -->
+          <option>❓</option>     <!-- Fun: Question Mark -->
+          <option>❌</option>     <!-- Fun: Cross Mark -->
+          <option>🕹️</option>     <!-- Fun: Joystick -->
+          <option>💣</option>     <!-- Fun: Bomb -->
+          <option>🏁</option>     <!-- Fun: Checkered Flag -->
         </select>
       </div>
     </div>
@@ -319,10 +397,58 @@
   <!-- Sticky Side Ad -->
   <div class="ad-container ad-sticky" data-ad-size="160×600"><div id="adsterra-sticky-banner"><img src="https://via.placeholder.com/160x600?text=Advertisement" alt="Advertisement"></div></div>
 
-  <!-- Modals (Content unchanged, collapsed) -->
-  <div id="howToPlayModal" class="modal"> <div class="modal-content"> <!-- How to Play Content --> </div> </div>
-  <div id="premiumFeatureModal" class="modal"> <div class="modal-content"> <!-- Premium Unlock Content --> </div> </div>
-  <div id="interstitialModal" class="modal"> <div class="modal-content"> <!-- Interstitial Ad Content --> </div> </div>
+  <!-- Modals -->
+  <div id="howToPlayModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">How to Play</h2>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Welcome to Tic Tac Toe Deluxe! Here's how to play:</p>
+        <ol>
+          <li>Players take turns placing their mark (X or O) on the grid</li>
+          <li>The first player to get 3 (or more for larger grids) of their marks in a row wins</li>
+          <li>A row can be horizontal, vertical, or diagonal</li>
+          <li>If all cells are filled and no player has won, the game is a draw</li>
+        </ol>
+        <h3>Features</h3>
+        <ul>
+          <li>Change grid size to 3×3, 4×4, or 5×5 (premium)</li>
+          <li>Play against a friend or the computer AI</li>
+          <li>Select difficulty level when playing against the AI</li>
+          <li>Customize your marks with fun emojis</li>
+          <li>Choose from 15 vibrant themes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div id="premiumFeatureModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Premium Feature</h2>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="premiumFeatureText">Watch an ad to unlock this premium feature for 24 hours!</p>
+        <button id="watchAdBtn" class="btn" data-feature="">Watch Ad</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="interstitialModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Advertisement</h2>
+        <button id="closeAdBtn" class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <img src="https://via.placeholder.com/300x250?text=Interstitial+Ad" alt="Advertisement">
+        <p style="margin-top: 15px; font-size: 0.9rem; color: #777;">Please wait 5 seconds...</p>
+      </div>
+    </div>
+  </div>
 
   <!-- Sound Effects -->
   <audio id="clickSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9c6b84.mp3" preload="auto"></audio>
@@ -338,9 +464,9 @@
     /*   2. DOM Element Caching                         */
     /*   3. Initialization                              */
     /*   4. Event Listeners Setup & Handlers            */
-    /*   5. Core Game Logic (Reset, Move, Win/Draw)   */
+    /*   5. Core Game Logic (Reset, Move, Win/Draw)     */
     /*   6. AI Logic (Strategies by Difficulty)         */
-    /*   7. UI Updates (Board, Labels, Theme, Popups) */
+    /*   7. UI Updates (Board, Labels, Theme, Popups)   */
     /*   8. Sound Control                               */
     /*   9. Premium Features & Ads Handling             */
     /*  10. Utilities & Effects (Share, Celebration)    */
@@ -365,117 +491,970 @@
     /* -------------------------------------------------- */
     /*             2. DOM Element Caching               */
     /* -------------------------------------------------- */
-    // Cache all frequently accessed elements (IDs are assumed unique)
-    const $ = (id) => document.getElementById(id);
-    const $$ = (selector) => document.querySelectorAll(selector);
-
-    const boardElement = $('board'), gridSizeSelect = $('gridSize'), difficultySelect = $('difficulty'), gameModeSelect = $('gameMode'), player1EmojiSelect = $('player1Emoji'), player2EmojiSelect = $('player2Emoji'), newGameBtn = $('newGameBtn'), restartBtn = $('restartBtn'), player1WinsElement = $('player1Wins'), player2WinsElement = $('player2Wins'), drawsElement = $('draws'), colorOptions = $$('.color-option'), p1Label = $('p1Label'), p2Label = $('p2Label'), howToPlayBtn = $('howToPlayBtn'), howToPlayModal = $('howToPlayModal'), premiumFeatureModal = $('premiumFeatureModal'), premiumFeatureText = $('premiumFeatureText'), watchAdBtn = $('watchAdBtn'), interstitialModal = $('interstitialModal');
-    let closeAdBtn = $('closeAdBtn'); // Use 'let' because it's replaced
-    const closeModalBtns = $$('.close-modal'), shareBtn = $('shareBtn'), darkModeBtn = $('darkModeBtn'), soundToggleBtn = $('soundToggleBtn'), grid5x5Ad = $('grid5x5-ad'), hardModeAd = $('hardMode-ad'), unlock5x5Btn = $('unlock5x5Btn'), unlockHardBtn = $('unlockHardBtn'), clickSound = $('clickSound'), winSound = $('winSound'), drawSound = $('drawSound'), allSounds = [clickSound, winSound, drawSound];
+    // Cache all frequently accessed elements
+    const boardElement = document.getElementById('board');
+    const gridSizeSelect = document.getElementById('gridSize');
+    const difficultySelect = document.getElementById('difficulty');
+    const gameModeSelect = document.getElementById('gameMode');
+    const player1EmojiSelect = document.getElementById('player1Emoji');
+    const player2EmojiSelect = document.getElementById('player2Emoji');
+    const newGameBtn = document.getElementById('newGameBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const player1WinsElement = document.getElementById('player1Wins');
+    const player2WinsElement = document.getElementById('player2Wins');
+    const drawsElement = document.getElementById('draws');
+    const colorOptions = document.querySelectorAll('.color-option');
+    const p1Label = document.getElementById('p1Label');
+    const p2Label = document.getElementById('p2Label');
+    const howToPlayBtn = document.getElementById('howToPlayBtn');
+    const howToPlayModal = document.getElementById('howToPlayModal');
+    const premiumFeatureModal = document.getElementById('premiumFeatureModal');
+    const premiumFeatureText = document.getElementById('premiumFeatureText');
+    const watchAdBtn = document.getElementById('watchAdBtn');
+    const interstitialModal = document.getElementById('interstitialModal');
+    let closeAdBtn = document.getElementById('closeAdBtn'); // 'let' for replacement
+    const closeModalBtns = document.querySelectorAll('.close-modal');
+    const shareBtn = document.getElementById('shareBtn');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    const grid5x5Ad = document.getElementById('grid5x5-ad');
+    const hardModeAd = document.getElementById('hardMode-ad');
+    const unlock5x5Btn = document.getElementById('unlock5x5Btn');
+    const unlockHardBtn = document.getElementById('unlockHardBtn');
+    const clickSound = document.getElementById('clickSound');
+    const winSound = document.getElementById('winSound');
+    const drawSound = document.getElementById('drawSound');
+    const allSounds = [clickSound, winSound, drawSound];
 
     /* -------------------------------------------------- */
     /*                3. Initialization                 */
     /* -------------------------------------------------- */
     document.addEventListener('DOMContentLoaded', initializeGame);
 
-    /** Initializes the game on page load */
     function initializeGame() {
-        applyThemeColorBasedOnSelection(); loadPreferences(); checkPremiumFeatures();
-        setupEventListeners(); updateEmojiLabels(); resetGame(); updatePremiumUI();
-        showRelevantPremiumAds(); initializeAds(); console.log("Game Ready!");
+        applyThemeColorBasedOnSelection();
+        loadPreferences();
+        checkPremiumFeatures();
+        setupEventListeners();
+        updateEmojiLabels();
+        resetGame();
+        updatePremiumUI();
+        showRelevantPremiumAds();
+        initializeAds();
+        console.log("Game Ready!");
     }
-    /** Applies theme based on initially selected color */
-    function applyThemeColorBasedOnSelection() { const s = document.querySelector('.color-option.selected') || document.querySelector('.color-option'); if(s){ applyThemeColor(s.getAttribute('data-color'), s.getAttribute('data-rgb')); s.classList.add('selected'); }}
-    /** Loads saved preferences (e.g., mute) */
-    function loadPreferences() { isMuted = localStorage.getItem('ticTacToeMuted') === 'true'; updateSoundButtonIcon(); }
+
+    function applyThemeColorBasedOnSelection() {
+        const selected = document.querySelector('.color-option.selected') || document.querySelector('.color-option');
+        if (selected) {
+            applyThemeColor(selected.getAttribute('data-color'), selected.getAttribute('data-rgb'));
+            selected.classList.add('selected');
+        }
+    }
+
+    function loadPreferences() {
+        isMuted = localStorage.getItem('ticTacToeMuted') === 'true';
+        updateSoundButtonIcon();
+    }
 
     /* -------------------------------------------------- */
     /*          4. Event Listeners Setup & Handlers       */
     /* -------------------------------------------------- */
-    /** Attaches all event listeners */
     function setupEventListeners() {
-        gridSizeSelect.addEventListener('change',handleGridSizeChange); difficultySelect.addEventListener('change',handleDifficultyChange); gameModeSelect.addEventListener('change',handleGameModeChange); player1EmojiSelect.addEventListener('change',handleEmojiChange); player2EmojiSelect.addEventListener('change',handleEmojiChange); colorOptions.forEach(o=>o.addEventListener('click',()=>handleThemeChange(o)));
-        newGameBtn.addEventListener('click',resetGame); restartBtn.addEventListener('click',handleRestartClick); howToPlayBtn.addEventListener('click',()=>toggleModal(howToPlayModal, true)); darkModeBtn.addEventListener('click',toggleDarkMode); shareBtn.addEventListener('click',shareGame); soundToggleBtn.addEventListener('click',toggleSound);
-        unlock5x5Btn.addEventListener('click',()=>showPremiumFeatureModal('grid5x5')); unlockHardBtn.addEventListener('click',()=>showPremiumFeatureModal('hardMode')); watchAdBtn.addEventListener('click',simulateWatchingAd);
-        closeModalBtns.forEach(b=>b.addEventListener('click',closeAllModals)); $$('.modal').forEach(m=>m.addEventListener('click',(e)=>{if(e.target===m)closeAllModals();}));
-        boardElement.addEventListener('mousedown',unlockAudioContext,{once:true}); boardElement.addEventListener('touchstart',unlockAudioContext,{once:true}); boardElement.addEventListener('click',handleCellClick);
-        setInterval(checkPremiumFeatures, 300000); // Check premium every 5 mins
+        gridSizeSelect.addEventListener('change', handleGridSizeChange);
+        difficultySelect.addEventListener('change', handleDifficultyChange);
+        gameModeSelect.addEventListener('change', handleGameModeChange);
+        player1EmojiSelect.addEventListener('change', handleEmojiChange);
+        player2EmojiSelect.addEventListener('change', handleEmojiChange);
+        colorOptions.forEach(option => option.addEventListener('click', () => handleThemeChange(option)));
+        newGameBtn.addEventListener('click', resetGame);
+        restartBtn.addEventListener('click', handleRestartClick);
+        howToPlayBtn.addEventListener('click', () => toggleModal(howToPlayModal, true));
+        darkModeBtn.addEventListener('click', toggleDarkMode);
+        shareBtn.addEventListener('click', shareGame);
+        soundToggleBtn.addEventListener('click', toggleSound);
+        unlock5x5Btn.addEventListener('click', () => showPremiumFeatureModal('grid5x5'));
+        unlockHardBtn.addEventListener('click', () => showPremiumFeatureModal('hardMode'));
+        watchAdBtn.addEventListener('click', simulateWatchingAd);
+        closeModalBtns.forEach(btn => btn.addEventListener('click', closeAllModals));
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeAllModals();
+            });
+        });
+        
+        // Fast unlock audio context
+        boardElement.addEventListener('mousedown', unlockAudioContext, {once: true});
+        boardElement.addEventListener('touchstart', unlockAudioContext, {once: true});
+        
+        // Direct event listener on board for better performance
+        boardElement.addEventListener('click', handleCellClick);
+        
+        // Periodically check premium features
+        setInterval(checkPremiumFeatures, 300000); // Every 5 minutes
     }
-    // --- Event Handlers ---
-    function handleGridSizeChange(e){const s=parseInt(e.target.value);if(s===5&&!premiumFeatures.grid5x5){e.preventDefault();setTimeout(()=>gridSizeSelect.value=gridSize,0);showPremiumFeatureModal('grid5x5');return;}gridSize=s;winningLength=s;resetBoard();showRelevantPremiumAds();}
-    function handleDifficultyChange(e){const d=e.target.value;if(d==='hard'&&!premiumFeatures.hardMode){e.preventDefault();setTimeout(()=>difficultySelect.value=difficulty,0);showPremiumFeatureModal('hardMode');return;}difficulty=d;if(gameMode==='PvC')resetBoard();showRelevantPremiumAds();}
-    function handleGameModeChange(){gameMode=gameModeSelect.value;resetBoard();showRelevantPremiumAds();}
-    function handleEmojiChange(){updateEmojiLabels();resetBoard();}
-    function handleRestartClick(){gamePlayCount++;if(gamePlayCount>1&&gamePlayCount%interstitialAdFrequency===0)showInterstitialAd(resetBoard);else resetBoard();}
-    function handleCellClick(e){unlockAudioContext();const c=e.target.closest('.cell');if(c&&gameActive){const r=parseInt(c.getAttribute('data-row')),col=parseInt(c.getAttribute('data-col'));if(!isNaN(r)&&!isNaN(col)&&gameBoard[r][col]===0)makeMove(r,col);}}
-    function handleThemeChange(opt){colorOptions.forEach(o=>o.classList.remove('selected'));opt.classList.add('selected');applyThemeColor(opt.getAttribute('data-color'),opt.getAttribute('data-rgb'));}
+
+    // --- Event Handlers (Optimized) ---
+    function handleGridSizeChange(e) {
+        const size = parseInt(e.target.value);
+        if (size === 5 && !premiumFeatures.grid5x5) {
+            e.preventDefault();
+            setTimeout(() => gridSizeSelect.value = gridSize, 0);
+            showPremiumFeatureModal('grid5x5');
+            return;
+        }
+        gridSize = size;
+        winningLength = size;
+        resetBoard();
+        showRelevantPremiumAds();
+    }
+
+    function handleDifficultyChange(e) {
+        const diff = e.target.value;
+        if (diff === 'hard' && !premiumFeatures.hardMode) {
+            e.preventDefault();
+            setTimeout(() => difficultySelect.value = difficulty, 0);
+            showPremiumFeatureModal('hardMode');
+            return;
+        }
+        difficulty = diff;
+        if (gameMode === 'PvC') resetBoard();
+        showRelevantPremiumAds();
+    }
+
+    function handleGameModeChange() {
+        gameMode = gameModeSelect.value;
+        resetBoard();
+        showRelevantPremiumAds();
+    }
+
+    function handleEmojiChange() {
+        updateEmojiLabels();
+        resetBoard();
+    }
+
+    function handleRestartClick() {
+        gamePlayCount++;
+        if (gamePlayCount > 1 && gamePlayCount % interstitialAdFrequency === 0) {
+            showInterstitialAd(resetBoard);
+        } else {
+            resetBoard();
+        }
+    }
+
+    function handleCellClick(e) {
+        unlockAudioContext();
+        const cell = e.target.closest('.cell');
+        if (cell && gameActive) {
+            const row = parseInt(cell.getAttribute('data-row'));
+            const col = parseInt(cell.getAttribute('data-col'));
+            if (!isNaN(row) && !isNaN(col) && gameBoard[row][col] === 0) {
+                makeMove(row, col);
+            }
+        }
+    }
+
+    function handleThemeChange(option) {
+        colorOptions.forEach(o => o.classList.remove('selected'));
+        option.classList.add('selected');
+        applyThemeColor(option.getAttribute('data-color'), option.getAttribute('data-rgb'));
+    }
 
     /* -------------------------------------------------- */
     /*          5. Core Game Logic (Reset, Move, Win/Draw) */
     /* -------------------------------------------------- */
-    function resetGame(){console.log("New Game");currentPlayer=(lastWinner>0&&stats.player1Wins+stats.player2Wins+stats.draws>0)?lastWinner:1;stats={player1Wins:0,player2Wins:0,draws:0};updateStatsDisplay();gamePlayCount=0;resetBoard();}
-    function resetBoard(){console.log(`Reset ${gridSize}x${gridSize}`);gameActive=true;boardElement.innerHTML='';boardElement.className=`board board-${gridSize}`;gameBoard=Array(gridSize).fill(null).map(()=>Array(gridSize).fill(0));gameBoardEmojis=Array(gridSize).fill(null).map(()=>Array(gridSize).fill(''));for(let r=0;r<gridSize;r++)for(let c=0;c<gridSize;c++){const l=document.createElement('div');l.className='cell';l.setAttribute('data-row',r);l.setAttribute('data-col',c);boardElement.appendChild(l);}currentPlayer=lastWinner>0?lastWinner:1;if(currentPlayer===2&&gameMode==='PvC'&&gameActive)setTimeout(makeComputerMove,550);}
-    function makeMove(r,c){if(gameBoard[r][c]!==0||!gameActive)return;playSound(clickSound);const e=currentPlayer===1?player1EmojiSelect.value:player2EmojiSelect.value;gameBoard[r][c]=currentPlayer;gameBoardEmojis[r][c]=e;updateCellDisplay(r,c,e);const wL=checkWin(r,c);if(wL){console.log(`P${currentPlayer} Wins`);gameActive=false;lastWinner=currentPlayer;highlightWinningCells(wL);updateScore(currentPlayer);playSound(winSound);showWinnerPopup(currentPlayer===1?"P1":"P2",e);return;}if(checkDraw()){console.log("Draw");gameActive=false;lastWinner=0;updateScore(0);playSound(drawSound);showDrawPopup();return;}currentPlayer=currentPlayer===1?2:1;if(currentPlayer===2&&gameMode==='PvC'&&gameActive)setTimeout(makeComputerMove,600);}
-    function checkWin(r,c){const p=gameBoard[r][c],e=gameBoardEmojis[r][c];if(p===0)return null;const D=[{dr:0,dc:1},{dr:1,dc:0},{dr:1,dc:1},{dr:1,dc:-1}];for(const{dr,dc}of D){let l=[{row:r,col:c}];for(let i=1;i<winningLength;i++){const nr=r+dr*i,nc=c+dc*i;if(isValidCell(nr,nc)&&gameBoard[nr][nc]===p&&gameBoardEmojis[nr][nc]===e)l.push({row:nr,col:nc});else break;}for(let i=1;i<winningLength;i++){const nr=r-dr*i,nc=c-dc*i;if(isValidCell(nr,nc)&&gameBoard[nr][nc]===p&&gameBoardEmojis[nr][nc]===e)l.push({row:nr,col:nc});else break;}if(l.length>=winningLength){const s=findExactWinningSequence(l,p,e,dr,dc);if(s)return s;}}return null;}
-    function isValidCell(r,c){return r>=0&&r<gridSize&&c>=0&&c<gridSize;}
-    function findExactWinningSequence(l,p,e,dr,dc){if(l.length<winningLength)return null;if(dr===1&&dc===-1)l.sort((a,b)=>b.row-a.row||a.col-b.col);else l.sort((a,b)=>a.row-b.row||a.col-b.col);for(let i=0;i<=l.length-winningLength;i++){const s=l.slice(i,i+winningLength);let cons=true;for(let j=0;j<winningLength-1;j++){if(Math.abs(s[j].row-s[j+1].row)!==Math.abs(dr)||Math.abs(s[j].col-s[j+1].col)!==Math.abs(dc)){cons=false;break;}}if(cons&&s.every(cell=>gameBoard[cell.row][cell.col]===p&&gameBoardEmojis[cell.row][cell.col]===e))return s;}return null;}
-    function checkDraw(){return gameBoard.flat().every(cell=>cell!==0);}
+    function resetGame() {
+        console.log("New Game");
+        currentPlayer = (lastWinner > 0 && stats.player1Wins + stats.player2Wins + stats.draws > 0) ? lastWinner : 1;
+        stats = {player1Wins: 0, player2Wins: 0, draws: 0};
+        updateStatsDisplay();
+        gamePlayCount = 0;
+        resetBoard();
+    }
+
+    function resetBoard() {
+        console.log(`Reset Board ${gridSize}x${gridSize}`);
+        gameActive = true;
+        boardElement.innerHTML = '';
+        boardElement.className = `board board-${gridSize}`;
+        
+        // Initialize board arrays efficiently
+        gameBoard = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
+        gameBoardEmojis = Array(gridSize).fill().map(() => Array(gridSize).fill(''));
+        
+        // Create board cells with a DocumentFragment for better performance
+        const fragment = document.createDocumentFragment();
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.setAttribute('data-row', row);
+                cell.setAttribute('data-col', col);
+                fragment.appendChild(cell);
+            }
+        }
+        boardElement.appendChild(fragment);
+        
+        currentPlayer = lastWinner > 0 ? lastWinner : 1;
+        
+        // Make computer move if necessary
+        if (currentPlayer === 2 && gameMode === 'PvC' && gameActive) {
+            setTimeout(makeComputerMove, 300);
+        }
+    }
+
+    function makeMove(row, col) {
+        if (gameBoard[row][col] !== 0 || !gameActive) return;
+        
+        playSound(clickSound);
+        
+        const emoji = currentPlayer === 1 ? player1EmojiSelect.value : player2EmojiSelect.value;
+        gameBoard[row][col] = currentPlayer;
+        gameBoardEmojis[row][col] = emoji;
+        
+        // Immediate UI update for better UX
+        updateCellDisplay(row, col, emoji);
+        
+        const winningLine = checkWin(row, col);
+        if (winningLine) {
+            console.log(`P${currentPlayer} Wins`);
+            gameActive = false;
+            lastWinner = currentPlayer;
+            highlightWinningCells(winningLine);
+            updateScore(currentPlayer);
+            playSound(winSound);
+            showWinnerPopup(currentPlayer === 1 ? "P1" : "P2", emoji);
+            return;
+        }
+        
+        if (checkDraw()) {
+            console.log("Draw");
+            gameActive = false;
+            lastWinner = 0;
+            updateScore(0);
+            playSound(drawSound);
+            showDrawPopup();
+            return;
+        }
+        
+        currentPlayer = currentPlayer === 1 ? 2 : 1;
+        
+        if (currentPlayer === 2 && gameMode === 'PvC' && gameActive) {
+            setTimeout(makeComputerMove, 500);
+        }
+    }
+
+    function checkWin(row, col) {
+        const player = gameBoard[row][col];
+        const playerEmoji = gameBoardEmojis[row][col];
+        
+        if (player === 0) return null;
+        
+        // Check in all 4 directions: horizontal, vertical, diagonal, anti-diagonal
+        const directions = [
+            {dr: 0, dc: 1}, // horizontal
+            {dr: 1, dc: 0}, // vertical
+            {dr: 1, dc: 1}, // diagonal
+            {dr: 1, dc: -1} // anti-diagonal
+        ];
+        
+        for (const {dr, dc} of directions) {
+            let line = [{row: row, col: col}];
+            
+            // Check in positive direction
+            for (let i = 1; i < winningLength; i++) {
+                const newRow = row + dr * i;
+                const newCol = col + dc * i;
+                if (isValidCell(newRow, newCol) && gameBoard[newRow][newCol] === player && gameBoardEmojis[newRow][newCol] === playerEmoji) {
+                    line.push({row: newRow, col: newCol});
+                } else {
+                    break;
+                }
+            }
+            
+            // Check in negative direction
+            for (let i = 1; i < winningLength; i++) {
+                const newRow = row - dr * i;
+                const newCol = col - dc * i;
+                if (isValidCell(newRow, newCol) && gameBoard[newRow][newCol] === player && gameBoardEmojis[newRow][newCol] === playerEmoji) {
+                    line.push({row: newRow, col: newCol});
+                } else {
+                    break;
+                }
+            }
+            
+            if (line.length >= winningLength) {
+                const sequence = findExactWinningSequence(line, player, playerEmoji, dr, dc);
+                if (sequence) return sequence;
+            }
+        }
+        
+        return null;
+    }
+
+    function isValidCell(row, col) {
+        return row >= 0 && row < gridSize && col >= 0 && col < gridSize;
+    }
+
+    function findExactWinningSequence(line, player, emoji, dr, dc) {
+        if (line.length < winningLength) return null;
+        
+        // Sort cells based on direction
+        if (dr === 1 && dc === -1) {
+            line.sort((a, b) => b.row - a.row || a.col - b.col);
+        } else {
+            line.sort((a, b) => a.row - b.row || a.col - b.col);
+        }
+        
+        // Find consecutive sequences
+        for (let i = 0; i <= line.length - winningLength; i++) {
+            const sequence = line.slice(i, i + winningLength);
+            let consecutive = true;
+            
+            for (let j = 0; j < winningLength - 1; j++) {
+                if (Math.abs(sequence[j].row - sequence[j+1].row) !== Math.abs(dr) || 
+                    Math.abs(sequence[j].col - sequence[j+1].col) !== Math.abs(dc)) {
+                    consecutive = false;
+                    break;
+                }
+            }
+            
+            if (consecutive && sequence.every(cell => 
+                gameBoard[cell.row][cell.col] === player && 
+                gameBoardEmojis[cell.row][cell.col] === emoji)) {
+                return sequence;
+            }
+        }
+        
+        return null;
+    }
+
+    function checkDraw() {
+        return gameBoard.flat().every(cell => cell !== 0);
+    }
 
     /* -------------------------------------------------- */
     /*             6. AI Logic (Strategies)             */
     /* -------------------------------------------------- */
-    function makeComputerMove(){if(!gameActive)return;console.log(`AI(${difficulty}) thinking...`);let m;if(difficulty==='hard'&&premiumFeatures.hardMode)m=findBestMoveMinimaxStyle();else if(difficulty==='medium')m=findBetterStrategicMove();else m=findBasicOffensiveDefensiveMove();if(!m)m=findRandomMove();if(m&&isValidCell(m.row,m.col)&&gameBoard[m.row][m.col]===0)makeMove(m.row,m.col);else{const fb=findRandomMove();if(fb)makeMove(fb.row,fb.col);else console.error("AI Error: No move found.");}}
-    function findRandomMove(){const e=[];for(let r=0;r<gridSize;r++)for(let c=0;c<gridSize;c++)if(gameBoard[r][c]===0)e.push({row:r,col:c});return e.length>0?e[Math.floor(Math.random()*e.length)]:null;}
-    function findWinningMoveForPlayer(p){for(let r=0;r<gridSize;r++)for(let c=0;c<gridSize;c++)if(gameBoard[r][c]===0){gameBoard[r][c]=p;gameBoardEmojis[r][c]=p===1?player1EmojiSelect.value:player2EmojiSelect.value;const win=checkWin(r,c);gameBoard[r][c]=0;gameBoardEmojis[r][c]='';if(win)return{row:r,col:c};}return null;}
-    function findBasicOffensiveDefensiveMove(){const w=findWinningMoveForPlayer(2);if(w)return w;const b=findWinningMoveForPlayer(1);if(b)return b;return findRandomMove();}
-    function findBetterStrategicMove(){const w=findWinningMoveForPlayer(2);if(w)return w;const b=findWinningMoveForPlayer(1);if(b)return b;const cn=Math.floor(gridSize/2);if(isValidCell(cn,cn)&&gameBoard[cn][cn]===0)return{row:cn,col:cn};const co=[{r:0,c:0},{r:0,c:gridSize-1},{r:gridSize-1,c:0},{r:gridSize-1,c:gridSize-1}];const ec=co.filter(p=>isValidCell(p.r,p.c)&&gameBoard[p.r][p.c]===0);if(ec.length>0)return ec[Math.floor(Math.random()*ec.length)];return findRandomMove();}
-    function findBestMoveMinimaxStyle(){const w=findWinningMoveForPlayer(2);if(w)return w;const b=findWinningMoveForPlayer(1);if(b)return b;const cn=Math.floor(gridSize/2);if(isValidCell(cn,cn)&&gameBoard[cn][cn]===0)return{row:cn,col:cn};const co=[{r:0,c:0},{r:0,c:gridSize-1},{r:gridSize-1,c:0},{r:gridSize-1,c:gridSize-1}];const ec=co.filter(p=>isValidCell(p.r,p.c)&&gameBoard[p.r][p.c]===0);if(ec.length>0)return ec[Math.floor(Math.random()*ec.length)];return findRandomMove();}
+    function makeComputerMove() {
+        if (!gameActive) return;
+        
+        console.log(`AI(${difficulty}) thinking...`);
+        let move;
+        
+        // Select move based on difficulty
+        if (difficulty === 'hard' && premiumFeatures.hardMode) {
+            move = findBestMoveMinimaxStyle();
+        } else if (difficulty === 'medium') {
+            move = findBetterStrategicMove();
+        } else {
+            move = findBasicOffensiveDefensiveMove();
+        }
+        
+        // Fallback to random if no move found
+        if (!move) {
+            move = findRandomMove();
+        }
+        
+        // Execute the move
+        if (move && isValidCell(move.row, move.col) && gameBoard[move.row][move.col] === 0) {
+            makeMove(move.row, move.col);
+        } else {
+            // Emergency fallback
+            const fallback = findRandomMove();
+            if (fallback) {
+                makeMove(fallback.row, fallback.col);
+            } else {
+                console.error("AI Error: No move found.");
+            }
+        }
+    }
+
+    function findRandomMove() {
+        const emptyCells = [];
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                if (gameBoard[row][col] === 0) {
+                    emptyCells.push({row, col});
+                }
+            }
+        }
+        return emptyCells.length > 0 ? emptyCells[Math.floor(Math.random() * emptyCells.length)] : null;
+    }
+
+    function findWinningMoveForPlayer(player) {
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                if (gameBoard[row][col] === 0) {
+                    // Try this move
+                    gameBoard[row][col] = player;
+                    gameBoardEmojis[row][col] = player === 1 ? player1EmojiSelect.value : player2EmojiSelect.value;
+                    
+                    const win = checkWin(row, col);
+                    
+                    // Undo move
+                    gameBoard[row][col] = 0;
+                    gameBoardEmojis[row][col] = '';
+                    
+                    if (win) {
+                        return {row, col};
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    function findBasicOffensiveDefensiveMove() {
+        // Try to win
+        const winningMove = findWinningMoveForPlayer(2);
+        if (winningMove) return winningMove;
+        
+        // Block opponent's win
+        const blockingMove = findWinningMoveForPlayer(1);
+        if (blockingMove) return blockingMove;
+        
+        // Random if no strategic move
+        return findRandomMove();
+    }
+
+    function findBetterStrategicMove() {
+        // Try to win
+        const winningMove = findWinningMoveForPlayer(2);
+        if (winningMove) return winningMove;
+        
+        // Block opponent's win
+        const blockingMove = findWinningMoveForPlayer(1);
+        if (blockingMove) return blockingMove;
+        
+        // Take center if available
+        const center = Math.floor(gridSize/2);
+        if (isValidCell(center, center) && gameBoard[center][center] === 0) {
+            return {row: center, col: center};
+        }
+        
+        // Take corners if available
+        const corners = [
+            {r: 0, c: 0},
+            {r: 0, c: gridSize-1},
+            {r: gridSize-1, c: 0},
+            {r: gridSize-1, c: gridSize-1}
+        ];
+        
+        const emptyCorners = corners.filter(pos => 
+            isValidCell(pos.r, pos.c) && gameBoard[pos.r][pos.c] === 0
+        );
+        
+        if (emptyCorners.length > 0) {
+            return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
+        }
+        
+        // Random if no strategic move
+        return findRandomMove();
+    }
+
+    function findBestMoveMinimaxStyle() {
+        // This is a simplified version of minimax for better performance
+        // Try to win
+        const winningMove = findWinningMoveForPlayer(2);
+        if (winningMove) return winningMove;
+        
+        // Block opponent's win
+        const blockingMove = findWinningMoveForPlayer(1);
+        if (blockingMove) return blockingMove;
+        
+        // Take center if available
+        const center = Math.floor(gridSize/2);
+        if (isValidCell(center, center) && gameBoard[center][center] === 0) {
+            return {row: center, col: center};
+        }
+        
+        // Take corners if available
+        const corners = [
+            {r: 0, c: 0},
+            {r: 0, c: gridSize-1},
+            {r: gridSize-1, c: 0},
+            {r: gridSize-1, c: gridSize-1}
+        ];
+        
+        const emptyCorners = corners.filter(pos => 
+            isValidCell(pos.r, pos.c) && gameBoard[pos.r][pos.c] === 0
+        );
+        
+        if (emptyCorners.length > 0) {
+            return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
+        }
+        
+        // Random if no strategic move
+        return findRandomMove();
+    }
 
     /* -------------------------------------------------- */
     /*        7. UI Updates (Board, Labels, Theme)      */
     /* -------------------------------------------------- */
-    function updateCellDisplay(r,c,e){const l=boardElement.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);if(l){l.innerHTML='';const s=document.createElement('span');s.className='emoji-appear';s.textContent=e;l.appendChild(s);}}
-    function highlightWinningCells(c){if(!c)return;c.forEach(l=>{const e=boardElement.querySelector(`.cell[data-row="${l.row}"][data-col="${l.col}"]`);if(e)e.classList.add('winner');});}
-    function updateEmojiLabels(){p1Label.textContent=`${player1EmojiSelect.value} P1`;p2Label.textContent=`${player2EmojiSelect.value} P2`;}
-    function updateStatsDisplay(){player1WinsElement.textContent=stats.player1Wins;player2WinsElement.textContent=stats.player2Wins;drawsElement.textContent=stats.draws;}
-    function updateScore(w){if(w===1)stats.player1Wins++;else if(w===2)stats.player2Wins++;else if(w===0)stats.draws++;updateStatsDisplay();}
-    function applyThemeColor(c,r){document.documentElement.style.setProperty('--main-color',c);document.documentElement.style.setProperty('--main-color-rgb',r);}
-    function toggleDarkMode(){document.body.classList.toggle('dark-mode');isDarkMode=document.body.classList.contains('dark-mode');darkModeBtn.querySelector('i').className=isDarkMode?'ri-sun-line':'ri-moon-line';darkModeBtn.title=isDarkMode?"Light":"Dark";}
-    function showWinnerPopup(n,e){const p=document.createElement('div');p.className=`popup ${isDarkMode?'dark-mode':''}`;p.innerHTML=`<span class="celebrate">🎉</span><div>${e} ${n} Wins!</div>`;document.body.appendChild(p);createPremiumCelebration();setTimeout(()=>p.remove(),3000);}
-    function showDrawPopup(){const p=document.createElement('div');p.className=`popup ${isDarkMode?'dark-mode':''}`;p.innerHTML=`<span class="celebrate">🤝</span><div>It's a Draw!</div>`;document.body.appendChild(p);setTimeout(()=>p.remove(),1600);}
-    function toggleModal(el,show){if(el)el.classList.toggle('active',show);}
-    function closeAllModals(){document.querySelectorAll('.modal.active').forEach(m=>toggleModal(m,false));}
-    function showTemporaryNotification(m){const n=document.createElement('div');n.textContent=m;n.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--main-color);color:white;padding:10px 20px;border-radius:8px;z-index:2000;box-shadow:0 4px 15px rgba(0,0,0,0.2);opacity:0;transition:opacity .5s ease,bottom .5s ease;font-family:var(--font-body);font-size:.9rem;';document.body.appendChild(n);setTimeout(()=>{n.style.opacity='1';n.style.bottom='30px';},10);setTimeout(()=>{n.style.opacity='0';n.style.bottom='20px';},3000);setTimeout(()=>{if(n.parentNode)n.remove();},3500);}
+    function updateCellDisplay(row, col, emoji) {
+        const cell = boardElement.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+        if (cell) {
+            // Clear any existing content
+            cell.innerHTML = '';
+            
+            // Create emoji span
+            const span = document.createElement('span');
+            span.className = 'emoji-appear';
+            span.textContent = emoji;
+            
+            // Add to cell
+            cell.appendChild(span);
+        }
+    }
+
+    function highlightWinningCells(cells) {
+        if (!cells) return;
+        
+        cells.forEach(cell => {
+            const element = boardElement.querySelector(`.cell[data-row="${cell.row}"][data-col="${cell.col}"]`);
+            if (element) {
+                element.classList.add('winner');
+            }
+        });
+    }
+
+    function updateEmojiLabels() {
+        p1Label.textContent = `${player1EmojiSelect.value} P1`;
+        p2Label.textContent = `${player2EmojiSelect.value} P2`;
+    }
+
+    function updateStatsDisplay() {
+        player1WinsElement.textContent = stats.player1Wins;
+        player2WinsElement.textContent = stats.player2Wins;
+        drawsElement.textContent = stats.draws;
+    }
+
+    function updateScore(winner) {
+        if (winner === 1) {
+            stats.player1Wins++;
+        } else if (winner === 2) {
+            stats.player2Wins++;
+        } else if (winner === 0) {
+            stats.draws++;
+        }
+        updateStatsDisplay();
+    }
+
+    function applyThemeColor(color, rgb) {
+        document.documentElement.style.setProperty('--main-color', color);
+        document.documentElement.style.setProperty('--main-color-rgb', rgb);
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        isDarkMode = document.body.classList.contains('dark-mode');
+        darkModeBtn.querySelector('i').className = isDarkMode ? 'ri-sun-line' : 'ri-moon-line';
+        darkModeBtn.title = isDarkMode ? "Light Mode" : "Dark Mode";
+    }
+
+    function showWinnerPopup(name, emoji) {
+        const popup = document.createElement('div');
+        popup.className = `popup ${isDarkMode ? 'dark-mode' : ''}`;
+        popup.innerHTML = `<span class="celebrate">🎉</span><div>${emoji} ${name} Wins!</div>`;
+        document.body.appendChild(popup);
+        createPremiumCelebration();
+        setTimeout(() => popup.remove(), 3000);
+    }
+
+    function showDrawPopup() {
+        const popup = document.createElement('div');
+        popup.className = `popup ${isDarkMode ? 'dark-mode' : ''}`;
+        popup.innerHTML = `<span class="celebrate">🤝</span><div>It's a Draw!</div>`;
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 1600);
+    }
+
+    function toggleModal(element, show) {
+        if (element) {
+            element.classList.toggle('active', show);
+        }
+    }
+
+    function closeAllModals() {
+        document.querySelectorAll('.modal.active').forEach(modal => toggleModal(modal, false));
+    }
+
+    function showTemporaryNotification(message) {
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--main-color);color:white;padding:10px 20px;border-radius:8px;z-index:2000;box-shadow:0 4px 15px rgba(0,0,0,0.2);opacity:0;transition:opacity .5s ease,bottom .5s ease;font-family:var(--font-body);font-size:.9rem;';
+        document.body.appendChild(notification);
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            notification.style.bottom = '30px';
+        }, 10);
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.bottom = '20px';
+        }, 3000);
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 3500);
+    }
 
     /* -------------------------------------------------- */
     /*                 8. Sound Control                 */
     /* -------------------------------------------------- */
-    function unlockAudioContext(){if(!audioContextUnlocked){console.log("Unlocking audio...");let p=allSounds.map(s=>new Promise((res,rej)=>{if(s&&typeof s.play==='function'){s.volume=0;const pp=s.play();if(pp!==undefined)pp.then(()=>{s.pause();s.currentTime=0;s.volume=1;res(s.id);}).catch(e=>{s.volume=1;rej(e);});else{s.volume=1;res(s.id);}}else res(null);}));Promise.allSettled(p).then(r=>{r.forEach(res=>{if(res.status==='fulfilled'&&res.value)console.log(`Unlocked: ${res.value}`);});});audioContextUnlocked=true;}}
-    function toggleSound(){isMuted=!isMuted;localStorage.setItem('ticTacToeMuted',String(isMuted));updateSoundButtonIcon();}
-    function updateSoundButtonIcon(){const i=soundToggleBtn.querySelector('i');if(isMuted){i.className='ri-volume-mute-line';soundToggleBtn.title="Unmute";}else{i.className='ri-volume-up-line';soundToggleBtn.title="Mute";}}
-    function playSound(a){if(isMuted||!a||typeof a.play!=='function')return;if(!audioContextUnlocked){unlockAudioContext();return;}if(a.readyState>=1){a.currentTime=0;const p=a.play();if(p!==undefined)p.catch(e=>{if(e.name!=='NotAllowedError')a.currentTime=0;});}}
+    function unlockAudioContext() {
+        if (!audioContextUnlocked) {
+            console.log("Unlocking audio...");
+            let promises = allSounds.map(sound => 
+                new Promise((resolve, reject) => {
+                    if (sound && typeof sound.play === 'function') {
+                        sound.volume = 0;
+                        const playPromise = sound.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(() => {
+                                sound.pause();
+                                sound.currentTime = 0;
+                                sound.volume = 1;
+                                resolve(sound.id);
+                            }).catch(err => {
+                                sound.volume = 1;
+                                reject(err);
+                            });
+                        } else {
+                            sound.volume = 1;
+                            resolve(sound.id);
+                        }
+                    } else {
+                        resolve(null);
+                    }
+                })
+            );
+            
+            Promise.allSettled(promises).then(results => {
+                results.forEach(result => {
+                    if (result.status === 'fulfilled' && result.value) {
+                        console.log(`Unlocked: ${result.value}`);
+                    }
+                });
+            });
+            
+            audioContextUnlocked = true;
+        }
+    }
+
+    function toggleSound() {
+        isMuted = !isMuted;
+        localStorage.setItem('ticTacToeMuted', String(isMuted));
+        updateSoundButtonIcon();
+    }
+
+    function updateSoundButtonIcon() {
+        const icon = soundToggleBtn.querySelector('i');
+        if (isMuted) {
+            icon.className = 'ri-volume-mute-line';
+            soundToggleBtn.title = "Unmute";
+        } else {
+            icon.className = 'ri-volume-up-line';
+            soundToggleBtn.title = "Mute";
+        }
+    }
+
+    function playSound(audio) {
+        if (isMuted || !audio || typeof audio.play !== 'function') return;
+        
+        if (!audioContextUnlocked) {
+            unlockAudioContext();
+            return;
+        }
+        
+        if (audio.readyState >= 1) {
+            audio.currentTime = 0;
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(err => {
+                    if (err.name !== 'NotAllowedError') {
+                        audio.currentTime = 0;
+                    }
+                });
+            }
+        }
+    }
 
     /* -------------------------------------------------- */
     /*           9. Premium Features & Ads              */
     /* -------------------------------------------------- */
-    function checkPremiumFeatures(){const t=Date.now();const g5t=parseInt(localStorage.getItem('grid5x5UnlockTime')||'0');premiumFeatures.grid5x5=g5t>t;if(!premiumFeatures.grid5x5){localStorage.removeItem('grid5x5UnlockTime');if(gridSize===5){gridSize=3;winningLength=3;gridSizeSelect.value='3';resetBoard();}}const hmt=parseInt(localStorage.getItem('hardModeUnlockTime')||'0');premiumFeatures.hardMode=hmt>t;if(!premiumFeatures.hardMode){localStorage.removeItem('hardModeUnlockTime');if(difficulty==='hard'){difficulty='medium';difficultySelect.value='medium';if(gameMode==='PvC')resetBoard();}}updatePremiumUI();showRelevantPremiumAds();}
-    function updatePremiumUI(){const g5o=gridSizeSelect.querySelector('option[value="5"]');const hmo=difficultySelect.querySelector('option[value="hard"]');if(g5o){g5o.textContent=premiumFeatures.grid5x5?"5×5":"5×5 (Premium)";g5o.classList.toggle('feature-lock',!premiumFeatures.grid5x5);}if(hmo){hmo.textContent=premiumFeatures.hardMode?"Hard":"Hard (Premium)";hmo.classList.toggle('feature-lock',!premiumFeatures.hardMode);}}
-    function showRelevantPremiumAds(){grid5x5Ad.style.display=(gridSize===4&&!premiumFeatures.grid5x5)?'block':'none';hardModeAd.style.display=(difficulty==='medium'&&gameMode==='PvC'&&!premiumFeatures.hardMode)?'block':'none';}
-    function showPremiumFeatureModal(f){const n=f==='grid5x5'?'5×5 Grid':'Hard Mode';if(premiumFeatureText)premiumFeatureText.textContent=`Watch an ad to unlock ${n} for 24 hours!`;if(watchAdBtn)watchAdBtn.setAttribute('data-feature',f);toggleModal(premiumFeatureModal,true);}
-    function simulateWatchingAd(){const f=watchAdBtn.getAttribute('data-feature');toggleModal(premiumFeatureModal,false);console.log(`Simulating ad for: ${f}`);showInterstitialAd(()=>{console.log(`Ad complete: ${f}`);unlockFeature(f);const n=f==='grid5x5'?'5×5 Grid':'Hard Mode';showTemporaryNotification(`${n} unlocked!`);if(f==='grid5x5'){gridSizeSelect.value='5';handleGridSizeChange({target:gridSizeSelect});}if(f==='hardMode'){difficultySelect.value='hard';handleDifficultyChange({target:difficultySelect});}}); }
-    function unlockFeature(f){const t=Date.now(),d=24*60*60*1000;if(f==='grid5x5'){premiumFeatures.grid5x5=true;localStorage.setItem('grid5x5UnlockTime',String(t+d));}else if(f==='hardMode'){premiumFeatures.hardMode=true;localStorage.setItem('hardModeUnlockTime',String(t+d));}checkPremiumFeatures();}
-    function showInterstitialAd(cb){console.log("Showing interstitial ad...");if(!interstitialModal)return;toggleModal(interstitialModal,true);const newBtn=closeAdBtn.cloneNode(true);if(closeAdBtn.parentNode)closeAdBtn.parentNode.replaceChild(newBtn,closeAdBtn);closeAdBtn=newBtn;closeAdBtn.onclick=()=>{console.log("Interstitial closed.");toggleModal(interstitialModal,false);if(cb&&typeof cb==='function')setTimeout(cb,100);};}
+    function checkPremiumFeatures() {
+        const now = Date.now();
+        
+        // Check 5x5 grid unlock status
+        const grid5time = parseInt(localStorage.getItem('grid5x5UnlockTime') || '0');
+        premiumFeatures.grid5x5 = grid5time > now;
+        
+        if (!premiumFeatures.grid5x5) {
+            localStorage.removeItem('grid5x5UnlockTime');
+            if (gridSize === 5) {
+                gridSize = 3;
+                winningLength = 3;
+                gridSizeSelect.value = '3';
+                resetBoard();
+            }
+        }
+        
+        // Check hard mode unlock status
+        const hardModeTime = parseInt(localStorage.getItem('hardModeUnlockTime') || '0');
+        premiumFeatures.hardMode = hardModeTime > now;
+        
+        if (!premiumFeatures.hardMode) {
+            localStorage.removeItem('hardModeUnlockTime');
+            if (difficulty === 'hard') {
+                difficulty = 'medium';
+                difficultySelect.value = 'medium';
+                if (gameMode === 'PvC') {
+                    resetBoard();
+                }
+            }
+        }
+        
+        updatePremiumUI();
+        showRelevantPremiumAds();
+    }
+
+    function updatePremiumUI() {
+        const grid5option = gridSizeSelect.querySelector('option[value="5"]');
+        const hardModeOption = difficultySelect.querySelector('option[value="hard"]');
+        
+        if (grid5option) {
+            grid5option.textContent = premiumFeatures.grid5x5 ? "5×5" : "5×5 (Premium)";
+            grid5option.classList.toggle('feature-lock', !premiumFeatures.grid5x5);
+        }
+        
+        if (hardModeOption) {
+            hardModeOption.textContent = premiumFeatures.hardMode ? "Hard" : "Hard (Premium)";
+            hardModeOption.classList.toggle('feature-lock', !premiumFeatures.hardMode);
+        }
+    }
+
+    function showRelevantPremiumAds() {
+        grid5x5Ad.style.display = (gridSize === 4 && !premiumFeatures.grid5x5) ? 'block' : 'none';
+        hardModeAd.style.display = (difficulty === 'medium' && gameMode === 'PvC' && !premiumFeatures.hardMode) ? 'block' : 'none';
+    }
+
+    function showPremiumFeatureModal(feature) {
+        const name = feature === 'grid5x5' ? '5×5 Grid' : 'Hard Mode';
+        if (premiumFeatureText) {
+            premiumFeatureText.textContent = `Watch an ad to unlock ${name} for 24 hours!`;
+        }
+        if (watchAdBtn) {
+            watchAdBtn.setAttribute('data-feature', feature);
+        }
+        toggleModal(premiumFeatureModal, true);
+    }
+
+    function simulateWatchingAd() {
+        const feature = watchAdBtn.getAttribute('data-feature');
+        toggleModal(premiumFeatureModal, false);
+        console.log(`Simulating ad for: ${feature}`);
+        
+        showInterstitialAd(() => {
+            console.log(`Ad complete: ${feature}`);
+            unlockFeature(feature);
+            
+            const name = feature === 'grid5x5' ? '5×5 Grid' : 'Hard Mode';
+            showTemporaryNotification(`${name} unlocked!`);
+            
+            if (feature === 'grid5x5') {
+                gridSizeSelect.value = '5';
+                handleGridSizeChange({target: gridSizeSelect});
+            }
+            
+            if (feature === 'hardMode') {
+                difficultySelect.value = 'hard';
+                handleDifficultyChange({target: difficultySelect});
+            }
+        });
+    }
+
+    function unlockFeature(feature) {
+        const now = Date.now();
+        const duration = 24 * 60 * 60 * 1000; // 24 hours
+        
+        if (feature === 'grid5x5') {
+            premiumFeatures.grid5x5 = true;
+            localStorage.setItem('grid5x5UnlockTime', String(now + duration));
+        } else if (feature === 'hardMode') {
+            premiumFeatures.hardMode = true;
+            localStorage.setItem('hardModeUnlockTime', String(now + duration));
+        }
+        
+        checkPremiumFeatures();
+    }
+
+    function showInterstitialAd(callback) {
+        console.log("Showing interstitial ad...");
+        if (!interstitialModal) return;
+        
+        toggleModal(interstitialModal, true);
+        
+        // Replace the close button to prevent event handler stacking
+        const newBtn = closeAdBtn.cloneNode(true);
+        if (closeAdBtn.parentNode) {
+            closeAdBtn.parentNode.replaceChild(newBtn, closeAdBtn);
+        }
+        closeAdBtn = newBtn;
+        
+        closeAdBtn.onclick = () => {
+            console.log("Interstitial closed.");
+            toggleModal(interstitialModal, false);
+            if (callback && typeof callback === 'function') {
+                setTimeout(callback, 100);
+            }
+        };
+    }
 
     /* -------------------------------------------------- */
     /*             10. Utilities & Effects              */
     /* -------------------------------------------------- */
-    async function shareGame(){const d={title:'Tic Tac Toe Deluxe',text:'Challenge me!',url:window.location.href};try{if(navigator.share)await navigator.share(d);else showTemporaryNotification('Sharing not supported, copy URL!');}catch(e){if(e.name!=='AbortError')showTemporaryNotification('Could not share.');}}
-    function createPremiumCelebration(){const mc=getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();const sc=[mc,'#FFD700','#FFFFFF','#C0C0C0'];const cc=[mc,'#E63946','#F4A261','#2A9D8F','#457B9D','#1D3557','#FFFFFF'];createConfetti(120,cc);createSparkles(80,sc);for(let i=0;i<5;i++){setTimeout(()=>createFirework(sc),i*250);}}
-    function createConfetti(c=100,o){const t=document.body;for(let n=0;n<c;n++){const e=document.createElement("div");e.className="confetti",e.style.cssText=`position:fixed;left:${100*Math.random()}%;width:${4+8*Math.random()}px;height:${e.style.width};background-color:${o[Math.floor(Math.random()*o.length)]};opacity:${.5+.5*Math.random()};animation:confetti-fall ${2.5+1*Math.random()}s linear ${.5*Math.random()}s forwards;z-index:1000;pointer-events:none;`,t.appendChild(e),setTimeout(()=>{e.parentNode&&e.remove()},4e3)}}
-    function createSparkles(c=50,o){const t=document.body;for(let n=0;n<c;n++){const e=document.createElement("div");e.className="sparkle";const l=o[Math.floor(Math.random()*o.length)];e.style.cssText=`position:fixed;left:${100*Math.random()}%;top:${100*Math.random()}%;width:${4+4*Math.random()}px;height:${e.style.width};background-color:${l};box-shadow:0 0 8px 2px ${l};border-radius:50%;animation:sparkle ${.7+.8*Math.random()}s linear ${1.5*Math.random()}s infinite;z-index:1001;pointer-events:none;`,t.appendChild(e),setTimeout(()=>{e.parentNode&&e.remove()},2500)}}
-    function createFirework(c){const o=document.body,t=document.createElement("div");t.className="firework",t.style.cssText=`position:fixed;left:${10+80*Math.random()}%;top:${10+50*Math.random()}%;width:1px;height:1px;z-index:1002;pointer-events:none;`,o.appendChild(t);const n=30+Math.floor(20*Math.random());for(let e=0;e<n;e++){const l=document.createElement("div");l.className="firework-particle";const a=c[Math.floor(Math.random()*c.length)],r=2*Math.random()*Math.PI,d=50+80*Math.random(),s=Math.cos(r)*d,m=Math.sin(r)*d;l.style.cssText=`position:absolute;left:0;top:0;width:5px;height:5px;background-color:${a};box-shadow:0 0 4px 1px ${a};border-radius:50%;opacity:1;transform-origin:center;--tx:${s}px;--ty:${m}px;animation:firework-expand ${.7+.5*Math.random()}s ease-out forwards;`,t.appendChild(l)}setTimeout(()=>{t.parentNode&&t.remove()},1500)}
-    function initializeAds(){console.log("Ad placeholders initialized.");/* ADD YOUR AD NETWORK CODE HERE */}
+    async function shareGame() {
+        const data = {
+            title: 'Tic Tac Toe Deluxe',
+            text: 'Challenge me!',
+            url: window.location.href
+        };
+        
+        try {
+            if (navigator.share) {
+                await navigator.share(data);
+            } else {
+                showTemporaryNotification('Sharing not supported, copy URL!');
+            }
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                showTemporaryNotification('Could not share.');
+            }
+        }
+    }
 
+    function createPremiumCelebration() {
+        const mainColor = getComputedStyle(document.documentElement).getPropertyValue('--main-color').trim();
+        const sparkleColors = [mainColor, '#FFD700', '#FFFFFF', '#C0C0C0'];
+        const confettiColors = [mainColor, '#E63946', '#2A9D8F', '#457B9D', '#8338EC', '#FF006E', '#FB5607', '#FFBE0B', '#FFFFFF'];
+        
+        createConfetti(120, confettiColors);
+        createSparkles(80, sparkleColors);
+        
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => createFirework(sparkleColors), i * 250);
+        }
+    }
+
+    function createConfetti(count = 100, colors) {
+        const body = document.body;
+        for (let i = 0; i < count; i++) {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * 100}%;
+                width: ${4 + Math.random() * 8}px;
+                height: ${confetti.style.width};
+                background-color: ${colors[Math.floor(Math.random() * colors.length)]};
+                opacity: ${0.5 + Math.random() * 0.5};
+                animation: confetti-fall ${2.5 + Math.random() * 1}s linear ${Math.random() * 0.5}s forwards;
+                z-index: 1000;
+                pointer-events: none;
+            `;
+            body.appendChild(confetti);
+            setTimeout(() => {
+                if (confetti.parentNode) {
+                    confetti.remove();
+                }
+            }, 4000);
+        }
+    }
+
+    function createSparkles(count = 50, colors) {
+        const body = document.body;
+        for (let i = 0; i < count; i++) {
+            const sparkle = document.createElement("div");
+            sparkle.className = "sparkle";
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            sparkle.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                width: ${4 + Math.random() * 4}px;
+                height: ${sparkle.style.width};
+                background-color: ${color};
+                box-shadow: 0 0 8px 2px ${color};
+                border-radius: 50%;
+                animation: sparkle ${0.7 + Math.random() * 0.8}s linear ${Math.random() * 1.5}s infinite;
+                z-index: 1001;
+                pointer-events: none;
+            `;
+            body.appendChild(sparkle);
+            setTimeout(() => {
+                if (sparkle.parentNode) {
+                    sparkle.remove();
+                }
+            }, 2500);
+        }
+    }
+
+    function createFirework(colors) {
+        const body = document.body;
+        const firework = document.createElement("div");
+        firework.className = "firework";
+        firework.style.cssText = `
+            position: fixed;
+            left: ${10 + Math.random() * 80}%;
+            top: ${10 + Math.random() * 50}%;
+            width: 1px;
+            height: 1px;
+            z-index: 1002;
+            pointer-events: none;
+        `;
+        body.appendChild(firework);
+        
+        const particleCount = 30 + Math.floor(Math.random() * 20);
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement("div");
+            particle.className = "firework-particle";
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 50 + Math.random() * 80;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+            
+            particle.style.cssText = `
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 5px;
+                height: 5px;
+                background-color: ${color};
+                box-shadow: 0 0 4px 1px ${color};
+                border-radius: 50%;
+                opacity: 1;
+                transform-origin: center;
+                --tx: ${x}px;
+                --ty: ${y}px;
+                animation: firework-expand ${0.7 + Math.random() * 0.5}s ease-out forwards;
+            `;
+            firework.appendChild(particle);
+        }
+        
+        setTimeout(() => {
+            if (firework.parentNode) {
+                firework.remove();
+            }
+        }, 1500);
+    }
+
+    function initializeAds() {
+        console.log("Ad placeholders initialized.");
+        /* ADD YOUR AD NETWORK CODE HERE */
+    }
   </script>
 </body>
 </html>
